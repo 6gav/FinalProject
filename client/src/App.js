@@ -1,9 +1,11 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
 import './App.css';
-import Home from './components/Home.js';
+import About from './components/pages/About'
+import Header from './components/layouts/Header'
+import Home from './components/pages/Home.js';
 import Grid from './components/Grid.js';
-import {Switch, Route,Router} from 'react-router-dom';
+import {BrowserRouter as Router,Route,Switch} from 'react-router-dom';
+
 
 class App extends Component {
 
@@ -22,16 +24,20 @@ class App extends Component {
   }
 
   render() {
-    const Ap = () => (
-      <Switch>
-          <Route exact path='/' component={Home}/>
-          <Route exact path='/Game' component={Grid} onPositionClick={this.onPositionClick}/>
-        </Switch>
-    );
     return (
-        <Route>
-          <Ap/>
-        </Route>
+      
+      <Router>
+        <div className = "App">
+          <div className="Container">
+            <Header/>
+            <Switch>
+              <Route exact path='/' component={Home}/>
+              <Route exact path='/game' component={Grid} onPositionClick={this.onPositionClick}/>
+              <Route exact path='/about'/>
+            </Switch>
+          </div>
+        </div>
+      </Router>
     );
   }
 }

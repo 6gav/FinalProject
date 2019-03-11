@@ -1,5 +1,5 @@
 .TitleMenuContainer{
-    position: absolute;
+    position: relative;
     left: 50%;
     bottom: 25%;
     transform: translate(-50%,0);
@@ -36,6 +36,10 @@
     align-items: center;
     justify-content: center;
         
+}
+.button:hover{
+    background-color: #777777;
+    color:#000;
 }
 
 .LinkContainer{

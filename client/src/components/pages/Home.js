@@ -1,5 +1,7 @@
 import React, {Component} from 'react';
-import '../components/Home.css'
+import { Link } from 'react-router-dom'
+import './Home.css'
+
 class Home extends Component{
 //#region colors
 /*
@@ -28,9 +30,16 @@ Blues
         //Holds "buttons" that 
         const Lnkbtn = (props) =>
         {
+            const linkStyle = {
+                color:'#fff',
+                textDecoration: 'none'
+            }
+            //link
+            //<Link to={this.props.href?this.props.href:'/'}>{this.props.text}</Link>
+            
             return (
             <div className = 'LinkContainer'>
-            <a className="button" href = {props.href}>{props.text}</a>
+                <a className="button" href = {props.href}>{props.text}</a>
             </div>
             );
         }
@@ -39,9 +48,9 @@ Blues
                 <div className="Page">
                     <div className="Title">DeGaS Final Project</div>
                     <div className="TitleMenuContainer">
-                        <Lnkbtn href="/Game" id="SinglePlayer" onClick={this.BeginSinglePlayer}  text="SinglePlayer"></Lnkbtn>
-                        <Lnkbtn href="/Game" id="SinglePlayer" onClick={this.Modes} text='Multiplayer Modes'></Lnkbtn>
-                        <Lnkbtn href="/Game" id="Cell Selection" text ="Cells"></Lnkbtn>
+                        <Lnkbtn href="/game" id="SinglePlayer" onClick={this.BeginSinglePlayer}  text="SinglePlayer"></Lnkbtn>
+                        <Lnkbtn href="/game" id="SinglePlayer" onClick={this.Modes} text='Multiplayer Modes'></Lnkbtn>
+                        <Lnkbtn href="/game" id="Cell Selection" text ="Cells"></Lnkbtn>
                     </div>
                 </div>
             </div>
