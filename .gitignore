@@ -5,6 +5,7 @@
 /client/node_modules
 /client/.pnp
 .pnp.js
+serviceAccount.json
 
 # testing
 /client/coverage
