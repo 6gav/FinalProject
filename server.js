@@ -5,8 +5,8 @@ const port = process.env.PORT || 5000;
 const path = require('path');
 
 //Custom modules
-const api = require('./api.js');
-const error = require('./error.js');
+const api = require('./server/api.js');
+const error = require('./server/error.js');
 
 //Enables JSON input on post methods
 const bodyParser = require('body-parser');
