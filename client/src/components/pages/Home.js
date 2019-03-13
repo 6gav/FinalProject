@@ -8,7 +8,6 @@ class Home extends Component{
 Reds
 E55041
 401612
-FF5948
 7F2C24
 BF4336
 
@@ -19,6 +18,7 @@ Blues
 1F2340
 707CE5
 */
+
 //#endregion
     BeginSinglePlayer = (event) =>{
         //

@@ -21,8 +21,6 @@ export default function Header(props) {
         <Link style={linkStyle} to="/">Home</Link> |
         <Link style={linkStyle} to="/about"> About</Link> |
         <Link style={linkStyle} to={authuser?"/profile":"/signin"}>{authuser?" My Profile":" Sign in"}</Link>
-        
-        
     </header>
   )
 }
