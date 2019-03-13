@@ -5,7 +5,7 @@ const GRID_WIDTH = 40,GRID_HEIGHT = 40;//Default grid dimensions are 40x40
 const GRID_SPACING=20;
 
 //#region Tools
-Range = function(min,max,integer=true){
+const RanRange = function(min,max,integer=true){
     let val = min+(Math.random()*(max-min))
     if(integer)
     {
@@ -38,7 +38,7 @@ class Cell extends Component{
                 {()=>{
                     if(this.state.imgs.length>0){
                         return(this.state.imgs.map(img=>(
-                            <img src = {posmark} className='CellContents'/>
+                            <img src = {posmark} alt = {''} className='CellContents'/>
                         )))
                     }
 
@@ -105,9 +105,9 @@ class Grid extends Component{
         
         for(let y = 0; y < this.rows; y++){
             for(let x = 0; x < this.cols; x++){
-                if(this.board[y,x]==false&&Range(0,100)<20){
-                    this.board[y,x] = true;
-                    cells.push({x:x,y:y,})
+                if(!this.board[y][x]&&RanRange(0,100)<20){
+                    this.board[y][x] = true;
+                    cells.push({x:x,y:y,color:'#444'})
                 }
             }
         }
