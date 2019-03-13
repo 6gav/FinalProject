@@ -5,7 +5,6 @@
 /client/node_modules
 /client/.pnp
 .pnp.js
-serviceAccount.json
 
 # testing
 /client/coverage
@@ -23,3 +22,4 @@ serviceAccount.json
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+server/serviceAccount.json
