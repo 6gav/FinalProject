@@ -5,6 +5,7 @@ import Header from './components/layouts/Header'
 import Home from './components/pages/Home.js';
 import Grid from './components/Grid.js';
 import {BrowserRouter as Router,Route,Switch} from 'react-router-dom';
+import { Registration } from './components/pages/Registration';
 
 const version = "v0.0.2."
 class App extends Component {
@@ -35,7 +36,8 @@ class App extends Component {
             <Switch>
               <Route exact path='/' component={Home}/>
               <Route exact path='/game' component={Grid} onPositionClick={this.onPositionClick}/>
-              <Route exact path='/about' component={About}/>
+              <Route exact path='/about' component={About} props={{version:version}}/>
+              <Route exact path='/signin' component={Registration} props={{version:version}}/>
             </Switch>
           </div>
         </div>
