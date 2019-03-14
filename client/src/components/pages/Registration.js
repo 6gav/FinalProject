@@ -90,7 +90,26 @@ export class Registration extends Component {
                 alert('email is not valid')
                 return;
             }
-            //.includes('@')
+
+            fetch('/api/registerUser', {
+                method: 'POST',
+                headers:{
+                    'Content-Type':'Application/json',
+                },
+                body: JSON.stringify({
+                    email:email,
+                    username:username,
+                    password:password,
+                })
+              
+              }).then(function(response) {
+                 return response.json();
+              
+              }).then(function(json) {
+                console.log(json)
+              }).catch(function(error) {
+                console.log(error);
+              });
         }
         else{
             //password was incorrect
