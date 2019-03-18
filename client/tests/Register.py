@@ -8,26 +8,19 @@ import time
 import threading
 import getpass
 import sys
+import random
 
 import Tools.RandomSets as RandomSets
 import Tools.Bots as Bots
-
+import UserAccount
 #endregion
 
-class Account:
 
-    def randomAccount(self):
-        self.email = RandomSets.Email()
-        self.username=RandomSets.String()
-        self.password=RandomSets.String()
-        
-    def __init__(self):
-        self.randomAccount()
-    
 
 browser = Bots.Navigator()
-acc = Account()
+acc = UserAccount.Account()
 acc.randomAccount()
+
 #region Write Tests Here
 def testRegistration():
     time.sleep(1)
@@ -51,6 +44,8 @@ def testRegistration():
     browser.click('reg_cbx_toggle_pass')
     #submit form
     browser.click("reg_submit")
+    acc.SaveAccount()
+        
 #endregion
 
 
