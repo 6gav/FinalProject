@@ -11,13 +11,13 @@ class Navigator:
         self.browser.get(url)
         time.sleep(wait)
         
-    def fillByName(self,name,text):
+    def fillByName(self,name,text,wait=0.25):
         self.browser.find_element_by_name(name).send_keys(text)
-        time.sleep(0.25)
+        time.sleep(wait)
         
-    def click(self,name):
+    def click(self,name,wait=0.7):
         self.browser.find_element_by_name(name).click()
-        time.sleep(0.7)
+        time.sleep(wait)
         
     def close(self):
         print("Finished. closing in 60 seconds")
