@@ -63,13 +63,48 @@ export class Registration extends Component {
         username:'',
         password:'',
         'confirm password':'',
+        "email or username":'',
         visiblePassword:false
     }
     togglePassword = () => {
         this.setState({visiblePassword:!this.state.visiblePassword})
     }
 
+    SubmitLogin = (e) =>{
+        e.preventDefault()
 
+        let {password} = this.state
+        let account_name = this.state["email or username"]
+
+        if(!ValidateForm('login_form',['log_pass','log_cbx_toggle_pass'])){
+            return
+        }
+        let email = '', username = ''
+        if(account_name.includes('@')){
+            email=account_name
+        }else{
+            username = account_name
+        }
+        fetch('/api/loginUser', {
+            method: 'POST',
+            headers:{
+                'Content-Type':'Application/json',
+            },
+            body: JSON.stringify({
+                email:email,
+                username:username,
+                password:password,
+            })
+          
+          }).then(function(response) {
+             return response.json();
+          
+          }).then(function(json) {
+            console.log(json)
+          }).catch(function(error) {
+            console.log(error);
+          });
+    }
     SubmitRegistration = (e) =>{
         e.preventDefault()
 
