@@ -71,7 +71,6 @@ export class Registration extends Component {
 
 
     SubmitRegistration = (e) =>{
-        console.log("Begin")
         e.preventDefault()
 
         let {email,username,password}=this.state
@@ -81,10 +80,7 @@ export class Registration extends Component {
             return
         }
 
-        console.log('checking password')
         if(password === passConfirm){
-            console.log('password was correctly entered')
-            console.log(`Username: ${username}\nEmail:${email}\nUnencrypted Password:${password}`)
             if(password.length < 5){
                 alert('password is too short')
                 return;
@@ -106,7 +102,6 @@ export class Registration extends Component {
                 })
               
               }).then(function(response) {
-                console.log("fdas")
                  return response.json();
               
               }).then(function(json) {
