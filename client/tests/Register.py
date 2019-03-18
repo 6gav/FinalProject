@@ -8,7 +8,6 @@ import time
 import threading
 import getpass
 import sys
-import random
 
 import Tools.RandomSets as RandomSets
 import Tools.Bots as Bots
