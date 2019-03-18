@@ -11,15 +11,18 @@ import sys
 
 import Tools.RandomSets as RandomSets
 import Tools.Bots as Bots
+import UserAccount as UserAccount
 
-import Register
 #endregion
+browser = Bots.Navigator()
+acc = UserAccount.Account()
+acc.randomFromDummmies()
 
-browser = Register.browser
-acc = Register.acc
 def testLogin():
-    Register.testRegistration()
+    #Register.testRegistration()
 
+    
+    browser.loadPage("localhost:3000")
 
     browser.click('btn_home')
     browser.click("btn_sign_in",wait=1)
@@ -30,6 +33,7 @@ def testLogin():
 def run():
     testLogin()
     browser.close()
+
 if __name__ == "__main__":
    # stuff only to run when not called via 'import' here
    run()
