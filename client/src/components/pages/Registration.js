@@ -45,14 +45,15 @@ const InsertHTML = (element,where,text) => {
 const ValidateForm = (form_name,input_names) =>{
     for(let i = 0; i < formvalues.length;i++)
     {
-        var x = document.forms[form_name][input_names[i]];
+        var x = toString((document.forms[form_name][input_names[i]]).value);
         
-        if (x.value == "") {
+        if (x == "") {
             
             alert(`${x.placeholder} must be filled out`);
             return false;
         }
     }
+    return true
 }
 
 const formvalues = 'reg_pass,reg_email,reg_username,reg_pass_check'.split(',')
@@ -61,6 +62,7 @@ export class Registration extends Component {
         email:'',
         username:'',
         password:'',
+        'confirm password':'',
         visiblePassword:false
     }
     togglePassword = () => {
@@ -69,6 +71,7 @@ export class Registration extends Component {
 
 
     SubmitRegistration = (e) =>{
+        console.log("Begin")
         e.preventDefault()
 
         let {email,username,password}=this.state
@@ -78,8 +81,8 @@ export class Registration extends Component {
             return
         }
 
-
-        if(password == passConfirm){
+        console.log('checking password')
+        if(password === passConfirm){
             console.log('password was correctly entered')
             console.log(`Username: ${username}\nEmail:${email}\nUnencrypted Password:${password}`)
             if(password.length < 5){
@@ -103,6 +106,7 @@ export class Registration extends Component {
                 })
               
               }).then(function(response) {
+                console.log("fdas")
                  return response.json();
               
               }).then(function(json) {
@@ -126,7 +130,7 @@ export class Registration extends Component {
       <div style={pageLayout}>
         <fieldset style={fieldSetLayout}>
             <legend>Register Here</legend>
-            <form name ="registration_form" className="Register" style={RegisterLayout}>
+            <form name ="registration_form" className="Register" style={RegisterLayout} onSubmit={this.SubmitRegistration}>
                 <p style={formInputContainer}><input name='reg_email'       type="text"     onChange={this.onFormChange}    placeholder="email" style={formInputLayout}/></p>
                 <p style={formInputContainer}><input name='reg_username'    type="text"     onChange={this.onFormChange}    placeholder="username" style={formInputLayout}/></p>
                 <p style={formInputContainer}><input name='reg_pass'        type={this.state.visiblePassword?"text":"password"} onChange={this.onFormChange} placeholder="password" style={formInputLayout}/></p>
@@ -134,7 +138,7 @@ export class Registration extends Component {
                     <input name='reg_pass_check' type={this.state.visiblePassword?"text":"password"}     placeholder="confirm password" onChange={this.onFormChange} style={formInputLayout}/> 
                     <input name='cbx_toggle_pass'type='checkbox' checked={this.state.visiblePassword} onChange={this.togglePassword}/>
                     Show Password</p>
-                <input name='reg_submit' type = 'submit' onClick={this.SubmitRegistration} text='Submit' style={formSubmitLayout}/>
+                <input name='reg_submit' type = 'submit'  text='Submit' style={formSubmitLayout}/>
             </form>
         </fieldset>
         
