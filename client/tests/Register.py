@@ -1,3 +1,4 @@
+#region imports
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 from os import path
@@ -11,13 +12,24 @@ import sys
 import Tools.RandomSets as RandomSets
 import Tools.Bots as Bots
 
-browser = Bots.Navigator()
+#endregion
 
+class Account:
+
+    def randomAccount(self):
+        self.email = RandomSets.Email()
+        self.username=RandomSets.String()
+        self.password=RandomSets.String()
+        
+    def __init__(self):
+        self.randomAccount()
+    
+
+browser = Bots.Navigator()
+acc = Account()
+acc.randomAccount()
 #region Write Tests Here
 def testRegistration():
-    email = RandomSets.Email()
-    username=RandomSets.String()
-    password=RandomSets.String()
     time.sleep(1)
     browser.loadPage("localhost:3000")
     time.sleep(1)
@@ -25,21 +37,22 @@ def testRegistration():
     time.sleep(0.7)
 
     #fill out email, username, and password
-    browser.fillByName('reg_email',email)
-    browser.fillByName('reg_username',username)
-    browser.fillByName('reg_pass',password)
+    browser.fillByName('reg_email',acc.email)
+    browser.fillByName('reg_username',acc.username)
+    browser.fillByName('reg_pass',acc.password)
     #reveal and hide password
-    browser.click('cbx_toggle_pass')
-    browser.click('cbx_toggle_pass')
+    browser.click('reg_cbx_toggle_pass')
+    browser.click('reg_cbx_toggle_pass')
     #confirm password
-    browser.fillByName('reg_pass_check',password)
+    browser.fillByName('reg_pass_check',acc.password)
 
     #reveal and hide password
-    browser.click('cbx_toggle_pass')
-    browser.click('cbx_toggle_pass')
+    browser.click('reg_cbx_toggle_pass')
+    browser.click('reg_cbx_toggle_pass')
     #submit form
     browser.click("reg_submit")
 #endregion
+
 
 def run():
     #call tests here
@@ -48,9 +61,9 @@ def run():
     browser.close()
 
 
-run()
-
-
+if __name__ == "__main__":
+   # stuff only to run when not called via 'import' here
+   run()
 
 
 
