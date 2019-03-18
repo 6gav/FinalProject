@@ -131,7 +131,7 @@ export class Registration extends Component {
                 <p style={formInputContainer}><input name='reg_pass'        type={this.state.visiblePassword?"text":"password"} onChange={this.onFormChange} placeholder="password" style={formInputLayout}/></p>
                 <p style={formInputContainer}>
                     <input name='reg_pass_check' type={this.state.visiblePassword?"text":"password"}     placeholder="confirm password" onChange={this.onFormChange} style={formInputLayout}/> 
-                    <input name='cbx_toggle_pass'type='checkbox' checked={this.state.visiblePassword} onChange={this.togglePassword}/>
+                    <input name='reg_cbx_toggle_pass'type='checkbox' checked={this.state.visiblePassword} onChange={this.togglePassword}/>
                     Show Password</p>
                 <input name='reg_submit' type = 'submit'  text='Submit' style={formSubmitLayout}/>
             </form>
@@ -139,11 +139,11 @@ export class Registration extends Component {
         
         <fieldset style={fieldSetLayout}>
             <legend>Sign In</legend>
-            <form className="Register" style={RegisterLayout}>
-                <p style={formInputContainer}><input type="text" placeholder="email or username" onChange={this.onFormChange} style={formInputLayout}/></p>
+            <form name='login_form' className="Login" style={RegisterLayout}>
+                <p style={formInputContainer}><input name = 'log_email_username' type="text" placeholder="email or username" onChange={this.onFormChange} style={formInputLayout}/></p>
                 <p style={formInputContainer}>
-                    <input type={this.state.visiblePassword?"text":"password"} placeholder="password" onChange={this.onFormChange} style={formInputLayout}/> 
-                    <input type='checkbox' checked={this.state.visiblePassword} onChange={this.togglePassword}/>
+                    <input name='log_pass' type={this.state.visiblePassword?"text":"password"} placeholder="password" onChange={this.onFormChange} style={formInputLayout}/> 
+                    <input name='log_cbx_toggle_pass'type='checkbox' checked={this.state.visiblePassword} onChange={this.togglePassword}/>
                     Show Password</p>
             </form>
         </fieldset>
