@@ -1,0 +1,55 @@
+.TitleMenuContainer{
+    position: relative;
+    left: 50%;
+    bottom: 25%;
+    transform: translate(-50%,0);
+    background-color: #444;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0px 10px 0px 10px;
+    
+}
+.Page{
+    background-color: #aaa;
+    padding: 0px 10px 70% 10px;
+}
+.Title{
+    font: bold 64px Times;
+    display: flex;
+    color: #511;
+    align-items: center;
+    justify-content: center;
+    padding: 0px 10px 100px 10px;
+}
+.button{
+    position: relative;
+    width: 200px;
+    height: 50px;
+    font: bold 24px Times;
+    text-decoration: none;
+    background-color: #eee;
+    color: #311b1b;
+    padding: 2px 6px 2px 6px;
+    border-top: 1px solid #ccc;
+    border-right: 1px solid #333333;
+    border-bottom: 1px solid #333333;
+    border-left: 1px solid #ccc;display: flex;
+    align-items: center;
+    justify-content: center;
+        
+}
+
+.button:hover{
+    
+    background-color: #eee;
+    color:#000;
+    transform: rotateX(10%);
+}
+.button:hover:before{transform: scaleX(1), rotate(30);}
+
+.LinkContainer{
+    
+    padding: 6px 6px 6px 6px;
+}
+

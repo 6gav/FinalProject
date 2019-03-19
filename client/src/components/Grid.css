@@ -1,0 +1,32 @@
+.Cell {
+    position: absolute;
+  }
+
+.GridHolder{
+    flex: 1;
+    margin: 20px;
+    background-color: white;
+}
+
+.Grid {
+    position: relative;
+    background-color: #211;
+    background-image:
+        linear-gradient(rgba(119, 255, 119, 0.2) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(119,255,119,0.15) 1px, transparent 1px);
+    
+}
+
+.UserInterface{
+    flex: 1;
+}
+  
+.CellContents{
+    position: absolute;
+    width: 19px;
+    height: 19px;
+    image-rendering: pixelated;
+}
+.App{
+    display: flex;
+}
