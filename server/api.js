@@ -1,5 +1,7 @@
 const admin = require('firebase-admin');
 const serviceAccount = require('./serviceAccount.json');
+const crypto = require('crypto');
+
 
 admin.initializeApp({
     credential: admin.credential.cert(serviceAccount),
@@ -9,12 +11,12 @@ admin.initializeApp({
 var auth = admin.auth();
 
 module.exports = {
-    
 
 
     registerUser: function(user){
-        console.log(user);
         
+
+
         auth.createUser({
             email: user.email,
             password: user.password,
@@ -25,8 +27,12 @@ module.exports = {
 
 
     loginUser: function(user){
-        console.log(user);
 
+        var currentUser = auth.getUserByEmail(user.email)
+        .then(res => {
+            console.log(res.toJSON());
+        });
+        
     }
 
 }

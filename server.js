@@ -7,6 +7,7 @@ const path = require('path');
 //Custom modules
 const api = require('./server/api.js');
 const error = require('./server/error.js');
+const routes = require('./routes.js');
 
 //Enables JSON input on post methods
 const bodyParser = require('body-parser');
@@ -18,6 +19,8 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 
 //Public APIs
+routes.registerPaths(app);
+
 //New user is sent to database
 app.post('/api/registerUser', (req, res) => {
 
@@ -25,12 +28,31 @@ app.post('/api/registerUser', (req, res) => {
 
     //Check parameters to see if all exist
     if(!(user.username && user.password && user.email)){
-        error.sendMissingError(res);
+        error.sendBadRequest(res);
+        return;
     }
 
     api.registerUser(user);
 
     res.send({'Message': "User registered successfully"});
+});
+
+app.post('/api/loginUser', (req, res) => {
+    var user = req.body;
+
+    if(!(user.password && user.email)){
+        error.sendBadRequest(res);
+        return;
+    }
+
+    var result = api.loginUser(user);
+
+    if(result){
+        res.send({'Message': "User sign-in failed."});
+        return;    
+    }
+
+    res.send({'Message': "User login successful"});
 });
 
 
