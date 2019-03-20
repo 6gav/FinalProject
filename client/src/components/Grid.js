@@ -156,12 +156,11 @@ class Grid extends Component{
         if(spacing != this.props.gridSpacing){
             this.setState({gridSpacing:this.props.gridSpacing})
         }
-        this.state.dimensions.X = this.props.gridSize?this.props.gridSize:this.state.dimensions.Y
+        this.state.dimensions.X = this.props.gridSize?this.props.gridSize:this.state.dimensions.X
         this.state.dimensions.Y = this.props.gridSize?this.props.gridSize:this.state.dimensions.Y
-        this.state.dimensions.Spacing=this.props.gridSpacing?parseInt(this.props.gridSpacing):this.state.dimensions.Spacing
-        this.rows = this.props.gridSize;
-        this.cols = this.props.gridSize;
-        console.log(this.state)
+        this.state.dimensions.Spacing=this.props.gridSpacing?this.props.gridSpacing:this.state.dimensions.Spacing
+        this.rows = this.state.dimensions.X;
+        this.cols = this.state.dimensions.Y;
         
         this.board = this.makeEmptyBoard();
         this.state.cells = this.makeCells();
