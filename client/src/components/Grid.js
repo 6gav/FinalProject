@@ -1,6 +1,7 @@
 import React, {Component} from 'react'
 import './Grid.css'
 import posmark from '../rescources/position_marker.png'
+//import { debug } from 'util';
 const GRID_WIDTH = 40,GRID_HEIGHT = 40;//Default grid dimensions are 40x40
 const GRID_SPACING=20;
 
@@ -11,15 +12,11 @@ const RanRange = function(min,max,integer=true){
     {
         val = Math.floor(val)
     }
-    console.log(min + ", "+ max + ", "+ val)
     return val;
   }
   //#endregion
 
 class Cell extends Component{
-    state={
-
-    }
     constructor(props){
         super(props)
         this.state.color = props.color?props.color:null;
@@ -72,13 +69,12 @@ class Grid extends Component{
     }
     constructor(props){
         super(props);
-        this.rows = GRID_HEIGHT;
-        this.cols = GRID_WIDTH;
-        this.board = this.makeEmptyBoard();
         this.makeCells = this.makeCells.bind(this)
-
+        
+        this.board = this.makeEmptyBoard();
         this.state.cells = this.makeCells();
         this.state.onPositionClick = props.onPositionClick?props.onPositionClick:null;
+        //
     }
 
     //create an empty board  
@@ -89,9 +85,10 @@ class Grid extends Component{
         for(let y = 0; y < this.rows; y++){
             board[y] = [];
             for(let x = 0; x < this.cols; x++){
-                board[y][x] = false;
+                board[y][x] = (y == x);
             }
         }
+        
         return board;
     }
     
@@ -139,8 +136,8 @@ class Grid extends Component{
         if(x >= 0 && x <= this.cols && y  >= 0 && y <= this.rows){
             if(this.board[y][x]){
                 if(this.state.onPositionClick){
-                    this.state.onPositionClick({x:x,y:y,obj:this.board[y][x]})
                     console.log("Clicked on: ("+x+','+y+').')
+                    this.state.onPositionClick({x:x,y:y,obj:this.board[y][x]})
                 }
             }
         }else{
@@ -150,10 +147,34 @@ class Grid extends Component{
     }
     //on initial mount, initializes base onscreen obj values
     
+    componentDidUpdate(){
+        let size = this.props.gridSize
+        let spacing = this.props.gridSpacing
+        if(size!=this.state.gridSize){
+            this.setState({gridSize:this.props.gridSize})
+        }
+        if(spacing != this.props.gridSpacing){
+            this.setState({gridSpacing:this.props.gridSpacing})
+        }
+        this.state.dimensions.X = this.props.gridSize?this.props.gridSize:this.state.dimensions.Y
+        this.state.dimensions.Y = this.props.gridSize?this.props.gridSize:this.state.dimensions.Y
+        this.state.dimensions.Spacing=this.props.gridSpacing?parseInt(this.props.gridSpacing):this.state.dimensions.Spacing
+        this.rows = this.props.gridSize;
+        this.cols = this.props.gridSize;
+        console.log(this.state)
+        
+        this.board = this.makeEmptyBoard();
+        this.state.cells = this.makeCells();
+
+    }
     componentDidMount(){
         const {cells} = this.state;
+        this.state.onPositionClick = (data) =>{
+            this.board[data.y][data.x] = true;
+        }
+
         if(this.props.app){
-            this.props.app.setState({plaeyrs:{
+            this.props.app.setState({players:{
                 count:(cells.length),
                 players:cells,
             }})
@@ -162,6 +183,7 @@ class Grid extends Component{
 
     render(){
         const{ cells } = this.state;
+        //console.log(cells);
         const Lnkbtn = (props) =>
         {
             return (
@@ -172,8 +194,7 @@ class Grid extends Component{
         };
         let sp = this.state.dimensions.Spacing,
         w = this.state.dimensions.X*sp,
-        h = this.state.dimensions.Y*sp
-        console.log(this.state)     
+        h = this.state.dimensions.Y*sp  
         return (
             <div>
                 <Lnkbtn href='/' text='🢠'></Lnkbtn>
@@ -184,16 +205,16 @@ class Grid extends Component{
                     //stores reference to the div inside of simulation
                     ref={(_ref) => {this.boardRef = _ref;}}>
                     {
-                        ()=>{console.log("tddryuing")
+                        ()=>{
                             if(cells)
                             {
-                                console.log("tryuing")
+                                
                                 return(cells.map(
                                 cell=>(
                                     <Cell 
                                     x={cell.x} y = {cell.y} 
                                     key={`${cell.x},${cell.y}`}
-                                    color = {cell.color} 
+                                    color = {'#fff'} 
                                     face={cell.face}
                                     />
                                     )
