@@ -1,6 +1,6 @@
 import React, {Component} from 'react'
 import './Grid.css'
-import posmark from '../rescources/position_marker.png'
+//import posmark from '../rescources/position_marker.png'
 //import { debug } from 'util';
 const GRID_WIDTH = 40,GRID_HEIGHT = 40;//Default grid dimensions are 40x40
 const GRID_SPACING=20;
@@ -35,7 +35,7 @@ class Cell extends Component{
                 {()=>{
                     if(this.state.imgs.length>0){
                         return(this.state.imgs.map(img=>(
-                            <img src = {posmark} alt = {''} className='CellContents'/>
+                        {/*<img src = {posmark} alt = {''} className='CellContents'/>*/}
                         )))
                     }
 
@@ -67,8 +67,26 @@ class Grid extends Component{
 
         
     }
+    construct = () => {
+        let size = this.props.gridSize
+        let spacing = this.props.gridSpacing
+        if(size!=this.state.gridSize){
+            this.setState({gridSize:this.props.gridSize})
+        }
+        if(spacing != this.props.gridSpacing){
+            this.setState({gridSpacing:this.props.gridSpacing})
+        }
+        this.state.dimensions.X = this.props.gridSize?this.props.gridSize:this.state.dimensions.X
+        this.state.dimensions.Y = this.props.gridSize?this.props.gridSize:this.state.dimensions.Y
+        this.state.dimensions.Spacing=this.props.gridSpacing?this.props.gridSpacing:this.state.dimensions.Spacing
+        this.rows = this.state.dimensions.X;
+        this.cols = this.state.dimensions.Y;
+        
+    }
     constructor(props){
         super(props);
+        this.construct()
+        
         this.makeCells = this.makeCells.bind(this)
         
         this.board = this.makeEmptyBoard();
@@ -148,24 +166,12 @@ class Grid extends Component{
     //on initial mount, initializes base onscreen obj values
     
     componentDidUpdate(){
-        let size = this.props.gridSize
-        let spacing = this.props.gridSpacing
-        if(size!=this.state.gridSize){
-            this.setState({gridSize:this.props.gridSize})
-        }
-        if(spacing != this.props.gridSpacing){
-            this.setState({gridSpacing:this.props.gridSpacing})
-        }
-        this.state.dimensions.X = this.props.gridSize?this.props.gridSize:this.state.dimensions.X
-        this.state.dimensions.Y = this.props.gridSize?this.props.gridSize:this.state.dimensions.Y
-        this.state.dimensions.Spacing=this.props.gridSpacing?this.props.gridSpacing:this.state.dimensions.Spacing
-        this.rows = this.state.dimensions.X;
-        this.cols = this.state.dimensions.Y;
+        this.construct()
         
         this.board = this.makeEmptyBoard();
         this.state.cells = this.makeCells();
-
     }
+
     componentDidMount(){
         const {cells} = this.state;
         this.state.onPositionClick = (data) =>{
