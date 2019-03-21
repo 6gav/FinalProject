@@ -27,16 +27,32 @@ module.exports.registerPaths = function(app){
 
     });
 
+
+    //User passes in gameID, returns all players in current game if exists
     app.post('/api/GetPlayers', (req, res) => {
         var game = games[req.body.gameID];
         if(!game){
             res.send({error: 'Game not found!', status: 404});
             return;
         }
-        res.send({game});
+        res.send({players: game.players});
     });
 
+
+    //User passes in gameID and host's ID, if it is matched with current game that isn't running, game is started
     app.post('/api/StartGame', (req, res) => {
-         
+        var game = games[req.body.gameID];
+        if(!game)
+        {
+            res.send({error: 'Game not found!', status: 404});
+            return;
+        }
+        if(game.running)
+        {
+            res.send({error: 'Game already running.', status: 500});
+            return;
+        }
+        GameManager.StartGame(game);
+        res.send({status: 200});
     });
 }
