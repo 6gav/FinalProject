@@ -7,12 +7,15 @@ const debuggerStyles = {
 }
 
 class Debugger extends Component {
-    state={
-        gridSize:50,
+    state=
+    {
+        gridSize:20,
         gridSpacing:20,
-        onDebugValuesChange:null
+        onDebugValuesChange:null,
+        chatMessage:'',
     }
-    constructor(props){
+    constructor(props)
+    {
         super(props)
         if(props.onDebugValuesChange)
         {
@@ -21,7 +24,8 @@ class Debugger extends Component {
         
     }
 
-    handleGridSize = (e) =>{
+    handleGridSize = (e) =>
+    {
         let gridSize = e.target.value;
         gridSize = gridSize<15?15:gridSize
         gridSize = gridSize>70?70:gridSize
@@ -32,23 +36,41 @@ class Debugger extends Component {
     
     }
 
-    handleGridSpacing = (e) =>{
+    handleGridSpacing = (e) =>
+    {
         let gridSpacing = e.target.value;
         
         gridSpacing = gridSpacing<5?5:gridSpacing
         gridSpacing = gridSpacing>30?30:gridSpacing
 
         this.setState({gridSpacing:gridSpacing})
-        if(this.state.onDebugValuesChange){
+        if(this.state.onDebugValuesChange)
+        {
             this.state.onDebugValuesChange({gridSpacing:gridSpacing})
         }
     }
+    HandleChatMessage = (e) =>
+    {
+        let chatMessage = e.target.value
+        this.setState({chatMessage:chatMessage})
+    }
 
-  render() {
+    SubmitMessage = () =>
+    {
+        let msg = this.state.chatMessage
+        if(msg.length > 0)
+        {
+        console.log(msg)
+        }
+        this.setState({chatMessage:''})
+    }
+  render() 
+  {
     return (
       <div style={debuggerStyles}>Debug Window
         <p><input type='number' value={this.state.gridSize} onChange={this.handleGridSize}></input>Grid size</p>
         <p><input type='number' value={this.state.gridSpacing} onChange={this.handleGridSpacing}></input>Spacing</p>
+        <p><input type='text' value={this.state.chatMessage} onChange={this.HandleChatMessage} placeholder={'enter chat message'}></input><input type="submit" value="Send Message" onClick={this.SubmitMessage}></input></p>
       </div>
     )
   }
