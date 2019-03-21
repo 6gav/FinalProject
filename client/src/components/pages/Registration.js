@@ -168,7 +168,7 @@ export class Registration extends Component {
                     <input name='reg_pass_check' type={this.state.visiblePassword?"text":"password"}     placeholder="confirm password" onChange={this.onFormChange} style={formInputLayout}/> 
                     <input name='reg_cbx_toggle_pass'type='checkbox' checked={this.state.visiblePassword} onChange={this.togglePassword}/>
                     Show Password</p>
-                <input name='reg_submit' type = 'submit'  text='Submit' style={formSubmitLayout}/>
+                <input name='reg_submit' type = 'submit'  value='Submit' style={formSubmitLayout}/>
             </form>
         </fieldset>
         
