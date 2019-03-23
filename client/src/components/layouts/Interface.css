@@ -1,0 +1,31 @@
+.Background{
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+.Input-Form{
+    position: absolute;
+    top: 515px;
+    left: 20px;
+}
+
+.User_Input{
+    width: 356px;
+    height: 52px;
+}
+
+.Message-List{
+    position: absolute;
+    top: 0px;
+    left: 0px;
+}
+
+.MessageDivider{
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    height: 2;
+    width:356px;
+    background-color: black;
+}

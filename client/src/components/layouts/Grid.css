@@ -18,6 +18,7 @@
 }
 
 .UserInterface{
+    position: relative;
     flex: 1;
 }
   
@@ -26,7 +27,4 @@
     width: 19px;
     height: 19px;
     image-rendering: pixelated;
-}
-.App{
-    display: flex;
 }
