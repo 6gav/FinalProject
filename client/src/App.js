@@ -9,11 +9,15 @@ import { Registration } from './components/pages/Registration';
 import Debugger from "./components/layouts/Debugger"
 import Interface from './components/layouts/Interface';
 
+
+const uuidv1 = require('uuid/v1');
 const version = "v0.0.2."
+
 class App extends Component {
   state={
     gridSize:20,
-    gridSpacing:20
+    gridSpacing:20,
+    messages:[]//array of message objects. objects have an id, along with data containing the string of the message.
   }
   constructor(props){
     super(props)
@@ -31,12 +35,23 @@ class App extends Component {
   hasAuthuser = () => {
     return false
   }
+  AddMessage = (message) =>{
+    console.log("adding new message")
+    message.id = uuidv1()
+    this.state.messages.push(message);
+
+    //force update
+    this.setState(this.state);
+    
+
+  }
+
   onDebugValuesChange = (data)=>{
     this.setState({gridSize:data.gridSize,gridSpacing:data.gridSpacing})
     console.log(data)
   }
 
-  GameSpace = <div><Grid  gridSize={this.state.gridSize} gridSpacing={this.state.gridSpacing} onPositionClick={this.onPositionClick}></Grid><Interface></Interface></div>
+  GameSpace = <div className="GameSpace"><Grid  gridSize={this.state.gridSize} gridSpacing={this.state.gridSpacing} onPositionClick={this.onPositionClick}></Grid><Interface messages={this.state.messages}AddMessage={this.AddMessage}></Interface></div>
   render() {
     return (
       
@@ -50,7 +65,7 @@ class App extends Component {
               <Route exact path='/about' render={()=><About props={{version:version}}/>} />
               <Route exact path='/signin' render={()=><Registration props={{version:version}}/>}/>
             </Switch>
-            <Debugger onDebugValuesChange={this.onDebugValuesChange}></Debugger>
+            <Debugger AddMessage={this.AddMessage} onDebugValuesChange={this.onDebugValuesChange}></Debugger>
             
           </div>
         </div>
