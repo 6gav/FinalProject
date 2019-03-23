@@ -70,15 +70,22 @@ class Grid extends Component{
     construct = () => {
         let size = this.props.gridSize
         let spacing = this.props.gridSpacing
+
+        // eslint-disable-next-line
         if(size!=this.state.gridSize){
             this.setState({gridSize:this.props.gridSize})
         }
+        // eslint-disable-next-line
         if(spacing != this.props.gridSpacing){
             this.setState({gridSpacing:this.props.gridSpacing})
         }
+        // eslint-disable-next-line
         this.state.dimensions.X = this.props.gridSize?this.props.gridSize:this.state.dimensions.X
+        // eslint-disable-next-line
         this.state.dimensions.Y = this.props.gridSize?this.props.gridSize:this.state.dimensions.Y
+        // eslint-disable-next-line
         this.state.dimensions.Spacing=this.props.gridSpacing?this.props.gridSpacing:this.state.dimensions.Spacing
+        
         this.rows = this.state.dimensions.X;
         this.cols = this.state.dimensions.Y;
         
