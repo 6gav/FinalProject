@@ -60,7 +60,7 @@ class Debugger extends Component {
         let msg = this.state.chatMessage
         if(msg.length > 0)
         {
-        console.log(msg)
+            this.props.AddMessage({sender:'Debug',data:msg})
         }
         this.setState({chatMessage:''})
     }
