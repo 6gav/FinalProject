@@ -47,13 +47,16 @@ app.post('/api/loginUser', (req, res) => {
     
     var cb = (status) => {
         if(status.statusCode != 0){
-            res.send({message: 'User sign-in failed.'});
+            res.send({message: status.message});
         }
         else
         {
-            res.send({message: 'User login successful.'});
+            res.send({message: status.message});
         }
     };
+
+    api.loginUser(user, cb);
+
 });
 
 
