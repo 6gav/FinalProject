@@ -50,8 +50,6 @@ module.exports = {
                 }
 
                 cb({statusCode: 500, message: 'Password incorrect'});
-                
-
             });
         })
         .catch(res => {
