@@ -33,7 +33,7 @@ module.exports = {
 
 
     loginUser: function(user, cb){
-
+        console.log('Logging in');
         var currentUser = auth.getUserByEmail(user.email)
         .then(res => {
             console.log(res.toJSON());
