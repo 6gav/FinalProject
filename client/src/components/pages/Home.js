@@ -1,5 +1,4 @@
 import React, {Component} from 'react';
-import { Link } from 'react-router-dom'
 import './Home.css'
 
 class Home extends Component{
@@ -30,12 +29,6 @@ Blues
         //Holds "buttons" that 
         const Lnkbtn = (props) =>
         {
-            const linkStyle = {
-                color:'#fff',
-                textDecoration: 'none'
-            }
-            //link
-            //<Link to={this.props.href?this.props.href:'/'}>{this.props.text}</Link>
             
             return (
             <div className = 'LinkContainer'>
@@ -48,9 +41,9 @@ Blues
                 <div className="Page">
                     <div className="Title">DeGaS Final Project</div>
                     <div className="TitleMenuContainer">
-                        <Lnkbtn href="/game" id="SinglePlayer" onClick={this.BeginSinglePlayer}  text="SinglePlayer"></Lnkbtn>
-                        <Lnkbtn href="/game" id="SinglePlayer" onClick={this.Modes} text='Multiplayer Modes'></Lnkbtn>
-                        <Lnkbtn href="/game" id="Cell Selection" text ="Cells"></Lnkbtn>
+                        <Lnkbtn href="/simulation_s" id="SinglePlayer" onClick={this.BeginSinglePlayer}  text="SinglePlayer"></Lnkbtn>
+                        <Lnkbtn href="/simulation_m" id="SinglePlayer" onClick={this.Modes} text='Multiplayer Modes'></Lnkbtn>
+                        <Lnkbtn href="/editor" id="Cell Selection" text ="Cells"></Lnkbtn>
                     </div>
                 </div>
             </div>
