@@ -63,7 +63,7 @@ export class Registration extends Component {
         username:'',
         password:'',
         'confirm password':'',
-        "email or username":'',
+        "username":'',
         visiblePassword:false
     }
     togglePassword = () => {
@@ -74,7 +74,7 @@ export class Registration extends Component {
         e.preventDefault()
 
         let {password} = this.state
-        let account_name = this.state["email or username"]
+        let account_name = this.state.username
 
         if(!ValidateForm('login_form',['log_pass','log_cbx_toggle_pass'])){
             return
@@ -175,7 +175,7 @@ export class Registration extends Component {
         <fieldset style={fieldSetLayout}>
             <legend>Sign In</legend>
             <form name='login_form' className="Login" style={RegisterLayout}>
-                <p style={formInputContainer}><input name = 'log_email_username' type="text" placeholder="email or username" onChange={this.onFormChange} style={formInputLayout}/></p>
+                <p style={formInputContainer}><input name = 'log_email_username' type="text" placeholder="username" onChange={this.onFormChange} style={formInputLayout}/></p>
                 <p style={formInputContainer}>
                     <input name='log_pass' type={this.state.visiblePassword?"text":"password"} placeholder="password" onChange={this.onFormChange} style={formInputLayout}/> 
                     <input name='log_cbx_toggle_pass'type='checkbox' checked={this.state.visiblePassword} onChange={this.togglePassword}/>
