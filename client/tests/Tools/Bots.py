@@ -11,8 +11,10 @@ class Navigator:
         self.browser.get(url)
         time.sleep(wait)
         
-    def fillByName(self,name,text,wait=0.25):
+    def fillByName(self,name,text,wait=0.25,submit=False):
         self.browser.find_element_by_name(name).send_keys(text)
+        if(submit):
+            self.browser.find_element_by_name(name).submit()
         time.sleep(wait)
         
     def click(self,name,wait=0.7):
