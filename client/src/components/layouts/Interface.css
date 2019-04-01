@@ -19,6 +19,8 @@
     position: absolute;
     top: 0px;
     left: 0px;
+    width: 360px;
+    height:492px;
 }
 
 .MessageDivider{
@@ -28,4 +30,8 @@
     height: 2;
     width:356px;
     background-color: black;
+}
+
+#LastMessage{
+    color: blue;
 }

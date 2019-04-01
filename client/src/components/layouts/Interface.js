@@ -12,18 +12,11 @@ class MessageList extends React.Component{
     state = {
         list : null,
         bottom:null,
+        showButton:true
     }
-    scrollToBottom = () => {
-        if(this.state.bottom){
-            this.state.bottom.scrollIntoView({ behavior: "smooth" });
-        }
-      }
     constructor(props){
         super(props);
         let messages=this.props.messagess
-        console.log('constructor')
-        console.log(this.props.messagess)
-        console.log(props.messagess)
         if(props.messages){
             for(let i = 0; i < this.props.messages.length; i++){
                 
@@ -34,20 +27,23 @@ class MessageList extends React.Component{
         let messageCount = this.state.messageCount;
         
     }
-   
+    
     render(){
         let i = 0;
         return (
-        <div id="listContainer"style ={{overflow: 'scroll',position:'absolute',backgroundColor:'#777',top:'20px',left:'19px',width:'361px',height:'473px'}}>
-        <ul classname="Message-List">
+        <div id="listContainer"style ={{overflow: 'scroll',position:'absolute',backgroundColor:'#eee',top:'20px',left:'19px',width:'361px',height:'473px'}}>
+        
+        <ul className="Message-List">
             {
                 
                 this.props.messages.map( (message)=>{
                     i++;
                     if(i == this.props.messages.length){
-                        return <div key={message.id} id="LastMessage">
+                        return <div key={message.id} id="LastMessage" name="LastMessage">
                         <div className="MessageDivider"/>
-                            <li><div>{message.sender}:  {message.data}</div></li>
+                            <li><div>
+                            {message.sender}:  {message.data}
+                            </div></li>
                         </div>
                     }
                     else{
@@ -60,6 +56,7 @@ class MessageList extends React.Component{
                 }
                 )}
         </ul>
+        
         </div>
         );
     }
@@ -116,7 +113,7 @@ class Interface extends React.Component {
         switch(data[0])
         {
             case "/api":
-            response = this.parseApiCall(data)
+                response = this.parseApiCall(data)
             break;
             case "/help":
                 response = ["nohelp4u","cint"]
@@ -125,7 +122,21 @@ class Interface extends React.Component {
                 response = this.PlayersCommand(data)
             break;
             case "/command":
-            response = "This is a response to a command."
+                response = "This is a response to a command."
+            break;
+            case "/resize":
+                let obj = {};
+                if(data.length > 1){
+                    obj = {gridSize:data[1]}
+                    if(data.length > 2){
+                        obj.gridSpacing = data[2]
+                    }
+                    response = "Resized the window"
+                    this.props.onDebugValuesChange(obj)
+                }
+                else{
+                    response = "/resize (scale) (spacing)"
+                }
             break;
             default:
                 console.log(data)
@@ -134,13 +145,13 @@ class Interface extends React.Component {
             
             
         }
-        console.log(`Response: ${response}`)
         return {data:response};
     }
     
     //#region handles
     handleSubmit(event){
         event.preventDefault();
+        this.scrollToBottom()
         let message = this.state.user_input,messages = this.state.messages;
         this.state.user_input = "";
         if(message != ""){
@@ -153,20 +164,17 @@ class Interface extends React.Component {
             if(message[0]=='/')
             {
                 let resp = this.parseMessage(message)
-                if(typeof resp == "string"){
-                    this.props.AddMessage({data:[resp],id:0})
-                }else if(Array.isArray(resp)){
-                    for(let i = 0; i < resp.length; i++){
-                        this.props.AddMessage(resp[i])
+                
+                if(typeof resp.data == "string"){
+                    this.props.AddMessage(resp)
+                }else if(Array.isArray(resp.data)){
+                    for(let i = 0; i < resp.data.length; i++){
+                        this.props.AddMessage({sender:'arr',data:resp.data[i]})
                     }
                 }
                 else{
                     this.props.AddMessage(resp)
                 }
-            }
-            else{
-                
-                console.log("Hello")
             }
         }
 
@@ -178,14 +186,20 @@ class Interface extends React.Component {
     }
     //#endregion
     
-    render(){
-        if(this.state.messages){
-
+    
+    scrollToBottom = () => {
+        let bottom = document.getElementsByName("LastMessage")
+        
+        if(bottom[0]){
+            bottom[0].scrollIntoView({ behavior: "smooth" });
         }
-        console.log('e')
-        console.log(this.props)
-        console.log(this.state)
-        //console.log(this.state.pos)
+      }
+    
+    componentDidMount(){
+        this.scrollToBottom()
+    }
+
+    render(){
         return(
             <div className='UserInterface'>
                 <img className="Background" src={Img_Interface}/>
@@ -193,8 +207,7 @@ class Interface extends React.Component {
                     <MessageList  messages={this.props.messages}/>
                 </div>
                 <form  className="Input-Form" onSubmit={this.handleSubmit.bind(this)}>
-                    <input className="User_Input" onChange={this.handleUserInputChange.bind(this)} type="text" placeholder=". . ." value={this.state.user_input}/> 
-                    
+                    <input name="ib_messages" className="User_Input" onChange={this.handleUserInputChange.bind(this)} type="text" placeholder=". . ." value={this.state.user_input}/> 
                 </form>
             </div>
         )
