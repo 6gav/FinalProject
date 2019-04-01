@@ -18,23 +18,33 @@ const RanRange = function(min,max,integer=true){
   //#endregion
 
 class Cell extends Component{
+    state={
+        dimensions:{
+            X:GRID_WIDTH,
+            Y:GRID_HEIGHT,
+            Spacing:GRID_SPACING,
+        }
+    }
     constructor(props){
         super(props)
         this.state.color = props.color?props.color:null;
         this.state.face = props.face?props.face:null;
         this.state.imgs = props.imgs?props.imgs:[];
+        this.state.dimensions = props.dimensions?props.dimensions:this.state.dimensions
     }
     
     render(){
         return(
             <div className="Cell" style={{
-                left: `${GRID_SPACING*this.props.x+1}px`,
-                top: `${GRID_SPACING*this.props.y+1}px`,
-                width: `${GRID_SPACING-1}px`,
-                height: `${GRID_SPACING-1}px`
+                left: `${this.state.dimensions.Spacing*this.props.x+1}px`,
+                top: `${this.state.dimensions.Spacing*this.props.y+1}px`,
+                width: `${this.state.dimensions.Spacing-1}px`,
+                height: `${this.state.dimensions.Spacing-1}px`,
+                backgroundColor:'#fff'
             }}>
                 {()=>{
                     if(this.state.imgs.length>0){
+                        alert()
                         return(this.state.imgs.map(img=>(
                         {/*<img src = {posmark} alt = {''} className='CellContents'/>*/}
                         )))
@@ -55,7 +65,28 @@ const a =() =>{
     )
 }
 */
-
+const RenderCells = (props)=>{
+    let cells = props.state.cells;
+    if(cells)
+    {
+        console.log(cells)
+        console.log("cells")
+        console.log(typeof(cells))
+        return(
+            cells.map(
+                cell=>(
+                    <Cell 
+                    x={cell.x} y = {cell.y} 
+                    key={`${cell.x},${cell.y}`}
+                    color = {cell.color} 
+                    face={cell.face}
+                    dimensions = {props.state.dimensions}
+                    />
+                )
+            )
+        )
+    }
+}
 function RenderChoicePrompt(props)
 {
     if(props.choice){
@@ -129,7 +160,7 @@ class Grid extends Component{
             board[y] = [];
             for(let x = 0; x < this.cols; x++){
                 // eslint-disable-next-line
-                board[y][x] = (y == x);
+                board[y][x] = false;
             }
         }
         
@@ -146,8 +177,8 @@ class Grid extends Component{
         
         for(let y = 0; y < this.rows; y++){
             for(let x = 0; x < this.cols; x++){
-                if(!this.board[y][x]&&RanRange(0,100)<20){
-                    this.board[y][x] = true;
+                if(this.board[y][x]){
+                    
                     cells.push({x:x,y:y,color:'#444'})
                 }
             }
@@ -187,7 +218,7 @@ class Grid extends Component{
         }else{
             console.log("Clicked on but outside bounds?")
         }
-        this.setState({cells:this.makeCells()});
+        this.setState();
     }
     //on initial mount, initializes base onscreen obj values
     
@@ -214,8 +245,8 @@ class Grid extends Component{
     }
     
     render(){
-        const{ cells } = this.state;
-        //console.log(cells);
+        const{ cells } = this.state.cells;
+        
         const Lnkbtn = (props) =>
         {
             return (
@@ -237,22 +268,7 @@ class Grid extends Component{
                     //stores reference to the div inside of simulation
                     ref={(_ref) => {this.boardRef = _ref;}}>
                     {
-                        ()=>{
-                            if(cells)
-                            {
-                                
-                                return(cells.map(
-                                cell=>(
-                                    <Cell 
-                                    x={cell.x} y = {cell.y} 
-                                    key={`${cell.x},${cell.y}`}
-                                    color = {'#fff'} 
-                                    face={cell.face}
-                                    />
-                                    )
-                                ))
-                            }
-                        }
+                        <RenderCells state = {this.state}/>
                     } 
                     </div>
                         {
