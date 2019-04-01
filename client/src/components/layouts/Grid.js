@@ -1,4 +1,5 @@
 import React, {Component} from 'react'
+import ChoicePrompt from './ChoicePrompt'
 import './Grid.css'
 //import posmark from '../rescources/position_marker.png'
 //import { debug } from 'util';
@@ -43,7 +44,8 @@ class Cell extends Component{
             </div>
         )
     }
-}/*
+}
+/*
 const a =() =>{
     return(
     <div x={cell.x} y = {cell.y} 
@@ -53,6 +55,20 @@ const a =() =>{
     )
 }
 */
+
+function RenderChoicePrompt(props)
+{
+    if(props.choice){
+        return (
+            <div>
+        <ChoicePrompt choice={props.choice} OnChoice={props.OnChoice}/>
+        </div>
+        )
+    }
+    else{
+        return null;
+    }
+}
 class Grid extends Component{
     state = {
         cells: [],//list of occupied cells and contents
@@ -63,6 +79,8 @@ class Grid extends Component{
             Y:GRID_HEIGHT,
             Spacing:GRID_SPACING,
         },//default dimensions
+        
+
         onPositionClick:null,//Container for calling events occuring when Grid is clicked
 
         
@@ -110,6 +128,7 @@ class Grid extends Component{
         for(let y = 0; y < this.rows; y++){
             board[y] = [];
             for(let x = 0; x < this.cols; x++){
+                // eslint-disable-next-line
                 board[y][x] = (y == x);
             }
         }
@@ -176,6 +195,7 @@ class Grid extends Component{
         this.construct()
         
         this.board = this.makeEmptyBoard();
+        // eslint-disable-next-line
         this.state.cells = this.makeCells();
     }
 
@@ -192,7 +212,7 @@ class Grid extends Component{
             }})
         }
     }
-
+    
     render(){
         const{ cells } = this.state;
         //console.log(cells);
@@ -235,6 +255,9 @@ class Grid extends Component{
                         }
                     } 
                     </div>
+                        {
+                            <RenderChoicePrompt isTrue={true} choice={this.props.choice}/>
+                        }
                 </div>
             </div>
         );

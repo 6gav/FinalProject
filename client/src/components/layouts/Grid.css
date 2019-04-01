@@ -16,6 +16,9 @@
         linear-gradient(90deg, rgba(119,255,119,0.15) 1px, transparent 1px);
     
 }
+.GridContainer{
+    position: relative;
+}
 
 .UserInterface{
     position: relative;
