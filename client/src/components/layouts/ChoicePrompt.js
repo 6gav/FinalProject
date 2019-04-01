@@ -12,6 +12,7 @@ export default class ChoicePrompt extends Component {
         }
     }
   render() {
+    let choices = this.props.choice.choices
       console.log(this.props)
     return (
       <div className="Prompt">
@@ -22,9 +23,18 @@ export default class ChoicePrompt extends Component {
                 <div>
                     
                     {
-                        this.props.choice.choices.map((choice) =>{
-                        return <input className="PromptButton" type="button" value={choice.Action.text} onClick={()=>{this.handleClick(choice);}}/>
+                        choices.map((choice) =>{
+                        return <input name="prompt_button" style={{backgroundColor:"darkcyan",textAlign:"center",margin:`5% ${choices.length==1?'30':'5'}%`,padding:"5% 8%", width:"40%"}} type="button" value={choice.Action.text} onClick={()=>{this.handleClick(choice);}}/>
+                        /*
+                        .PromptButton{
+    background-color: darkcyan;
+    text-align: center;
+    margin:  5%;
+    padding: 5% 8%;
+    width: 40%;
+} */
                     })}
+
                     </div>
         </form>
       </div>
