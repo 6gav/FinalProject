@@ -1,11 +1,59 @@
 var GameManager = require('./server/game.js');
 
+const api = require('./server/api.js');
+const error = require('./server/error.js');
 
 var games = {};
 
 let runningGames = [];
 
 module.exports.registerPaths = function(app){
+
+    //
+    //User accounts
+    //
+
+    //New user is sent to database
+    app.post('/api/registerUser', (req, res) => {
+
+        var user = req.body;
+
+        //Check parameters to see if all exist
+        if(!(user.username && user.password && user.email)){
+            error.sendBadRequest(res);
+            return;
+        }
+
+        api.registerUser(user);
+
+        res.send({'Message': "User registered successfully"});
+    });
+
+    app.post('/api/loginUser', (req, res) => {
+        var user = req.body;
+
+        if(!(user.password && user.email)){
+            error.sendBadRequest(res);
+            return;
+        }
+
+        var cb = (status) => {
+            if(status.statusCode != 0){
+                res.send({message: status.message});
+            }
+            else
+            {
+                res.send({message: status.message});
+            }
+        };
+
+        api.loginUser(user, cb);
+
+    });
+
+    //
+    //Game paths
+    //
 
     //Host ID, game id gets returned to sender
     app.post('/api/CreateGame', (req, res) => {
