@@ -43,7 +43,7 @@ Blues
                     <div className="TitleMenuContainer">
                         <Lnkbtn href="/simulation_s" id="SinglePlayer" onClick={this.BeginSinglePlayer}  text="SinglePlayer"></Lnkbtn>
                         <Lnkbtn href="/simulation_m" id="SinglePlayer" onClick={this.Modes} text='Multiplayer Modes'></Lnkbtn>
-                        <Lnkbtn href="/editor" id="Cell Selection" text ="Cells"></Lnkbtn>
+                        <Lnkbtn href="/simulation_editor" id="Cell Selection" text ="Cells"></Lnkbtn>
                     </div>
                 </div>
             </div>
