@@ -6,9 +6,21 @@ const debuggerStyles = {
     padding:'4px'
 }
 
+const Options = (props) => {
+    console.log("op")
+    let numOptions = props.options
+    console.log(numOptions)
+    let inputs = []
+    for(let i = 0; i < numOptions; i++){
+        inputs.push(<p><input key={i} ></input></p>)
+    }
+    return inputs;
+}
+
 class Debugger extends Component {
     state=
     {
+        numPrompts:0,
         onDebugValuesChange:null,
         chatMessage:'',
     }
@@ -76,13 +88,33 @@ class Debugger extends Component {
         }
         this.setState({chatMessage:''})
     }
+    handleNumPromptsChange = (e)=>{
+        this.setState({numPrompts:e.target.value})
+    }
+    addOneChoice = () =>{
+        let choice = this.props.PromptOneChoice("You died, goodnight.")
+        this.props.MakeChoice(choice)
+    }
+    addMultipleChoice = () =>{
+        let choice = this.props.PromptMultipleChoice("What's your favorite color","Red,Blue,Green,Other".split(','),this.onClosePrompt)
+        this.props.MakeChoice(choice)
+    }
   render() 
   {
+      const numPrompts=(this.state.numPrompts)
+      
     return (
       <div style={debuggerStyles}>Debug Window
         <p><input type='number' value={this.state.gridSize} onChange={this.handleGridSize}></input>Grid size</p>
         <p><input type='number' value={this.state.gridSpacing} onChange={this.handleGridSpacing}></input>Spacing</p>
+        <p>
+            <input type="button" onClick={this.addOneChoice}value="One Choice"></input>
+            <input type="button" onClick={this.addMultipleChoice}value="Multi-Choice"></input>
+        </p>
         <form onSubmit={this.SubmitMessage}><input type='text' value={this.state.chatMessage} onChange={this.HandleChatMessage} placeholder={'enter chat message'}/></form>
+        <form onSubmit={this.SubmitChoicePrompt}>
+        
+        </form>
       </div>
     )
   }
