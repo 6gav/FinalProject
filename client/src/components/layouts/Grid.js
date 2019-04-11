@@ -1,6 +1,7 @@
 import React, {Component} from 'react'
 import ChoicePrompt from './ChoicePrompt'
 import './Grid.css'
+import Cell from './resources/Cell.js'
 //import posmark from '../rescources/position_marker.png'
 //import { debug } from 'util';
 const GRID_WIDTH = 40,GRID_HEIGHT = 40;//Default grid dimensions are 40x40
@@ -17,44 +18,7 @@ const RanRange = function(min,max,integer=true){
   }
   //#endregion
 
-class Cell extends Component{
-    state={
-        dimensions:{
-            X:GRID_WIDTH,
-            Y:GRID_HEIGHT,
-            Spacing:GRID_SPACING,
-        }
-    }
-    constructor(props){
-        super(props)
-        this.state.color = props.color?props.color:null;
-        this.state.face = props.face?props.face:null;
-        this.state.imgs = props.imgs?props.imgs:[];
-        this.state.dimensions = props.dimensions?props.dimensions:this.state.dimensions
-    }
-    
-    render(){
-        return(
-            <div className="Cell" style={{
-                left: `${this.state.dimensions.Spacing*this.props.x+1}px`,
-                top: `${this.state.dimensions.Spacing*this.props.y+1}px`,
-                width: `${this.state.dimensions.Spacing-1}px`,
-                height: `${this.state.dimensions.Spacing-1}px`,
-                backgroundColor:'#fff'
-            }}>
-                {()=>{
-                    if(this.state.imgs.length>0){
-                        alert()
-                        return(this.state.imgs.map(img=>(
-                        {/*<img src = {posmark} alt = {''} className='CellContents'/>*/}
-                        )))
-                    }
 
-                }}
-            </div>
-        )
-    }
-}
 /*
 const a =() =>{
     return(
@@ -69,16 +33,13 @@ const RenderCells = (props)=>{
     let cells = props.state.cells;
     if(cells)
     {
-        console.log(cells)
-        console.log("cells")
-        console.log(typeof(cells))
         return(
             cells.map(
                 cell=>(
                     <Cell 
                     x={cell.x} y = {cell.y} 
                     key={`${cell.x},${cell.y}`}
-                    color = {cell.color} 
+                    color = {props.color} 
                     face={cell.face}
                     dimensions = {props.state.dimensions}
                     />
@@ -91,8 +52,8 @@ function RenderChoicePrompt(props)
 {
     if(props.choice){
         return (
-            <div>
-        <ChoicePrompt choice={props.choice} OnChoice={props.OnChoice}/>
+        <div>
+            <ChoicePrompt onClosePrompt={props.onClosePrompt} choice={props.choice} OnChoice={props.OnChoice}/>
         </div>
         )
     }
@@ -110,6 +71,7 @@ class Grid extends Component{
             Y:GRID_HEIGHT,
             Spacing:GRID_SPACING,
         },//default dimensions
+        color:"#c00",
         
 
         onPositionClick:null,//Container for calling events occuring when Grid is clicked
@@ -164,6 +126,7 @@ class Grid extends Component{
             }
         }
         
+        board[10][20] = true
         return board;
     }
     
@@ -220,6 +183,11 @@ class Grid extends Component{
         }
         this.setState();
     }
+    handleChoice = (choice) =>{
+        let color = choice.Action.text;
+        
+        this.setState({color:color})
+    }
     //on initial mount, initializes base onscreen obj values
     
     componentDidUpdate(){
@@ -257,7 +225,8 @@ class Grid extends Component{
         };
         let sp = this.state.dimensions.Spacing,
         w = this.state.dimensions.X*sp,
-        h = this.state.dimensions.Y*sp  
+        h = this.state.dimensions.Y*sp,
+        handleChoice = this.handleChoice
         return (
             <div>
                 <Lnkbtn href='/' text='🢠'></Lnkbtn>
@@ -268,11 +237,11 @@ class Grid extends Component{
                     //stores reference to the div inside of simulation
                     ref={(_ref) => {this.boardRef = _ref;}}>
                     {
-                        <RenderCells state = {this.state}/>
+                        <RenderCells state = {this.state} color={this.state.color}/>
                     } 
                     </div>
                         {
-                            <RenderChoicePrompt isTrue={true} choice={this.props.choice}/>
+                            <RenderChoicePrompt onClosePrompt={this.props.onClosePrompt} isTrue={true} choice={this.props.choice} callback={this.props.callback} OnChoice={handleChoice}/>
                         }
                 </div>
             </div>
