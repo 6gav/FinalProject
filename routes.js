@@ -63,6 +63,10 @@ module.exports.registerPaths = function(app){
         do{
             gameID = Math.floor(Math.random()*8000 + 1000);
         }while(games[gameID]);
+
+        //DEV ONLY
+        gameID = 2000;
+
         games[gameID] = {
             gameID: gameID,
             host: req.body.userID,
@@ -89,7 +93,10 @@ module.exports.registerPaths = function(app){
 
     //User passes in gameID and host's ID, if it is matched with current game that isn't running, game is started
     app.post('/api/StartGame', (req, res) => {
+        console.log(req.body);
         var game = games[req.body.gameID];
+        console.log(games);
+        console.log(game);
         if(!game)
         {
             res.send({error: 'Game not found!', status: 404});
