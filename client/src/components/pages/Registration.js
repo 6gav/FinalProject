@@ -174,12 +174,13 @@ export class Registration extends Component {
         
         <fieldset style={fieldSetLayout}>
             <legend>Sign In</legend>
-            <form name='login_form' className="Login" style={RegisterLayout}>
+            <form name='login_form' className="Login" style={RegisterLayout} onSubmit={this.SubmitLogin}>
                 <p style={formInputContainer}><input name = 'log_email_username' type="text" placeholder="username" onChange={this.onFormChange} style={formInputLayout}/></p>
                 <p style={formInputContainer}>
                     <input name='log_pass' type={this.state.visiblePassword?"text":"password"} placeholder="password" onChange={this.onFormChange} style={formInputLayout}/> 
                     <input name='log_cbx_toggle_pass'type='checkbox' checked={this.state.visiblePassword} onChange={this.togglePassword}/>
                     Show Password</p>
+                <input name='reg_submit' type = 'submit'  value='Submit' style={formSubmitLayout}/>
             </form>
         </fieldset>
       </div>
