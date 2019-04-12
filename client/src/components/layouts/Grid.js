@@ -30,7 +30,17 @@ const a =() =>{
 }
 */
 const RenderCells = (props)=>{
-    let cells = props.state.cells;
+    let cells = null//props.state.cells;
+    if(props.chars){
+        return(
+            chars.map(char=>(
+                <Cell 
+                char={char}
+                dimensions = {props.state.dimensions}
+                />
+            ))
+        )
+    }
     if(cells)
     {
         return(
