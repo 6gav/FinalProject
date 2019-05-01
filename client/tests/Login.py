@@ -26,7 +26,7 @@ def testLogin():
 
     browser.click('btn_home')
     browser.click("btn_sign_in",wait=1)
-    browser.fillByName('log_email_username',acc.email)
+    browser.fillByName('log_email',acc.email)
     browser.fillByName('log_pass',acc.password)
 
 
