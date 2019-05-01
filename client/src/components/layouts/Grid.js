@@ -2,8 +2,7 @@ import React, {Component} from 'react'
 import ChoicePrompt from './ChoicePrompt'
 import './Grid.css'
 import Cell from './resources/Cell.js'
-//import posmark from '../rescources/position_marker.png'
-//import { debug } from 'util';
+
 const GRID_WIDTH = 40,GRID_HEIGHT = 40;//Default grid dimensions are 40x40
 const GRID_SPACING=20;
 
@@ -18,29 +17,10 @@ const RanRange = function(min,max,integer=true){
   }
   //#endregion
 
-
-/*
-const a =() =>{
-    return(
-    <div x={cell.x} y = {cell.y} 
-    key={`${cell.x},${cell.y}`}
-    color={cell.color}
-    face={cell.face}/>
-    )
-}
-*/
-const RenderCells = (props)=>{
-    let cells = null//props.state.cells;
-    if(props.chars){
-        return(
-            chars.map(char=>(
-                <Cell 
-                char={char}
-                dimensions = {props.state.dimensions}
-                />
-            ))
-        )
-    }
+  const RenderCells = (props)=>{
+      console.log("help me")
+      console.log(props.state)
+      let cells = props.state.cells
     if(cells)
     {
         return(
@@ -71,6 +51,7 @@ function RenderChoicePrompt(props)
         return null;
     }
 }
+
 class Grid extends Component{
     state = {
         cells: [],//list of occupied cells and contents
@@ -136,7 +117,7 @@ class Grid extends Component{
             }
         }
         
-        board[10][20] = true
+        board[2][2] = true
         return board;
     }
     
