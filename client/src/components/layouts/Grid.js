@@ -18,8 +18,6 @@ const RanRange = function(min,max,integer=true){
   //#endregion
 
   const RenderCells = (props)=>{
-      console.log("help me")
-      console.log(props.state)
       let cells = props.state.cells
     if(cells)
     {
@@ -117,7 +115,6 @@ class Grid extends Component{
             }
         }
         
-        board[2][2] = true
         return board;
     }
     
