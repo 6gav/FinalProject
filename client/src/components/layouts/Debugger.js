@@ -7,9 +7,7 @@ const debuggerStyles = {
 }
 
 const Options = (props) => {
-    console.log("op")
     let numOptions = props.options
-    console.log(numOptions)
     let inputs = []
     for(let i = 0; i < numOptions; i++){
         inputs.push(<p><input key={i} ></input></p>)
@@ -26,7 +24,6 @@ class Debugger extends Component {
     }
 
     updateGridValues = () => {
-        console.log("hello")
         if(this.props.gridSize)
         {
             this.setState({gridSize:this.props.gridSize})
