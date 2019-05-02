@@ -6,7 +6,7 @@ var Player = class Player {
     constructor(userID, displayName, char){
         this._userID = userID;
         this._displayName = displayName;
-        this.char = char;
+        this._char = char;
     }
 
     get userID(){
@@ -18,11 +18,19 @@ var Player = class Player {
     }
 
     get position(){
-        return this.char.position;
+        return this._char.position;
     }
 
     set position(pos){
-        this.char.position = pos;
+        this._char.position = pos;
+    }
+
+    get char(){
+        return this._char;
+    }
+
+    set char(char){
+        return this._char;
     }
 
 
