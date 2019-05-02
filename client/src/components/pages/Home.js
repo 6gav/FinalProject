@@ -20,7 +20,8 @@ Blues
 
 //#endregion
     BeginSinglePlayer = (event) =>{
-        //
+        this.props.CreateGame()
+        //multiplayer is simply a publicly initialized game  
     }
     Modes = (event) =>{
 
@@ -29,20 +30,20 @@ Blues
         //Holds "buttons" that 
         const Lnkbtn = (props) =>
         {
-            
             return (
-            <div className = 'LinkContainer'>
-                <a className="button" href = {props.href}>{props.text}</a>
-            </div>
+                <div className = 'LinkContainer' >
+                    <a className="button" href = {props.href} onClick={props.onClick}>{props.text}</a>
+                </div>
             );
         }
+
         return(
             <div >
                 <div className="Page">
                     <div className="Title">DeGaS Final Project</div>
                     <div className="TitleMenuContainer">
-                        <Lnkbtn href="/simulation_s" id="SinglePlayer" onClick={this.BeginSinglePlayer}  text="SinglePlayer"></Lnkbtn>
-                        <Lnkbtn href="/simulation_m" id="SinglePlayer" onClick={this.Modes} text='Multiplayer Modes'></Lnkbtn>
+                        <Lnkbtn href="/simulation" id="SinglePlayer" onClick={this.BeginSinglePlayer}  text="SinglePlayer"></Lnkbtn>
+                        <Lnkbtn href="/simulation" id="MultiPlayer" onClick={this.Modes} text='Multiplayer Modes'></Lnkbtn>
                         <Lnkbtn href="/simulation_editor" id="Cell Selection" text ="Cells"></Lnkbtn>
                     </div>
                 </div>
