@@ -5,17 +5,14 @@ import CellList from './tools/CellList.js'
 
 
 class CellEditor extends Component {
-
-
-    GetCellsFromStorage=()=>{
-        let cells = JSON.parse(localStorage.getItem("cells")).cells
-        console.log(cells)
-        console.log("efea")
-        return cells==null?[]:cells
-      }
     
     componentDidMount(){
-        
+        if(this.state.cells == null){
+            let cells = this.props.GetCellsFromStorage()
+            if(cells != null){
+                this.setState({cells:cells})
+            }
+        }
     }
     constructor(props){
         super(props);
@@ -31,7 +28,6 @@ class CellEditor extends Component {
         color:this.props.colors[0],
         face:this.props.expressions[0],
         name:"",
-        cells:this.GetCellsFromStorage()
     }
     state=this.initState;
     ChangeFace = (e) =>{
@@ -91,20 +87,20 @@ class CellEditor extends Component {
                 }
             </div>
             <div className='Preview'>
-            <div className='Preview'>
-                
-                <img className='Body' src={this.props.cell_body}></img>
-                <img className='Color' src={this.state.color}></img>
-                <img className='Face' src={this.state.face}></img>
+                <div className='Preview'>
+                    <div style={{position:'relative'}}>
+                        <img className='Body' src={this.props.cell_body}></img>
+                        <img className='Color' src={this.state.color}></img>
+                        <img className='Face' src={this.state.face}></img>
+                    </div>
                 </div>
                 <form onSubmit={this.SaveCell}>
                     <input type='text' onChange={this.HandleNameChange} placeholder='Name this cell'/>
-                    <input type='submit' value='Save'/>                    
-                    <CellList state={this.state.cells} cell_body={this.props.cell_body}></CellList>
-
+                    <input type='submit' value='Save'/> 
                 </form>
             </div>
             <div className='CellListContainer'>
+                    <CellList state={this.state.cells} cell_body={this.props.cell_body}></CellList>
             </div>
         </div>
     )
