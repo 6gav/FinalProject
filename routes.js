@@ -2,6 +2,8 @@ var GameManager = require('./server/game.js');
 
 const api = require('./server/api.js');
 const error = require('./server/error.js');
+var Player = require('./server/classes/player');
+var Character = require('./server/classes/character');
 
 var games = {};
 
@@ -72,7 +74,8 @@ module.exports.registerPaths = function(app){
             host: req.body.userID,
             players: []
         }
-        games[gameID].players.push({userID: req.body.userID, displayName: req.body.username});
+
+        games[gameID].players.push(new Player(req.body.userID, req.body.displayName, new Character({x: 0, y: 0})));
         console.log('Created game:');
         console.log(games[gameID]);
         res.send({gameID: gameID});
