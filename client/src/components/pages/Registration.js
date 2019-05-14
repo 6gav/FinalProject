@@ -76,7 +76,7 @@ export class Registration extends Component {
 
         let {password} = this.state
         let account_name = this.state.email
-        let props = this.props.props;
+        let props = this.props;
         if(!ValidateForm('login_form',['log_pass','log_email'])){
             return
         }

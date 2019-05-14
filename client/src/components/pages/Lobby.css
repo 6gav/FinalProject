@@ -6,6 +6,7 @@
 }
 
 .LobbyList{
+    position: relative;
     width: 50vw;
     margin: 50px;
     flex: 1;
@@ -18,4 +19,11 @@
 
 .CenterText{
     text-align: center
+}
+
+.button-bottom-elem{
+    position: absolute;
+    bottom: 0%;
+    width: 100%;
+    left: 0%;
 }
