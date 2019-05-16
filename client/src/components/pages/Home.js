@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import './Home.css'
+import RefButton from './tools/RefButton'
 
 class Home extends Component{
 //#region colors
@@ -27,24 +28,16 @@ Blues
 
     }
     render(){
-        //Holds "buttons" that 
-        const Lnkbtn = (props) =>
-        {
-            return (
-                <div className = 'LinkContainer' >
-                    <a className="button" href = {props.href} onClick={props.onClick}>{props.text}</a>
-                </div>
-            );
-        }
-
+        
+        
         return(
             <div >
                 <div className="Page">
                     <div className="Title">DeGaS Final Project</div>
                     <div className="TitleMenuContainer">
-                        <Lnkbtn href="/simulation" id="SinglePlayer" onClick={this.BeginSinglePlayer}  text="SinglePlayer"></Lnkbtn>
-                        <Lnkbtn href="/simulation" id="MultiPlayer" onClick={this.Modes} text='Multiplayer Modes'></Lnkbtn>
-                        <Lnkbtn href="/simulation_editor" id="Cell Selection" text ="Cells"></Lnkbtn>
+                        <RefButton href="/simulation" id="SinglePlayer" onClick={this.BeginSinglePlayer}  text="SinglePlayer"></RefButton>
+                        <RefButton href="/simulation" id="MultiPlayer" onClick={this.Modes} text='Multiplayer Modes'></RefButton>
+                        <RefButton href="/simulation_editor" id="Cell Selection" name="btn_home_cell_selection"text ="Cells"></RefButton>
                     </div>
                 </div>
             </div>

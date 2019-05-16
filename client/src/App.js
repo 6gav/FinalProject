@@ -12,6 +12,10 @@ import ProfilePage from "./components/pages/ProfilePage"
 import Lobby from "./components/pages/Lobby"
 import CellEditor from "./components/pages/CellEditor"
 
+
+import openSocket from 'socket.io-client';
+const socket = openSocket('http://localhost:5000')
+
 //#region cell imports.
 import cell_body from './components/layouts/resources/cell/cell_body.png'
 import color_mask_00 from './components/layouts/resources/cell/color_mask_00.png'
@@ -123,7 +127,11 @@ class App extends Component {
 
   //gets local user cells
   GetCellsFromStorage=()=>{
-    let cells = JSON.parse(localStorage.getItem("cells")).cells
+    let cells = JSON.parse(localStorage.getItem("cells"))
+
+    if(cells != null){
+      cells = cells.cells
+    }
     
     return cells==null?[]:cells
   }
@@ -194,6 +202,7 @@ class App extends Component {
   
   GetPlayers = (gameID) =>
   {
+    //grabs list of players in current game
     console.log("Fetching Players")
     let players = null
       fetch('/api/GetPlayers', {
@@ -213,6 +222,28 @@ class App extends Component {
       }).catch(function(error) {
       });
       return players;
+  }
+  SetCellSelection = (index) =>{
+    //sends the server which cell current 
+    //user will play as
+    let user = this.state.user
+    console.log(user.uid)
+    
+    fetch('/api/SetUserCell', {
+      method: 'POST',
+      headers:{
+          'Content-Type':'Application/json',
+      },
+      body: JSON.stringify({
+        //pass in host's current game
+        uid:user.uid,
+        index:index
+      })
+  }).then(function(response) {
+      console.log(response)
+  }).then(function(json) {
+  }).catch(function(error) {
+  });
   }
   CreateGame = () => {
     let user = this.GetUser();
@@ -244,9 +275,36 @@ class App extends Component {
     });
     return true;
   }
-
+  StartGame = () =>{
+    let user = this.state.user,userID=user.uid,displayName=user.displayName
+    console.log(user)
+    
+    fetch('/api/StartGame', {
+      method: 'POST',
+      headers:{
+          'Content-Type':'Application/json',
+      },
+      body: JSON.stringify({
+        userID:userID,
+        displayName:displayName
+      })
+    }).then(function(response) {
+       return response.json();
+    }).then(function(json) {
+      console.log(json)
+    }).catch(function(error) {
+      console.log(error);
+    });
+    return true;
+  }
 
   render() {
+    let game_data={
+      cell_body:cell_body,
+      expressions:expressions,
+      colors:colors,
+    }
+
     const SinglePlayerGame= ()=>{
       //post start game to server
       
@@ -255,18 +313,18 @@ class App extends Component {
         return (<div className="GameSpace">
           <Grid onClosePrompt={this.onClosePrompt}choice={this.state.choice} 
           OnChoice={this.OnChoice} gridSize={this.state.gridSize} gridSpacing={this.state.gridSpacing} 
-          onPositionClick={this.onPositionClick}></Grid></div>);
+          onPositionClick={this.onPositionClick}  GetCellsFromStorage={this.GetCellsFromStorage}></Grid></div>);
           }
         const MultiPlayerGame = (<div className="GameSpace">
         <Grid choice={this.state.choice} OnChoice={this.OnChoice} gridSize={this.state.gridSize} gridSpacing={this.state.gridSpacing} onPositionClick={this.onPositionClick}></Grid>
           <Interface onDebugValuesChange={this.onDebugValuesChange} messages={this.state.messages} AddMessage={this.AddMessage}></Interface></div>);
           const CustomizeCell = ()=>{
             return (
-              <CellEditor GetCellsFromStorage={this.GetCellsFromStorage}expressions={expressions} colors={colors} cell_body={cell_body}/>
+              <CellEditor GetCellsFromStorage={this.GetCellsFromStorage}game_data={game_data}/>
             )
           }
     
-
+    
 
     let MakeChoice = this.MakeChoice
     return (
@@ -279,10 +337,10 @@ class App extends Component {
               <Route exact path='/'   render={() => <Home CreateGame={this.CreateGame}/>}/>
               <Route exact path='/simulation_s'       render={() =><SinglePlayerGame/>} />
               <Route exact path='/simulation_m'       render={() =><MultiPlayerGame/>}  />
-              <Route exact path='/simulation'         render={() =><Lobby cell_body={cell_body} GetCellsFromStorage = {this.GetCellsFromStorage}mode ={"singleplayer"}user={this.user} GetPlayers={this.GetPlayers}/>}/>
-              <Route exact path='/simulation_editor'  render={()=><CustomizeCell user={this.state.user}/>}/>
+              <Route exact path='/simulation'         render={() =><Lobby  game_data={game_data} func={{StartGame:this.StartGame,GetCellsFromStorage:this.GetCellsFromStorage,GetPlayers:this.GetPlayers,SetCellSelection:this.SetCellSelection}}mode ={"singleplayer"}user={this.user}/>}/>
+              <Route exact path='/simulation_editor'  render={()=><CustomizeCell game_data={game_data} user={this.state.user}/>}/>
               <Route exact path='/about'              render={()=><About          version={version}/>} />
-              <Route exact path='/signin'             render={()=><Registration   props={{version:version,LoginUser:this.LoginUser}} hasAuthuser = {this.hasAuthuser}/>}/>
+              <Route exact path='/signin'             render={()=><Registration   version={version}LoginUser={this.LoginUser} hasAuthuser = {this.hasAuthuser}/>}/>
               <Route exact path='/profile'            render={()=><ProfilePage    version = {version} user={this.state.user} LogoutUser={this.LogoutUser}/>}/>
             </Switch>
             

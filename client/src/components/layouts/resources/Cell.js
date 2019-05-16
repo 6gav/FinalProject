@@ -10,17 +10,16 @@ import { SSL_OP_SSLEAY_080_CLIENT_DH_BUG } from 'constants';
 let cell_color=null;
 export class Cell extends Component {
     state={
-        dimensions:{
-            X:this.props.GRID_WIDTH,
-            Y:this.props.GRID_HEIGHT,
-            Spacing:this.props.GRID_SPACING,
-        }
     }
     constructor(props){
         super(props)
     }
     
     render(){
+        console.log("rendering cell")
+        console.log(this.state)
+        let cell_primary = this.props.cell_primary,
+        cell_secondary   = this.props.cell_secondary
         let char = this.props.char?this.props.char:null
         let color = (this.props.color?this.props.color:this.state.color)
         if(char){
@@ -31,18 +30,19 @@ export class Cell extends Component {
         let spacing = this.props.dimensions.Spacing*0.8,rad=-2,
         translation='translate('+rad+'px, '+rad+'px)',
         invlation = 'translate('+(-rad)+'px, '+(-rad)+'px)';
-        return <div/>
+        
         return(
             <div className="Cell" style={{
                 transform:invlation,
-                left:   `${this.state.dimensions.Spacing*this.props.x+1}px`,
-                top:    `${this.state.dimensions.Spacing*this.props.y+1}px`,
-                width:  `${this.state.dimensions.Spacing-1}px`,
-                height: `${this.state.dimensions.Spacing-1}px`,
+                left:   `${spacing*this.props.x+1}px`,
+                top:    `${spacing*this.props.y+1}px`,
+                width:  `${spacing-1}px`,
+                height: `${spacing-1}px`,
                 
             }}>
-            <img src = {cell_body}  style={{tintColor:`${color}`,position:'absolute',width:spacing,height:spacing,opacity:'0.3'}}></img>
-            <img src = {cell_body} style={{transform:translation,position:'absolute',width:this.state.dimensions.Spacing}}></img>
+            <img src = {cell_body} style={{position:'absolute',width:spacing,height:spacing}}></img>
+            <img src = {cell_primary}  style={{tintColor:`${color}`,position:'absolute',width:spacing,height:spacing}}></img>
+            <img src = {cell_secondary} style={{position:'absolute',width:spacing,height:spacing}}></img>
                 {()=>{
                     if(this.state.imgs.length>0){
                         alert()
