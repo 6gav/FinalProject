@@ -35,9 +35,9 @@ Blues
                 <div className="Page">
                     <div className="Title">DeGaS Final Project</div>
                     <div className="TitleMenuContainer">
-                        <RefButton href="/simulation" id="SinglePlayer" onClick={this.BeginSinglePlayer}  text="SinglePlayer"></RefButton>
-                        <RefButton href="/simulation" id="MultiPlayer" onClick={this.Modes} text='Multiplayer Modes'></RefButton>
-                        <RefButton href="/simulation_editor" id="Cell Selection" name="btn_home_cell_selection"text ="Cells"></RefButton>
+                        <RefButton name="btn_singleplayer" href="/simulation" id="SinglePlayer" onClick={this.BeginSinglePlayer}  text="SinglePlayer"></RefButton>
+                        <RefButton name="btn_multiplayer" href="/simulation" id="MultiPlayer" onClick={this.Modes} text='Multiplayer Modes'></RefButton>
+                        <RefButton name="btn_editor" href="/simulation_editor" id="Cell Selection" name="btn_home_cell_selection"text ="Cells"></RefButton>
                     </div>
                 </div>
             </div>
