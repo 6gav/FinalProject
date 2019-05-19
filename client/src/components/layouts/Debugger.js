@@ -6,17 +6,41 @@ const debuggerStyles = {
     padding:'4px'
 }
 
+const Options = (props) => {
+    let numOptions = props.options
+    let inputs = []
+    for(let i = 0; i < numOptions; i++){
+        inputs.push(<p><input key={i} ></input></p>)
+    }
+    return inputs;
+}
+
 class Debugger extends Component {
     state=
     {
-        gridSize:20,
-        gridSpacing:20,
+        numPrompts:0,
         onDebugValuesChange:null,
         chatMessage:'',
+    }
+
+    updateGridValues = () => {
+        if(this.props.gridSize)
+        {
+            this.setState({gridSize:this.props.gridSize})
+        }
+        if(this.props.gridSpacing != this.state.gridSpacing)
+        {
+            this.setState({gridSpacing:this.props.gridSpacing})
+        }
+    }
+
+    componentDidMount(){
+    this.updateGridValues()
     }
     constructor(props)
     {
         super(props)
+        this.updateGridValues()
         if(props.onDebugValuesChange)
         {
             this.state.onDebugValuesChange = props.onDebugValuesChange
@@ -27,8 +51,6 @@ class Debugger extends Component {
     handleGridSize = (e) =>
     {
         let gridSize = e.target.value;
-        gridSize = gridSize<15?15:gridSize
-        gridSize = gridSize>70?70:gridSize
         this.setState({gridSize:gridSize})
         if(this.state.onDebugValuesChange){
             this.state.onDebugValuesChange({gridSize:gridSize})
@@ -40,8 +62,6 @@ class Debugger extends Component {
     {
         let gridSpacing = e.target.value;
         
-        gridSpacing = gridSpacing<5?5:gridSpacing
-        gridSpacing = gridSpacing>30?30:gridSpacing
 
         this.setState({gridSpacing:gridSpacing})
         if(this.state.onDebugValuesChange)
@@ -55,22 +75,43 @@ class Debugger extends Component {
         this.setState({chatMessage:chatMessage})
     }
 
-    SubmitMessage = () =>
+    SubmitMessage = (e) =>
     {
+        e.preventDefault()
         let msg = this.state.chatMessage
         if(msg.length > 0)
         {
-        console.log(msg)
+            this.props.AddMessage({sender:'Debug',data:msg})
         }
         this.setState({chatMessage:''})
     }
+    handleNumPromptsChange = (e)=>{
+        this.setState({numPrompts:e.target.value})
+    }
+    addOneChoice = () =>{
+        let choice = this.props.PromptOneChoice("You died, goodnight.")
+        this.props.MakeChoice(choice)
+    }
+    addMultipleChoice = () =>{
+        let choice = this.props.PromptMultipleChoice("What's your favorite color","Red,Blue,Green,Other".split(','),this.onClosePrompt)
+        this.props.MakeChoice(choice)
+    }
   render() 
   {
+      const numPrompts=(this.state.numPrompts)
+      
     return (
       <div style={debuggerStyles}>Debug Window
         <p><input type='number' value={this.state.gridSize} onChange={this.handleGridSize}></input>Grid size</p>
         <p><input type='number' value={this.state.gridSpacing} onChange={this.handleGridSpacing}></input>Spacing</p>
-        <p><input type='text' value={this.state.chatMessage} onChange={this.HandleChatMessage} placeholder={'enter chat message'}></input><input type="submit" value="Send Message" onClick={this.SubmitMessage}></input></p>
+        <p>
+            <input type="button" onClick={this.addOneChoice}value="One Choice"></input>
+            <input type="button" onClick={this.addMultipleChoice}value="Multi-Choice"></input>
+        </p>
+        <form onSubmit={this.SubmitMessage}><input type='text' value={this.state.chatMessage} onChange={this.HandleChatMessage} placeholder={'enter chat message'}/></form>
+        <form onSubmit={this.SubmitChoicePrompt}>
+        
+        </form>
       </div>
     )
   }

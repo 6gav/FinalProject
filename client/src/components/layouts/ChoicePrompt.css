@@ -1,0 +1,14 @@
+.Prompt{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+    width: 25vw;
+    background-color: lightblue;
+}
+.PromptMessage{
+    position: relative;
+    background-color: aqua;
+    text-align: center;
+    font-size: 130%;
+}

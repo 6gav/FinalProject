@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
-import { Link } from 'react-router-dom'
 import './Home.css'
+import RefButton from './tools/RefButton'
 
 class Home extends Component{
 //#region colors
@@ -21,36 +21,23 @@ Blues
 
 //#endregion
     BeginSinglePlayer = (event) =>{
-        //
+        this.props.CreateGame()
+        //multiplayer is simply a publicly initialized game  
     }
     Modes = (event) =>{
 
     }
     render(){
-        //Holds "buttons" that 
-        const Lnkbtn = (props) =>
-        {
-            const linkStyle = {
-                color:'#fff',
-                textDecoration: 'none'
-            }
-            //link
-            //<Link to={this.props.href?this.props.href:'/'}>{this.props.text}</Link>
-            
-            return (
-            <div className = 'LinkContainer'>
-                <a className="button" href = {props.href}>{props.text}</a>
-            </div>
-            );
-        }
+        
+        
         return(
             <div >
                 <div className="Page">
                     <div className="Title">DeGaS Final Project</div>
                     <div className="TitleMenuContainer">
-                        <Lnkbtn href="/game" id="SinglePlayer" onClick={this.BeginSinglePlayer}  text="SinglePlayer"></Lnkbtn>
-                        <Lnkbtn href="/game" id="SinglePlayer" onClick={this.Modes} text='Multiplayer Modes'></Lnkbtn>
-                        <Lnkbtn href="/game" id="Cell Selection" text ="Cells"></Lnkbtn>
+                        <RefButton name="btn_singleplayer" href="/simulation" id="SinglePlayer" onClick={this.BeginSinglePlayer}  text="SinglePlayer"></RefButton>
+                        <RefButton name="btn_multiplayer" href="/simulation" id="MultiPlayer" onClick={this.Modes} text='Multiplayer Modes'></RefButton>
+                        <RefButton name="btn_editor" href="/simulation_editor" id="Cell Selection" name="btn_home_cell_selection"text ="Cells"></RefButton>
                     </div>
                 </div>
             </div>

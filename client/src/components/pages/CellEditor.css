@@ -1,0 +1,39 @@
+.BtnContainer{
+    background-color: black;
+}
+.Button{
+    width:32px;
+    height:32px;
+    background-color: gray;
+    margin: 10px
+}
+.Body{
+    position: absolute;
+    width:64px;
+    height:64px;
+    transform: translate(0px,-32px)
+}
+.Color{
+    position: absolute;
+    width:64px;
+    height:64px;
+    transform: translate(0px,-32px)
+}
+.Face{
+    position: absolute;
+    width:32px;
+    height:32px;
+    transform: translate(16px,-16px)
+}
+.Preview{
+    background-color: darkslategray;
+    padding: 32px;
+    margin: 32px;
+}
+
+.CellListContainer{
+    background-color: darkslategray;
+    padding: 32px;
+    margin: 32px;
+}
+

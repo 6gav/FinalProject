@@ -9,7 +9,7 @@ def DomainAddr():
 def String(length=0):
     email_name = ''
     if(length==0):
-        length= random.randint(5,10)
+        length= random.randint(7,12)
     for i in range(length):
         email_name = email_name + chr(ord('a')+random.randint(0,25))
     return email_name

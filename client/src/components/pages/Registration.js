@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import { Redirect } from 'react-router-dom';
 
 const RegisterLayout = 
 {
@@ -43,7 +44,7 @@ const InsertHTML = (element,where,text) => {
     }
 }
 const ValidateForm = (form_name,input_names) =>{
-    for(let i = 0; i < formvalues.length;i++)
+    for(let i = 0; i < input_names.length;i++)
     {
         var x = toString((document.forms[form_name][input_names[i]]).value);
         
@@ -63,7 +64,7 @@ export class Registration extends Component {
         username:'',
         password:'',
         'confirm password':'',
-        "email or username":'',
+        "username":'',
         visiblePassword:false
     }
     togglePassword = () => {
@@ -74,16 +75,14 @@ export class Registration extends Component {
         e.preventDefault()
 
         let {password} = this.state
-        let account_name = this.state["email or username"]
-
-        if(!ValidateForm('login_form',['log_pass','log_cbx_toggle_pass'])){
+        let account_name = this.state.email
+        let props = this.props;
+        if(!ValidateForm('login_form',['log_pass','log_email'])){
             return
         }
         let email = '', username = ''
         if(account_name.includes('@')){
             email=account_name
-        }else{
-            username = account_name
         }
         fetch('/api/loginUser', {
             method: 'POST',
@@ -92,18 +91,20 @@ export class Registration extends Component {
             },
             body: JSON.stringify({
                 email:email,
-                username:username,
                 password:password,
             })
-          
           }).then(function(response) {
-             return response.json();
-          
+              let res = response.json()
+
+             return res;
           }).then(function(json) {
-            console.log(json)
+                props.LoginUser(json.user)
+                console.log(json)
+                
           }).catch(function(error) {
             console.log(error);
           });
+
     }
     SubmitRegistration = (e) =>{
         e.preventDefault()
@@ -135,10 +136,8 @@ export class Registration extends Component {
                     username:username,
                     password:password,
                 })
-              
               }).then(function(response) {
                  return response.json();
-              
               }).then(function(json) {
                 console.log(json)
               }).catch(function(error) {
@@ -156,7 +155,16 @@ export class Registration extends Component {
         this.setState({[e.target.placeholder]:e.target.value})
     }
   render() {
-    return (
+      let hasAuthuser = this.props.hasAuthuser;
+      if(hasAuthuser())
+      {
+        
+        return <div>
+            You are now logged in.
+            <Redirect to='/'/>
+            </div>
+      }
+      else return (
       <div style={pageLayout}>
         <fieldset style={fieldSetLayout}>
             <legend>Register Here</legend>
@@ -174,12 +182,13 @@ export class Registration extends Component {
         
         <fieldset style={fieldSetLayout}>
             <legend>Sign In</legend>
-            <form name='login_form' className="Login" style={RegisterLayout}>
-                <p style={formInputContainer}><input name = 'log_email_username' type="text" placeholder="email or username" onChange={this.onFormChange} style={formInputLayout}/></p>
+            <form name='login_form' className="Login" style={RegisterLayout} onSubmit={this.SubmitLogin}>
+                <p style={formInputContainer}><input name = 'log_email' type="text" placeholder="email" onChange={this.onFormChange} style={formInputLayout}/></p>
                 <p style={formInputContainer}>
                     <input name='log_pass' type={this.state.visiblePassword?"text":"password"} placeholder="password" onChange={this.onFormChange} style={formInputLayout}/> 
                     <input name='log_cbx_toggle_pass'type='checkbox' checked={this.state.visiblePassword} onChange={this.togglePassword}/>
                     Show Password</p>
+                <input name='log_submit' type = 'submit'  value='Submit' style={formSubmitLayout}/>
             </form>
         </fieldset>
       </div>

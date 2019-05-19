@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
-import Img_Interface from '../resources/UserInterface.png'
-
+import Img_Interface from '../rescources/UserInterface.png'
+import './Interface.css'
 const UIStyle = {
     backgroundColor:"#cfc"
 }
@@ -10,75 +10,53 @@ const UIStyle = {
 class MessageList extends React.Component{
     messagesEnd = null;
     state = {
-        list : document.createElement('ul'),
-        messageCount:0,
+        list : null,
         bottom:null,
+        showButton:true
     }
-    scrollToBottom = () => {
-        if(this.state.bottom){
-            this.state.bottom.scrollIntoView({ behavior: "smooth" });
-        }
-      }
     constructor(props){
         super(props);
-        let messages=[]
-        
+        let messages=this.props.messagess
         if(props.messages){
-            for(let i = 0; i < props.messages.length; i++){
-                if(props.messages[i]!= ""){
-                    messages.push(props.messages[i])
-                }
+            for(let i = 0; i < this.props.messages.length; i++){
+                
             }
         }
         this.state.messages = messages
         
         let messageCount = this.state.messageCount;
-        this.state.list.className="OrderedList"
-        if(messages.length!=0){
-            //for(var i = messages.length-1; i >= 0; i--){
-            while(messageCount < messages.length){
-                if(messages[messageCount]!= "" && messages[messageCount]!= null){
-
-                    var item = document.createElement('li')
-                    item.className="ListItem"
-                    item.appendChild(document.createTextNode(messages[messageCount]));
-                    
-                    this.state.list.appendChild(item);
-                    this.state.bottom = item;
-                }
-                messageCount++;
-                
-            }
-            this.state.messageCount = messageCount
-            console.log("Messages")
-            console.log(messages)
-        }
+        
     }
-    componentDidUpdate(props){
-        
-        
-        let list = this.state.list;
-        let messages=props.messages?props.messages:[]
-        let messageCount = this.state.messageCount;
-        if(messageCount < messages.length && 0 < messages.length){
-            
-            
-            var item = document.createElement('li')
-                item.appendChild(document.createTextNode(messages[messageCount]));
-                
-                list.appendChild(item);
-                this.setState({messageCount:( messageCount+1)})
-                this.scrollToBottom();
-        }
-        this.state.list = list;
-        
-        if(list != null){
-            document.getElementById("listContainer").appendChild(list)
-            }
-    }
+    
     render(){
+        let i = 0;
         return (
-        <div id="listContainer">
+        <div id="listContainer"style ={{overflow: 'scroll',position:'absolute',backgroundColor:'#eee',top:'20px',left:'19px',width:'361px',height:'473px'}}>
+        
+        <ul className="Message-List">
+            {
+                
+                this.props.messages.map( (message)=>{
+                    i++;
+                    if(i == this.props.messages.length){
+                        return <div key={message.id} id="LastMessage" name="LastMessage">
+                        <div className="MessageDivider"/>
+                            <li><div>
+                            {message.sender}:  {message.data}
+                            </div></li>
+                        </div>
+                    }
+                    else{
+                        return <div key={message.id}>
+                    <div className="MessageDivider"/>
+                        <li><div>{message.sender}:  {message.data}</div></li>
+                    </div>
+                    }
+            
+                }
+                )}
+        </ul>
+        
         </div>
         );
     }
@@ -88,27 +66,23 @@ class MessageList extends React.Component{
 class Interface extends React.Component {
     state={
         pos:[-1,-1],
-        messages:[],
         user_input:"",
         MouseClick: false,
     }
     constructor(props){
         super(props)
         if(props.messages){
-            this.state.messages = props.messages
+            
         }
-    }
-    componentDidMount(props){
-        this.setState({pos:props})
     }
     parseApiCall(data){
         if(data.length>1){
             
         }
         let arr = []
-        arr.push("TEST API RESPONSE")
+        arr.push({sender:'//',data:"TEST API RESPONSE"})
         for(let i = 1; i < data.length;i++){
-            arr.push(data[i])
+            arr.push({sender:'//',data:data[i]})
         }
         return arr
     }
@@ -136,9 +110,10 @@ class Interface extends React.Component {
         
         let data = message.split(' '),response = ""
         
-        switch(data[0]){
+        switch(data[0])
+        {
             case "/api":
-            response = this.parseApiCall(data)
+                response = this.parseApiCall(data)
             break;
             case "/help":
                 response = ["nohelp4u","cint"]
@@ -147,7 +122,21 @@ class Interface extends React.Component {
                 response = this.PlayersCommand(data)
             break;
             case "/command":
-            response = "This is a response to a command."
+                response = "This is a response to a command."
+            break;
+            case "/resize":
+                let obj = {};
+                if(data.length > 1){
+                    obj = {gridSize:data[1]}
+                    if(data.length > 2){
+                        obj.gridSpacing = data[2]
+                    }
+                    response = "Resized the window"
+                    this.props.onDebugValuesChange(obj)
+                }
+                else{
+                    response = "/resize (scale) (spacing)"
+                }
             break;
             default:
                 console.log(data)
@@ -156,61 +145,37 @@ class Interface extends React.Component {
             
             
         }
-        return response;
+        return {data:response};
     }
     
-    AddMessage(message){
-        console.log(message)
-        let messages = this.state.messages;
-        if(messages){
-            if(typeof message == "string"){
-                messages.data.push(message)
-    
-            }
-            
-            if(Array.isArray(message))
-            {
-                for(let i = 0; i < message.length; i++){
-                    messages.data.push(message[i])
-                }
-            }
-            else if(message.data){
-                if(message.id != this.state.id){
-                    messages.data.push(message.data[0])
-                    this.state.id = message.id?message.id:this.state.id
-                    this.forceUpdate()
-                }
-            }
-        this.state.messages = messages;
-        }
-    }
     //#region handles
     handleSubmit(event){
         event.preventDefault();
+        this.scrollToBottom()
         let message = this.state.user_input,messages = this.state.messages;
         this.state.user_input = "";
-        if(message != "" && messages != null){
-            
+        if(message != ""){
             if(typeof message == "string"){
-                this.AddMessage({data:[message],id:null})
+                this.props.AddMessage({data:[message],id:null})
             }
             else{
-                this.AddMessage({data:message,id:-1})
+                this.props.AddMessage({data:message,id:-1})
             }
             if(message[0]=='/')
             {
                 let resp = this.parseMessage(message)
-                if(typeof resp == "string"){
-                    this.AddMessage({data:[resp],id:0})
-                }else if(Array.isArray(resp)){
-                    console.log("Hello")
-                    for(let i = 0; i < resp.length; i++){
-                        
-                        this.AddMessage(resp[i])
+                
+                if(typeof resp.data == "string"){
+                    this.props.AddMessage(resp)
+                }else if(Array.isArray(resp.data)){
+                    for(let i = 0; i < resp.data.length; i++){
+                        this.props.AddMessage({sender:'arr',data:resp.data[i]})
                     }
                 }
+                else{
+                    this.props.AddMessage(resp)
+                }
             }
-            this.setState({messages:messages})
         }
 
         
@@ -220,49 +185,29 @@ class Interface extends React.Component {
         
     }
     //#endregion
-    componentDidUpdate(props){
-        let mid = this.state.id?this.state.id:-1;
-        if(this.props.messages){
-                {
-                    if(this.props.messages.data.length != 0){
-                    //there is retrievable data
-                    if(mid != this.props.messages.id){
-
-                        console.log("mid: " + this.state.id + " lastid: " + this.props.messages.id)
-                        if(Array.isArray(this.props.messages)){
-                            for(let i = 0; i < this.props.messages.length; i++){
-                                this.AddMessage(this.props.messages[i])
-                            }
-                        }
-                        else{
-                            this.AddMessage(this.props.messages)
-                        }
-                        this.state.id = this.props.messages.id
-
-                    }
-                }
-            }
+    
+    
+    scrollToBottom = () => {
+        let bottom = document.getElementsByName("LastMessage")
+        
+        if(bottom[0]){
+            bottom[0].scrollIntoView({ behavior: "smooth" });
         }
+      }
+    
+    componentDidMount(){
+        this.scrollToBottom()
     }
-      
-    render(){
-        if(this.state.messages){
 
-        }
-        console.log(this.state.messages)
-        console.log("hello")
-        console.log(this.state)
-        //console.log(this.state.pos)
+    render(){
         return(
             <div className='UserInterface'>
                 <img className="Background" src={Img_Interface}/>
                 <div className="History">
-                    
-                    <MessageList messages={this.state.messages.data} />
-                    
+                    <MessageList  messages={this.props.messages}/>
                 </div>
                 <form  className="Input-Form" onSubmit={this.handleSubmit.bind(this)}>
-                <input className="User_Input" onChange={this.handleUserInputChange.bind(this)} type="text" placeholder=". . ." value={this.state.user_input}/> 
+                    <input name="ib_messages" className="User_Input" onChange={this.handleUserInputChange.bind(this)} type="text" placeholder=". . ." value={this.state.user_input}/> 
                 </form>
             </div>
         )
