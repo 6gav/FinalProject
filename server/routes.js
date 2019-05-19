@@ -68,7 +68,7 @@ function registerUserPaths(app){
         }
 
         var cb = (status) => {
-                res.send({message: status.message, uid: status.uid}); 
+                res.send({message: status.message, user: status.user}); 
         };
 
         userApi.loginUser(user, cb);

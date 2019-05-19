@@ -47,7 +47,7 @@ function loginUser(user, cb){
             }
 
             if(val.password == user.password){
-                cb({statusCode: 0, message: 'Login successful', uid: res.uid});
+                cb({statusCode: 0, message: 'Login successful', user: {uid: res.uid, displayName: val.displayName, email: res.email}});
                 return;
             }
 
