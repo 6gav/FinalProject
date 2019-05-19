@@ -98,7 +98,7 @@ export class Registration extends Component {
 
              return res;
           }).then(function(json) {
-              props.LoginUser(json.user)
+                props.LoginUser(json.user)
                 console.log(json)
                 
           }).catch(function(error) {

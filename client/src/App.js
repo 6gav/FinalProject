@@ -14,7 +14,6 @@ import CellEditor from "./components/pages/CellEditor"
 
 
 import openSocket from 'socket.io-client';
-const socket = openSocket('http://localhost:5000')
 
 //#region cell imports.
 import cell_body from './components/layouts/resources/cell/cell_body.png'
@@ -56,13 +55,13 @@ const colors =
   color_mask_02,
   color_mask_03,
   color_mask_04,
-
+  
   color_mask_05,
   color_mask_06,
   color_mask_07,
   color_mask_08,
   color_mask_09,
-
+  
   color_mask_10,
   color_mask_11,
   color_mask_12,
@@ -75,6 +74,7 @@ const colors =
 //cowboy hat leather chaps
 const uuidv1 = require('uuid/v1');
 const version = "v0.1.4.";
+const socket = openSocket('http://localhost:5000')
 
 
 const PromptOneChoice=(message,event=null)=>{
@@ -86,6 +86,7 @@ const PromptOneChoice=(message,event=null)=>{
     }
   return msg;
 }
+
 const PromptMultipleChoice = (caption,messages,event)=>{
   let choices = [];
   messages.map((message) =>{
