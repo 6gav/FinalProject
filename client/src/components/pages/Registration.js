@@ -84,6 +84,8 @@ export class Registration extends Component {
         if(account_name.includes('@')){
             email=account_name
         }
+//email
+//store cells in db/server?
         fetch('/api/loginUser', {
             method: 'POST',
             headers:{
@@ -158,11 +160,7 @@ export class Registration extends Component {
       let hasAuthuser = this.props.hasAuthuser;
       if(hasAuthuser())
       {
-        
-        return <div>
-            You are now logged in.
-            <Redirect to='/'/>
-            </div>
+        window.location = '/';
       }
       else return (
       <div style={pageLayout}>

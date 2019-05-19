@@ -1,36 +1,36 @@
 import React, { Component } from 'react';
 import './App.css';
 import About from './components/pages/About'
-import Header from './components/layouts/Header'
+import Header from './components/layouts/Header';
 import Home from './components/pages/Home.js';
 import Grid from './components/layouts/Grid.js';
 import {BrowserRouter as Router,Route,Switch} from 'react-router-dom';
 import { Registration } from './components/pages/Registration';
-import Debugger from "./components/layouts/Debugger"
+import Debugger from "./components/layouts/Debugger";
 import Interface from './components/layouts/Interface';
-import ProfilePage from "./components/pages/ProfilePage"
-import Lobby from "./components/pages/Lobby"
-import CellEditor from "./components/pages/CellEditor"
+import ProfilePage from "./components/pages/ProfilePage";
+import Lobby from "./components/pages/Lobby";
+import CellEditor from "./components/pages/CellEditor";
 
 
 import openSocket from 'socket.io-client';
 
 //#region cell imports.
-import cell_body from './components/layouts/resources/cell/cell_body.png'
-import color_mask_00 from './components/layouts/resources/cell/color_mask_00.png'
-import color_mask_01 from './components/layouts/resources/cell/color_mask_01.png'
-import color_mask_02 from './components/layouts/resources/cell/color_mask_02.png'
-import color_mask_03 from './components/layouts/resources/cell/color_mask_03.png'
-import color_mask_04 from './components/layouts/resources/cell/color_mask_04.png'
-import color_mask_05 from './components/layouts/resources/cell/color_mask_05.png'
-import color_mask_06 from './components/layouts/resources/cell/color_mask_06.png'
-import color_mask_07 from './components/layouts/resources/cell/color_mask_07.png'
-import color_mask_08 from './components/layouts/resources/cell/color_mask_08.png'
-import color_mask_09 from './components/layouts/resources/cell/color_mask_09.png'
-import color_mask_10 from './components/layouts/resources/cell/color_mask_10.png'
-import color_mask_11 from './components/layouts/resources/cell/color_mask_11.png'
-import color_mask_12 from './components/layouts/resources/cell/color_mask_12.png'
-import color_mask_13 from './components/layouts/resources/cell/color_mask_13.png'
+import cell_body from './components/layouts/resources/cell/cell_body.png';
+import color_mask_00 from './components/layouts/resources/cell/color_mask_00.png';
+import color_mask_01 from './components/layouts/resources/cell/color_mask_01.png';
+import color_mask_02 from './components/layouts/resources/cell/color_mask_02.png';
+import color_mask_03 from './components/layouts/resources/cell/color_mask_03.png';
+import color_mask_04 from './components/layouts/resources/cell/color_mask_04.png';
+import color_mask_05 from './components/layouts/resources/cell/color_mask_05.png';
+import color_mask_06 from './components/layouts/resources/cell/color_mask_06.png';
+import color_mask_07 from './components/layouts/resources/cell/color_mask_07.png';
+import color_mask_08 from './components/layouts/resources/cell/color_mask_08.png';
+import color_mask_09 from './components/layouts/resources/cell/color_mask_09.png';
+import color_mask_10 from './components/layouts/resources/cell/color_mask_10.png';
+import color_mask_11 from './components/layouts/resources/cell/color_mask_11.png';
+import color_mask_12 from './components/layouts/resources/cell/color_mask_12.png';
+import color_mask_13 from './components/layouts/resources/cell/color_mask_13.png';
 
 import expression_0 from './components/layouts/resources/cell/expression_0.png'
 import expression_1 from './components/layouts/resources/cell/expression_1.png'
@@ -292,6 +292,7 @@ class App extends Component {
     }).then(function(response) {
        return response.json();
     }).then(function(json) {
+      console.log("Start Hello")
       console.log(json)
     }).catch(function(error) {
       console.log(error);
