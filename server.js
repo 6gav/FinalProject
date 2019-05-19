@@ -1,31 +1,30 @@
-//Initial server for backend
-const express = require('express');
+//Environment Vars
+const PORT = process.env.PORT || 5000;
+
+
+//Module imports
+const path = require("path");
+const bodyParser = require("body-parser");
+const express = require("express");
 const app = express();
-const port = process.env.PORT || 5000;
-const path = require('path');
+const server = require('http').createServer(app);
+const io = require('socket.io');
 
-//Custom modules
-const routes = require('./routes.js');
-
-//Enables JSON input on post methods
-const bodyParser = require('body-parser');
 
 //Server setup
-app.use(express.static(path.join(__dirname, 'client/build')));
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
+app.use(express.static(path.join(__dirname, "client/build")));
+app.use(bodyParser.urlencoded({extended: true}));
+
+//Custom modules
+require("./server/routes.js")(app);     //Register api calls/routing info to app
 
 
-//Public APIs
-routes.registerPaths(app);
-
-
-//Route for production
-app.get('*', (req, res) => {
-    res.sendFile(path.join(__dirname + '/client/build/index.html'));
+//Production routing
+app.get("/", (req, res) => {
+    res.sendFile(path.join(__dirname, "client/build/index.html"));
 });
 
 
-app.listen(port);
-
-console.log('Server listening on port ' + port);
+//Server listening
+server.listen(PORT, () => {console.log("Server listening on port " + PORT)});

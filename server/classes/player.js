@@ -1,39 +1,21 @@
-"use strict";
+const Char = require('./Char');
 
-require('./character.js')
 
-var Player = class Player {
-    constructor(userID, displayName, char){
-        this._userID = userID;
-        this._displayName = displayName;
-        this._char = char;
-    }
+class Player {
+    constructor(userID, displayName){
+        this.userID = userID;
+        this.displayName = displayName;
 
-    get userID(){
-        return this._userID;
-    }
+        this.char = new Char("tempVal");
 
-    get name(){
-        return this._displayName;
-    }
-
-    get position(){
-        return this._char.position;
-    }
-
-    set position(pos){
-        this._char.position = pos;
-    }
-
-    get char(){
-        return this._char;
-    }
-
-    set char(char){
-        return this._char;
     }
 
 
+
+    Print(){
+        console.log(this);
+    }
 }
+
 
 module.exports = Player;

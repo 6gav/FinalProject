@@ -1,13 +1,8 @@
-module.exports = {
-    
-    //If the frontend made the api request wrong, this gets 
-    sendBadRequest: function(res){
-        res.send({errorCode: 400, message: "Api request not sent correctly"});
-    },
-    
-    //Info was requested that was not found
-    sendMissingError: function(res){
-        res.send({errorCode: 404, message: "Item not found"});
-    },
-
+//Bad API Params
+function sendBadRequest(res){
+    res.send({status: 300, message: "Bad request was made to API, please check parameters and try again."});
 }
+
+
+
+module.exports.sendBadRequest = sendBadRequest;
