@@ -94,7 +94,7 @@ class CellEditor extends Component {
                     </div>
                 </div>
                 <form onSubmit={this.SaveCell}>
-                    <input type='text' onChange={this.HandleNameChange} placeholder='Name this cell'/>
+                    <input type='text'  name="cell_name"onChange={this.HandleNameChange} placeholder='Name this cell'/>
                     <input type='submit'name="cell_form_submit" value='Save'/> 
                 </form>
             </div>
