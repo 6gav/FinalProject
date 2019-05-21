@@ -54,6 +54,15 @@ class GameManager{
         return currentGame.playerList;
     }
 
+    SetupSocket(socket){
+        this.socket = socket;
+
+        socket.on("connection", (client) => {
+            client.on("uid", (info) => {
+                client.join(info);
+            });
+        });
+    }
 }
 
 module.exports = GameManager;

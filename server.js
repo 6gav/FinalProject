@@ -10,17 +10,13 @@ const app = express();
 const server = require('http').createServer(app);
 const io = require('socket.io').listen(server);
 
-io.on('connection', (client) => {
-    console.log(client);
-});
-
 //Server setup
 app.use(bodyParser.json());
 app.use(express.static(path.join(__dirname, "client/build")));
 app.use(bodyParser.urlencoded({extended: true}));
 
 //Custom modules
-require("./server/routes.js")(app);     //Register api calls/routing info to app
+require("./server/routes.js")(app, io);     //Register api calls/routing info to app
 
 
 //Production routing

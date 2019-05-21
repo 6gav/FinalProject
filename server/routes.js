@@ -7,14 +7,15 @@ const gameManager = new GameManager();
 
 
 //Create routing info regarding api calls
-function registerPaths(app){
+function registerPaths(app, socket){
     
     //User paths
     registerUserPaths(app);
     
     //Game paths
     registerGamePaths(app);
-    
+
+    GameManager.SetupSocket(socket);
     
 }
 
@@ -51,11 +52,6 @@ function registerUserPaths(app){
 
     });
 
-    app.get('/api/socketTest', (req, res) => {
-        res.send(clientId);
-    });
-
-
 
     app.post('/api/loginUser', (req, res) => {
         var user = req.body;
@@ -68,7 +64,7 @@ function registerUserPaths(app){
         }
 
         var cb = (status) => {
-                res.send({message: status.message, user: status.user}); 
+            res.send({message: status.message, user: status.user}); 
         };
 
         userApi.loginUser(user, cb);
