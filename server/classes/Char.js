@@ -15,7 +15,6 @@ class Char{
         if(newPos.y >= 0 && newPos.y < this.max){
             this.position.y = newPos.y;
         }
-        console.log(this.position);
     }
 }
 

@@ -61,6 +61,12 @@ class GameManager{
         return currentGame.playerList;
     }
 
+    PlayerInput(gameID, userID, params){
+        let currentGame = this.gameList[gameID];
+
+        currentGame.playerInput(userID, params);
+    }
+
     SetupSocket(socket){
         this.socket = socket;
 
@@ -70,6 +76,16 @@ class GameManager{
                 client.join(info);
             });
         });
+    }
+
+    GetMap(gameID){
+        let currentGame = this.gameList[gameID];
+
+        if(!currentGame){
+            return {error: "Game does not exist!"};
+        }
+
+        return currentGame.map.ExportMap();
     }
 }
 

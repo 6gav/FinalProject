@@ -17,6 +17,8 @@ function registerPaths(app, socket){
     //Game paths
     registerGamePaths(app);
 
+    global.gameManager.SetupSocket(socket);
+
 }
 
 //Call function when file is loaded externally
@@ -126,5 +128,17 @@ function registerGamePaths(app){
         let result = gameManager.GetPlayers(req.body.gameID);
 
         res.send(result);
+    });
+
+    app.get('/api/GetMap', (req, res) => {
+        var mapObject = global.gameManager.GetMap(req.body.gameID);
+        
+        res.send(mapObject);
+    });
+
+    app.post('/api/PlayerInput', (req, res) => {
+        //GameID, UserID, InputType, Params
+
+        global.gameManager.PlayerInput(req.body.gameID, req.body.userID, {type: req.body.inputType, params: req.body.parms})
     });
 }

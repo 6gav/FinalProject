@@ -10,6 +10,7 @@ class Game{
         this.hostID = hostID;
 
         this.playerList = [];
+        this.map = new Map(25);
 
     }
 
@@ -35,7 +36,6 @@ class Game{
         this.deltaTime = deltaTime;
         this.running = true;
 
-        this.map = new Map(25);
         
 
         this.playerList.forEach(player => {
@@ -45,6 +45,8 @@ class Game{
             this.map.objects.push(player);
 
         });
+
+        this.playerList[1].SetPosition({x: 0, y: 0});
         this.map.ExportMap();
 
         this.playerList[0].Input({type: 'direction', direction: {x: -1, y: -1}});
@@ -55,12 +57,33 @@ class Game{
             if(player.userID == userID){
                 player.Input(params);
             }
-        });   
+        });
     }
 
     Update(){
 
+        let player = this.playerList[0];
+
+        for(let j = 1; j < this.playerList.length; j++){
+
+            const otherPlayer = this.playerList[j];
+
+            var pPos = player.GetPosition();
+            var ePos = otherPlayer.GetPosition();
+            
+            var distX = pPos.x - ePos.x;
+            var distY = pPos.y - ePos.y;
+
+            if(distX + distY <= 10){
+                this.playerList[0].Input({type: "enemy", enemy: otherPlayer});
+            }
+        }
+
         console.log("Game tick");
+
+        if(!this.playerList[0].alive){
+            this.running = false;
+        }
 
         this.playerList.forEach(player => {
             player.Update();
