@@ -1,27 +1,26 @@
 const GameManager = require('./classes/GameManager');
+
 const Player = require('./classes/Player');
+
 const userApi = require('./userApi');
 const error = require('./error');
 
-const gameManager = new GameManager();
 
+global.gameManager = new GameManager();
 
 //Create routing info regarding api calls
-function registerPaths(app){
+function registerPaths(app, socket){
     
     //User paths
     registerUserPaths(app);
     
     //Game paths
     registerGamePaths(app);
-    
-    
+
 }
 
 //Call function when file is loaded externally
 module.exports = registerPaths;
-
-
 
 
 
@@ -51,16 +50,10 @@ function registerUserPaths(app){
 
     });
 
-    app.get('/api/socketTest', (req, res) => {
-        res.send(clientId);
-    });
-
-
 
     app.post('/api/loginUser', (req, res) => {
         var user = req.body;
 
-        //SABIAN FUCKING WANTS THE USER //Uid, Username
 
         if(!(user.password && user.email)){
             error.sendBadRequest(res);
@@ -68,13 +61,11 @@ function registerUserPaths(app){
         }
 
         var cb = (status) => {
-                res.send({message: status.message, user: status.user}); 
+            res.send({message: status.message, user: status.user}); 
         };
 
         userApi.loginUser(user, cb);
     });
-
-    //api/SetUserCell - uid, index
 
 
 }
@@ -88,13 +79,15 @@ function registerGamePaths(app){
     app.post('/api/CreateGame', (req, res) => {
         //Create game object
         var gameID;
+        console.log(global.gameManager);
 
-        gameID = gameManager.CreateGame(req.body.userID);
-        console.log(gameID);
+        gameID = global.gameManager.CreateGame(req.body.userID);
+
         //Add player
-        gameManager.AddPlayer(gameID, new Player(req.body.userID, req.body.displayName));
+        global.gameManager.AddPlayer(gameID, new Player(req.body.userID, req.body.displayName));
 
         //SEND BACK HOST
+        res.send({gameID: gameID, hostID: req.body.userID});
 
     });
 
@@ -102,18 +95,23 @@ function registerGamePaths(app){
     //Start game
     //@Params = GameID, UserID
     app.post('/api/StartGame', (req, res) => {
-        console.log("Start game here");
 
-        gameManager.StartGame(req.body.gameID, req.body.userID);
+        var result = global.gameManager.StartGame(req.body.gameID, req.body.userID);
+
+        if(result){
+            res.send({result});
+        }
+        else{
+            res.send({status: "Game started successfully!"});
+        }
     });
 
     //Join game
     //@Params = GameID, UserID, DisplayName
     app.post('/api/JoinGame', (req, res) => {
-        console.log("Joining game");
 
         let result = gameManager.AddPlayer(req.body.gameID, new Player(req.body.userID, req.body.displayName));
-
+        
         if(result){
             res.send(result);
         }
@@ -125,8 +123,6 @@ function registerGamePaths(app){
 
     //Get players
     app.post('/api/GetPlayers', (req, res) => {
-        console.log("Getting player list");
-        console.log(req.body);
         let result = gameManager.GetPlayers(req.body.gameID);
 
         res.send(result);

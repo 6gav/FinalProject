@@ -60,6 +60,10 @@ function loginUser(user, cb){
     });
 }
 
+function setUserCell(){
+    
+}
+
 
 module.exports.loginUser = loginUser;
 
