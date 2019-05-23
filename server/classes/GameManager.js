@@ -32,7 +32,13 @@ class GameManager{
             return {error: "Game does not exist"};
         }
 
-        currentGame.Start(100);
+        if(currentGame.hostID == userID){
+            currentGame.AddAi(2);
+
+            currentGame.StartGame(1000);
+        }
+
+        return;
     }
 
     AddPlayer(gameID, player){
@@ -42,6 +48,7 @@ class GameManager{
             return {error: "Game does not exist"};
         }
         currentGame.AddPlayer(player);
+        player.AssignToGame(gameID);
     }
 
     GetPlayers(gameID){
@@ -59,6 +66,7 @@ class GameManager{
 
         socket.on("connection", (client) => {
             client.on("uid", (info) => {
+                console.log("Client connected with uid: " + info);
                 client.join(info);
             });
         });
