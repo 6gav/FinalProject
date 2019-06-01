@@ -74,7 +74,7 @@ class Game{
             var distX = pPos.x - ePos.x;
             var distY = pPos.y - ePos.y;
 
-            if(distX + distY <= 10){
+            if(distX + distY <= 10 && otherPlayer.alive){
                 this.playerList[0].Input({type: "enemy", enemy: otherPlayer});
             }
         }
@@ -92,6 +92,10 @@ class Game{
         if(this.running){
             setTimeout(() => this.Update(), this.deltaTime);
         }
+    }
+
+    GetMap(){
+        return this.map.ExportMap();
     }
 }
 

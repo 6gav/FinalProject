@@ -30,21 +30,33 @@ class Player{
         this.health = 100;
         this.attack = 10;
 
+        this.TurnCount = 0; //<<<<<REMOVE THIS
+
         this.userID = number;
         this.displayName = "AI_" + number;
     }
 
     Update(){
+        this.TurnCount++;
+
+        this.TurnCount %= 10;
+
+        this.char.target = {x: Math.floor(Math.random() * 3) - 1, y: Math.floor(Math.random() * 3) - 1};
+
         //Call AI and get result
 
         if(this.combat && this.enemyTarget){
             this.Attack(this.enemyTarget);
+            
         }
 
         this.char.Update();
+
+        console.log({x: this.GetPosition().x, y: this.GetPosition().y, health: this.health});
     }
 
     Attack(enemy){
+
         let pAttack = Math.floor(Math.random()*this.attack);
         let eAttack = Math.floor(Math.random()*enemy.attack);
 
@@ -55,7 +67,13 @@ class Player{
             }
         }
         else {
-            enemy.health -= pAttack;
+            if(enemy.health > 0){
+                enemy.health -= eAttack;
+            }
+            
+            if(enemy.health < 0){
+                enemy.health = 0;
+            }
         }
 
         if(this.armor > 0){
@@ -65,10 +83,20 @@ class Player{
             }
         }
         else {
-            this.health -= eAttack;
+            if(this.health > 0){
+                this.health -= eAttack;
+            }
+
+            if(this.health < 0){
+                this.health = 0;
+            }
         }
 
-        if(this.health = 0){
+        if(enemy.health == 0){
+            enemy.alive = false;
+        }
+
+        if(this.health == 0){
             this.alive = false;
         }
 
@@ -86,7 +114,7 @@ class Player{
         switch(params.type){
             case 'direction':
                 this.char.target = params.direction;   
-            break; 
+            break;
             case 'enemy':
                 if(this.mood.includes("fight")){
                     this.combat = true;

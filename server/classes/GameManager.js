@@ -33,7 +33,7 @@ class GameManager{
         }
 
         if(currentGame.hostID == userID){
-            currentGame.AddAi(2);
+            currentGame.AddAi(3);
 
             currentGame.StartGame(1000);
         }
@@ -71,12 +71,28 @@ class GameManager{
         this.socket = socket;
 
         socket.on("connection", (client) => {
-            client.on("uid", (info) => {
+            console.log("Client joined");
+            client.on("sendUid", (info) => {
                 console.log("Client connected with uid: " + info);
                 client.join(info);
             });
+
+            client.on("getMap", (info) => {
+                let uid = info.uid;
+
+                let currentGame = this.gameList[info.gameID];
+
+                let map = currentGame.GetMap();
+                socket.to(uid).emit("map", (map));
+            });
+
+            //Uid, GameID, Params
+            client.on("pInput", (info) => {
+
+            }); 
         });
     }
+    
 
     GetMap(gameID){
         let currentGame = this.gameList[gameID];
