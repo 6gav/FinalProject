@@ -33,7 +33,7 @@ class GameManager{
         }
 
         if(currentGame.hostID == userID){
-            currentGame.AddAi(2);
+            currentGame.AddAi(3);
 
             currentGame.StartGame(1000);
         }
@@ -61,15 +61,47 @@ class GameManager{
         return currentGame.playerList;
     }
 
+    PlayerInput(gameID, userID, params){
+        let currentGame = this.gameList[gameID];
+
+        currentGame.playerInput(userID, params);
+    }
+
     SetupSocket(socket){
         this.socket = socket;
 
         socket.on("connection", (client) => {
-            client.on("uid", (info) => {
+            console.log("Client joined");
+            client.on("sendUid", (info) => {
                 console.log("Client connected with uid: " + info);
                 client.join(info);
             });
+
+            client.on("getMap", (info) => {
+                let uid = info.uid;
+
+                let currentGame = this.gameList[info.gameID];
+
+                let map = currentGame.GetMap();
+                socket.to(uid).emit("map", (map));
+            });
+
+            //Uid, GameID, Params
+            client.on("pInput", (info) => {
+
+            }); 
         });
+    }
+    
+
+    GetMap(gameID){
+        let currentGame = this.gameList[gameID];
+
+        if(!currentGame){
+            return {error: "Game does not exist!"};
+        }
+
+        return currentGame.map.ExportMap();
     }
 }
 
