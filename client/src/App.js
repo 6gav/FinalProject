@@ -14,6 +14,7 @@ import CellEditor from "./components/pages/CellEditor";
 
 
 import openSocket from 'socket.io-client';
+import ReactTimeout from 'react-timeout';
 
 //#region cell imports.
 import cell_body from './components/layouts/resources/cell/cell_body.png';
@@ -73,8 +74,8 @@ const colors =
 //TODO: Cell Personalize objects
 //cowboy hat leather chaps
 const uuidv1 = require('uuid/v1');
-const version = "v0.1.4.";
-const socket = openSocket('http://localhost:5000')
+const version = "v0.4.1.";
+const socket = require('./api')
 
 
 const PromptOneChoice=(message,event=null)=>{
@@ -87,6 +88,10 @@ const PromptOneChoice=(message,event=null)=>{
   return msg;
 }
 
+
+//caption: the text asking the user what they should do (string)
+//messages: the choices for the user. (array of strings)
+//
 const PromptMultipleChoice = (caption,messages,event)=>{
   let choices = [];
   messages.map((message) =>{
@@ -111,6 +116,7 @@ class App extends Component {
   
   LoginUser = (user) =>{
     localStorage.setItem('user', JSON.stringify({user:user}));
+    console.log(user)
     this.setState({user:user})
   }
   GetUser = ()=>{
@@ -144,14 +150,21 @@ class App extends Component {
     user:this.GetUser(),
     //array of message objects. objects have an id, along with data containing the string of the message.
     messages:[],
-    choice:null,
+    choice:null//PromptMultipleChoice("What will you do","loot,heal,wander,fight,run".split(',')),
   }
   
-  
+  onIdle = () =>{
+    //log the user out after 10 minutes of inactivity
+
+    //if user is in a game, they will not be logged out as the 'simulation' is likely running
+
+    //Todo: check if user is ingame
+    this.setState({user:null})
+  }
   constructor(props){
     super(props)
     this.p = this;
-    this.state.choice = null;
+
   }
   OnChoice = (target) =>{
     //TODO: send the choice the player made to the server
@@ -252,11 +265,14 @@ class App extends Component {
       if(user == null){
         console.log("login required")
         alert("Please Login to continue.")
+        
+        window.location='/signin'
         return false;
       }
+      console.log("Creating game")
     let userID = user.uid,
     displayName = user.displayName;
-    
+    let main = this;
     console.log(user);
     fetch('/api/CreateGame', {
       method: 'POST',
@@ -268,8 +284,10 @@ class App extends Component {
         displayName:displayName
       })
     }).then(function(response) {
+      
        return response.json();
     }).then(function(json) {
+      //main.setState({gameID:json.gameID,hostID:json.hostID})
       console.log(json)
     }).catch(function(error) {
       console.log(error);
@@ -277,9 +295,9 @@ class App extends Component {
     return true;
   }
   StartGame = () =>{
-    let user = this.state.user,userID=user.uid,displayName=user.displayName
-    console.log(user)
-    
+    let viewer = this;
+    let user = this.state.user,userID=user.uid,
+    gameID = 2000
     fetch('/api/StartGame', {
       method: 'POST',
       headers:{
@@ -287,17 +305,20 @@ class App extends Component {
       },
       body: JSON.stringify({
         userID:userID,
-        displayName:displayName
+        gameID:gameID
       })
     }).then(function(response) {
        return response.json();
     }).then(function(json) {
       console.log("Start Hello")
+      viewer.setState({running:true})
       console.log(json)
     }).catch(function(error) {
       console.log(error);
     });
+    window.location = '/simulation_s';
     return true;
+    
   }
 
   render() {
@@ -306,10 +327,13 @@ class App extends Component {
       expressions:expressions,
       colors:colors,
     }
-
-    const SinglePlayerGame= ()=>{
+    
+    const SinglePlayerGame= (props)=>{
       //post start game to server
-      
+      console.log("SinglePlayer JSX")
+      console.log(props.gameID)
+      console.log(props.displayName)
+      console.log(props.userID)
 
 
         return (<div className="GameSpace">
@@ -337,15 +361,14 @@ class App extends Component {
             <Header hasAuthuser={this.hasAuthuser}/>
             <Switch>
               <Route exact path='/'   render={() => <Home CreateGame={this.CreateGame}/>}/>
-              <Route exact path='/simulation_s'       render={() =><SinglePlayerGame/>} />
-              <Route exact path='/simulation_m'       render={() =><MultiPlayerGame/>}  />
+              <Route exact path='/simulation_s'       render={() =><SinglePlayerGame gameID={this.state.gameID}socket={socket}/>} />
+              <Route exact path='/simulation_m'       render={() =><MultiPlayerGame socket={socket}/>}  />
               <Route exact path='/simulation'         render={() =><Lobby  game_data={game_data} func={{StartGame:this.StartGame,GetCellsFromStorage:this.GetCellsFromStorage,GetPlayers:this.GetPlayers,SetCellSelection:this.SetCellSelection}}mode ={"singleplayer"}user={this.user}/>}/>
               <Route exact path='/simulation_editor'  render={()=><CustomizeCell game_data={game_data} user={this.state.user}/>}/>
               <Route exact path='/about'              render={()=><About          version={version}/>} />
               <Route exact path='/signin'             render={()=><Registration   version={version}LoginUser={this.LoginUser} hasAuthuser = {this.hasAuthuser}/>}/>
               <Route exact path='/profile'            render={()=><ProfilePage    version = {version} user={this.state.user} LogoutUser={this.LogoutUser}/>}/>
             </Switch>
-            
           </div>
         </div>
       </Router>
