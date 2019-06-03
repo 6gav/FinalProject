@@ -13,7 +13,8 @@ var game = {
             displayName: 'Gavin',
             //Actual character created by player
             char: {
-                
+                //format of cell objects that are compressed in b64
+                //name|maxHealth|visionRange|head|chest|legs|face|body
                 name: 'Hunag',
                 //Cellular position
                 position: {
