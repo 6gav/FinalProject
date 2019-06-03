@@ -3,7 +3,6 @@ import ChoicePrompt from './ChoicePrompt'
 import './Grid.css'
 import Cell from './resources/Cell'
 import cell_primary from './resources/cell/color_mask_00.png'
-import RefButton from '../pages/tools/RefButton'
 
 const GRID_WIDTH = 40,GRID_HEIGHT = 40;//Default grid dimensions are 40x40
 const GRID_SPACING=20;
@@ -93,15 +92,20 @@ const RanRange = function(min,max,integer=true){
           color:"#c00",
           onPositionClick:null,//function(s) to call when the grid is clicked.
         }
+
         makeCells = () =>{
         //api call (top,left,width,height)
-        //returns: list of occupied cells
+        let gridSp = this.props.socket.GetCells({top:0,left:0,width:GRID_WIDTH,height:GRID_HEIGHT})
         
+        //returns: list of occupied cells
+        let _cells = []
+        for(let i = 0; i < gridSp.length; i++){
+            if(gridSp[i]){
+                _cells.push(gridSp[i]);
+            }
+        }
         let storage = GetStorage()
-        let _cells = [{x:1,y:2,primary:storage[0].color,secondary:storage[0].face}]
-        _cells.push({x:6,y:4,primary:storage[1].color,secondary:storage[1].face})
-        _cells.push({x:6,y:5,primary:storage[2].color,secondary:storage[2].face})
-        _cells.push({x:4,y:2,primary:storage[3].color,secondary:storage[3].face})
+        
         console.log("Hiiya")
         console.log(_cells)
         
@@ -174,7 +178,8 @@ const RanRange = function(min,max,integer=true){
 
             console.log(`w: ${w} h: ${h}\nsp: ${sp}`)
           return (<div>
-              <RefButton href='/' text ='🢠'></RefButton>
+              <button className="LinkContainer" name="btn_back" id="SinglePlayer" onClick={()=>{window.location = '/'}} >🢠</button>
+                        
               <div className='GridContainer'>
                 <div classname='Grid'
                 style={{
