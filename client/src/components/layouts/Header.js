@@ -19,11 +19,11 @@ export default function Header(props) {
     const authuser = props.hasAuthuser()
   return (
       
-    <header style={headerStyle}>
+    <header className="Header">
         <h1>Final Project</h1>
-        <Link name='btn_home'    style={linkStyle} to="/">Home</Link> |
-        <Link name='btn_about'   style={linkStyle} to="/about"> About</Link> |
-        <Link name='btn_sign_in'  style={linkStyle} to={authuser?"/profile":"/signin"}>{authuser?" My Profile":" Sign in"}</Link>
+        <Link name='btn_home'    className="HeaderLink" to="/">Home</Link> |
+        <Link name='btn_about'   className="HeaderLink" to="/about"> About</Link> |
+        <Link name='btn_sign_in' className="HeaderLink" to={authuser?"/profile":"/signin"}>{authuser?" My Profile":" Sign in"}</Link>
     </header>
   )
 }
