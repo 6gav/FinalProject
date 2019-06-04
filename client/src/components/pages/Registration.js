@@ -101,6 +101,7 @@ export class Registration extends Component {
              return res;
           }).then(function(json) {
                 props.LoginUser(json.user)
+                alert(json.message)
                 console.log(json)
                 
           }).catch(function(error) {
@@ -141,7 +142,9 @@ export class Registration extends Component {
               }).then(function(response) {
                  return response.json();
               }).then(function(json) {
-                console.log(json)
+                alert(json)
+                this.setState({email:"",username:"",password:""})
+                window.location = '/';
               }).catch(function(error) {
                 console.log(error);
               });

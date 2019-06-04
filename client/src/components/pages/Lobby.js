@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 import "./Lobby.css"
 import CellList from './tools/CellList.js'
-import RefButton from './tools/RefButton'
 
 export default class Lobby extends Component {
 
@@ -45,10 +44,8 @@ export default class Lobby extends Component {
       
     }
     GrabPlayers = () =>{
-      console.log("GFE")
-      console.log(this.state.gameID)
-      console.log(this.props.func.GetPlayers(2000))
-      console.log("Done.")
+      //console.log(this.props.func.GetPlayers(2000))
+      //console.log("Done.")
     }
     handleStartGame = (e) =>{
       e.target.disabled = true
@@ -61,7 +58,7 @@ export default class Lobby extends Component {
   render() {
       
     //e.target.disabled = true
-      console.log(this.state)
+      //console.log(this.state)
       const cells = (this.state.cells)
     return (
     <div className="LobbyContainer">
@@ -76,7 +73,8 @@ export default class Lobby extends Component {
           {
             <CellList onCellSelected={this.onCellSelected}state={cells} cell_body={this.props.cell_body}></CellList>
           }
-          <RefButton className="button-bottom-elem" href="/simulation_editor" id="Cell Selection" name="btn_home_cell_selection"text ="Edit Cells"></RefButton>      
+          
+          <button className="button-bottom-elem" name="btn_home_cell_selection" id="Cell Selection" onClick={()=>{window.location = '/simulation_editor'}} >Edit Cells</button>    
         </div>
       </div>
     </div>
