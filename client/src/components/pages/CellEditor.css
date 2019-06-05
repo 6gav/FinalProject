@@ -12,8 +12,11 @@
     cursor: pointer;
 }
 .Button:hover{
-    image-rendering: pixelated;
     background-color: rgb(168, 164, 137);
+}
+.Button:active{
+    transition: background-color 0.1s;
+    background-color: rgb(95, 93, 78);
 }
 .Preview{
     background-color: darkslategray;
