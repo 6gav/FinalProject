@@ -32,22 +32,56 @@ import color_mask_10 from './components/layouts/resources/cell/color_mask_10.png
 import color_mask_11 from './components/layouts/resources/cell/color_mask_11.png';
 import color_mask_12 from './components/layouts/resources/cell/color_mask_12.png';
 import color_mask_13 from './components/layouts/resources/cell/color_mask_13.png';
+import color_mask_14 from './components/layouts/resources/cell/color_mask_14.png';
+import color_mask_15 from './components/layouts/resources/cell/color_mask_15.png';
+import color_mask_16 from './components/layouts/resources/cell/color_mask_16.png';
+import color_mask_17 from './components/layouts/resources/cell/color_mask_17.png';
+import color_mask_18 from './components/layouts/resources/cell/color_mask_18.png';
 
-import expression_0 from './components/layouts/resources/cell/expression_0.png'
-import expression_1 from './components/layouts/resources/cell/expression_1.png'
-import expression_2 from './components/layouts/resources/cell/expression_2.png'
-import expression_3 from './components/layouts/resources/cell/expression_3.png'
-import expression_4 from './components/layouts/resources/cell/expression_4.png'
-import expression_5 from './components/layouts/resources/cell/expression_5.png'
+import face_00 from './components/layouts/resources/cell/face_00.png'
+import face_01 from './components/layouts/resources/cell/face_01.png'
+import face_02 from './components/layouts/resources/cell/face_02.png'
+import face_03 from './components/layouts/resources/cell/face_03.png'
+import face_04 from './components/layouts/resources/cell/face_04.png'
+import face_05 from './components/layouts/resources/cell/face_05.png'
+import face_06 from './components/layouts/resources/cell/face_06.png'
+import face_07 from './components/layouts/resources/cell/face_07.png'
+import face_08 from './components/layouts/resources/cell/face_08.png'
+import face_09 from './components/layouts/resources/cell/face_09.png'
 
-const expressions = 
+import face_10 from './components/layouts/resources/cell/face_10.png'
+import face_11 from './components/layouts/resources/cell/face_11.png'
+import face_12 from './components/layouts/resources/cell/face_12.png'
+import face_13 from './components/layouts/resources/cell/face_13.png'
+import face_14 from './components/layouts/resources/cell/face_14.png'
+
+import face_15 from './components/layouts/resources/cell/face_15.png'
+import face_16 from './components/layouts/resources/cell/face_16.png'
+import face_17 from './components/layouts/resources/cell/face_17.png'
+
+const faces = 
 [
-  expression_0,
-  expression_1,
-  expression_2,
-  expression_3,
-  expression_4,
-  expression_5
+  face_00,
+  face_01,
+  face_02,
+  face_03,
+  face_04,
+  
+  face_05,
+  face_06,
+  face_07,
+  face_08,
+  face_09,
+  
+  face_10,
+  face_11,
+  face_12,
+  face_13,
+  face_14,
+  
+  face_15,
+  face_16,
+  face_17,
 ]
 const colors = 
 [
@@ -67,6 +101,12 @@ const colors =
   color_mask_11,
   color_mask_12,
   color_mask_13,
+  color_mask_14,
+  
+  color_mask_15,
+  color_mask_16,
+  color_mask_17,
+  color_mask_18,
 ]
 //#endregion
 
@@ -164,7 +204,6 @@ class App extends Component {
   constructor(props){
     super(props)
     this.p = this;
-
   }
   OnChoice = (target) =>{
     //TODO: send the choice the player made to the server
@@ -326,7 +365,7 @@ class App extends Component {
   render() {
     let game_data={
       cell_body:cell_body,
-      expressions:expressions,
+      faces:faces,
       colors:colors,
     }
     
