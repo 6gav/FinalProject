@@ -1,34 +1,44 @@
-import io from 'socket.io-client';
-const socket = io();
+import OpenSocket from 'socket.io-client';
+
+const socket = OpenSocket();
 
 class SocketApi{
     constructor(){
         this.map_cb = null;
+        this.connected = false;
+        console.log("CONST")
 
         socket.on('map',(map)=>{
             map = map;
         
-            if(map_cb != null){
-                map_cb(map)
+            console.log("ME")
+            if(this.map_cb != null){
+                console.log("ME")
+                this.map_cb(map)
             }
         })
 
     }
-    connectToSocket(cb){
-        console.log('connecting');
-        socket.on('acceptConnection', vals => cb(null, vals));    
+    connectToSocket(user,cb){
+        let uid = user.uid
+        console.log(`connecting with user ${uid}`);
+        socket.emit('connection', vals => cb(null, vals));  
+        
+        socket.emit('sendUid',uid)
+        this.connected = true;
     };
 
     disconnectFromServer(){
         console.log('Disconnecting.');
         socket.emit('disconnect');
+        this.connected = false
     }
     //get game map. data includes current user uid, and game ID 
     getMap(data,cb){
         console.log('fetching map data')
         socket.emit('getMap',data)
         
-        map_cb = cb;
+        this.map_cb = cb;
     }
 
     sendUid(uid){
@@ -42,4 +52,6 @@ class SocketApi{
         socket.emit("getCells")
     }
 }
-module.exports = SocketApi;
+
+global.SocketApi = new SocketApi();
+
