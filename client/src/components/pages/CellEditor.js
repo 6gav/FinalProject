@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import './CellEditor.css'
 import './Cell.css'
 import CellList from './tools/CellList.js'
+import { userInfo } from 'os';
 
 
 
@@ -42,7 +43,8 @@ class CellEditor extends Component {
         let cell = {
             color:this.props.game_data.colors[this.state.color],
             face :this.props.game_data.faces[this.state.face],
-            name :this.state.name
+            name :this.state.name,
+            user :this.props.user.displayName,
         }
         if(cell.name == ""){
             return;
@@ -53,7 +55,7 @@ class CellEditor extends Component {
         console.log(this.state.cells)
         this.state.cells.push(cell)
         //TODO: the storage overwrites existing cells
-        localStorage.setItem('cells', JSON.stringify({cells:this.state.cells}));
+        this.props.AddCellToStorage(cell)
         
         console.log("Saving cell")
     }
