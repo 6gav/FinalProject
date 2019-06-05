@@ -75,8 +75,8 @@ const colors =
 //cowboy hat leather chaps
 const uuidv1 = require('uuid/v1');
 const version = "v0.4.1.";
-const socket = require('./api')
-
+require('./api')
+const socket = global.SocketApi;
 
 const PromptOneChoice=(message,event=null)=>{
   let msg = {
@@ -287,11 +287,13 @@ class App extends Component {
       
        return response.json();
     }).then(function(json) {
-      //main.setState({gameID:json.gameID,hostID:json.hostID})
+      main.setState({gameID:json.gameID,hostID:json.hostID})
       console.log(json)
     }).catch(function(error) {
       console.log(error);
     });
+
+    socket.connectToSocket(user,(j)=>{console.log(j)})
     return true;
   }
   StartGame = () =>{
@@ -337,12 +339,27 @@ class App extends Component {
 
 
         return (<div className="GameSpace">
-          <Grid onClosePrompt={this.onClosePrompt}choice={this.state.choice} 
-          OnChoice={this.OnChoice} gridSize={this.state.gridSize} gridSpacing={this.state.gridSpacing} 
-          onPositionClick={this.onPositionClick}  GetCellsFromStorage={this.GetCellsFromStorage}></Grid></div>);
+          <Grid 
+          gameID={2000}
+          uid={this.state.user.uid}
+          onClosePrompt={this.onClosePrompt}
+          choice={this.state.choice} 
+          OnChoice={this.OnChoice} 
+          gridSize={this.state.gridSize} 
+          gridSpacing={this.state.gridSpacing} 
+          onPositionClick={this.onPositionClick}  
+          GetCellsFromStorage={this.GetCellsFromStorage}>
+          </Grid>
+          </div>);
           }
         const MultiPlayerGame = (<div className="GameSpace">
-        <Grid choice={this.state.choice} OnChoice={this.OnChoice} gridSize={this.state.gridSize} gridSpacing={this.state.gridSpacing} onPositionClick={this.onPositionClick}></Grid>
+        <Grid 
+        choice={this.state.choice} 
+        OnChoice={this.OnChoice} 
+        gridSize={this.state.gridSize} 
+        gridSpacing={this.state.gridSpacing} 
+        onPositionClick={this.onPositionClick}>
+        </Grid>
           <Interface onDebugValuesChange={this.onDebugValuesChange} messages={this.state.messages} AddMessage={this.AddMessage}></Interface></div>);
           const CustomizeCell = ()=>{
             return (

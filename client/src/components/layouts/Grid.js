@@ -95,11 +95,12 @@ const RanRange = function(min,max,integer=true){
 
         makeCells = () =>{
         //api call (top,left,width,height)
-        let gridSp = this.props.socket.GetCells({top:0,left:0,width:GRID_WIDTH,height:GRID_HEIGHT})
-        
+        let gridSp = global.SocketApi.getMap({gameID:this.props.gameID,uid:this.props.uid,top:0,left:0,width:GRID_WIDTH,height:GRID_HEIGHT},(resp)=>{console.log("feff");console.log(resp)})
+        console.log(gridSp)
+        console.log("EFE")
         //returns: list of occupied cells
         let _cells = []
-        for(let i = 0; i < gridSp.length; i++){
+        for(let i = 0; i < 0; i++){
             if(gridSp[i]){
                 _cells.push(gridSp[i]);
             }
@@ -181,7 +182,7 @@ const RanRange = function(min,max,integer=true){
               <button className="LinkContainer" name="btn_back" id="SinglePlayer" onClick={()=>{window.location = '/'}} >🢠</button>
                         
               <div className='GridContainer'>
-                <div classname='Grid'
+                <div className='Grid'
                 style={{
                     width:w,
                     height:h,
@@ -199,6 +200,7 @@ const RanRange = function(min,max,integer=true){
                     <OpenChoicePrompt onClosePrompt={this.props.onClosePrompt} isTrue={true} choice={this.props.choice} callback={this.props.callback} OnChoice={handleChoice}/>
                 }
               </div>
+          <button onClick={this.makeCells}>ForceUpdate</button>
           </div>)
       }
   }
