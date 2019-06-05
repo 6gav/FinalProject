@@ -175,12 +175,48 @@ class App extends Component {
   //gets local user cells
   GetCellsFromStorage=()=>{
     let cells = JSON.parse(localStorage.getItem("cells"))
-
-    if(cells != null){
-      cells = cells.cells
+    console.log(cells)
+    if(cells == null){
+      cells = []
     }
+    else
+      cells = cells.cells
     
-    return cells==null?[]:cells
+    let user_cells = []
+    
+    for(let i = 0; i < cells.length; i++){
+      if(cells[i].user == this.state.user.displayName)
+        user_cells.push(cells[i])
+    }
+
+    
+    return user_cells
+  }
+  AddCellToStorage=(cell)=>{
+    let cells = JSON.parse(localStorage.getItem("cells")).cells
+    for(let i = 0; i < cells.length; i++){
+      //cell exists in storage
+      if(cells[i].name == cell.name){
+        return false;
+      }
+    }
+    console.log("HERE")
+    console.log(cells)
+    cells.push(cell)
+    localStorage.setItem('cells', JSON.stringify({cells:cells}));
+    return true;
+  }
+  RemoveCellFromStorage=(cell)=>{
+    let cells = JSON.parse(localStorage.getItem("cells"))
+    
+    for(let i = 0; i < cells.length; i++){
+      //cell exists in storage
+      if(cells[i].name == cell.name){
+        cells.splice(i)
+        return true;
+      }
+    }
+    return false;
   }
 
   state={
@@ -402,7 +438,7 @@ class App extends Component {
           <Interface onDebugValuesChange={this.onDebugValuesChange} messages={this.state.messages} AddMessage={this.AddMessage}></Interface></div>);
           const CustomizeCell = ()=>{
             return (
-              <CellEditor GetCellsFromStorage={this.GetCellsFromStorage}game_data={game_data}/>
+              <CellEditor user={this.state.user}AddCellToStorage={this.AddCellToStorage}RemoveCellFromStorage={this.RemoveCellFromStorage}GetCellsFromStorage={this.GetCellsFromStorage}game_data={game_data}/>
             )
           }
     
