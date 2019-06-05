@@ -1,26 +1,4 @@
 
-.Body{
-    position: absolute;
-    width:64px;
-    height:64px;
-    left: 0%;
-    top: 50%;
-}
-.Color{
-    position: absolute;
-    width:64px;
-    height:64px;
-    left: 0%;
-    top: 50%;
-}
-.Face{
-    position: absolute;
-    width:32px;
-    height:32px;
-    left: 0%;
-    top: 50%;
-
-}
 .CellLabel{
     position: relative;
     background-color: bisque;
@@ -38,12 +16,19 @@
 
 .CustCell{
     display: flex;
+    transition: border-radius 0.5s, background-color 0.5s;
+    
     position: relative;
     transform: translate(-100,10);
     background-color: dimgrey;
-    border: 5px solid cadetblue;
-    margin: 16px;
+    border: solid cadetblue;
+    border-radius: 5px 5px 5px 5px;
     padding: 16px 32px;
+    margin: 16px 0px;
     width: 62%;
     cursor: pointer;
+}
+.CustCell:hover{
+    border-radius: 50px 5px 5px 5px;
+    background-color: rgb(163, 150, 133);
 }

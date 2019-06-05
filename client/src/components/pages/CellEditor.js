@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import './CellEditor.css'
+import './Cell.css'
 import CellList from './tools/CellList.js'
 
 
@@ -26,7 +27,7 @@ class CellEditor extends Component {
     
     initState = {
         color:this.props.game_data.colors[0],
-        face:this.props.game_data.expressions[0],
+        face:this.props.game_data.faces[0],
         name:"",
     }
     state=this.initState;
@@ -40,7 +41,7 @@ class CellEditor extends Component {
         e.preventDefault()
         let cell = {
             color:this.props.game_data.colors[this.state.color],
-            face :this.props.game_data.expressions[this.state.face],
+            face :this.props.game_data.faces[this.state.face],
             name :this.state.name
         }
         if(cell.name == ""){
@@ -53,6 +54,7 @@ class CellEditor extends Component {
         this.state.cells.push(cell)
         //TODO: the storage overwrites existing cells
         localStorage.setItem('cells', JSON.stringify({cells:this.state.cells}));
+        
         console.log("Saving cell")
     }
     HandleNameChange = (e) =>{
@@ -77,10 +79,10 @@ class CellEditor extends Component {
             
             <div className='BtnContainer'>
                 {
-                    props.game_data.expressions.map(
-                        (expression)=>{
+                    props.game_data.faces.map(
+                        (face)=>{
                             j++
-                            return <img className='Button'  name={`cell_face_${j}`}ind={j}src={expression} onClick={this.ChangeFace}/>
+                            return <img className='Button'  name={`cell_face_${j}`}ind={j}src={face} onClick={this.ChangeFace}/>
                         }
                     )
                 }
@@ -90,11 +92,11 @@ class CellEditor extends Component {
                     <div style={{position:'relative'}}>
                         <img className='Body' src={this.props.game_data.cell_body}></img>
                         <img className='Color' src={this.props.game_data.colors[this.state.color]}></img>
-                        <img className='Face' src={this.props.game_data.expressions[this.state.face]}></img>
+                        <img className='Face' src={this.props.game_data.faces[this.state.face]}></img>
                     </div>
                 </div>
                 <form onSubmit={this.SaveCell}>
-                    <input type='text'  name="cell_name"onChange={this.HandleNameChange} placeholder='Name this cell'/>
+                    <input type='text'  name="cell_name"onChange={this.HandleNameChange} value={this.state.name} placeholder='Name this cell'/>
                     <input type='submit'name="cell_form_submit" value='Save'/> 
                 </form>
             </div>

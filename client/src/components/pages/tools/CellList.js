@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
+import '../Cell.css'
 import './CellList.css'
-
 export default class CellList extends Component {
     handleClick = (e)=>{
         let choice = e.currentTarget.dataset.id

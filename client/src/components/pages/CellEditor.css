@@ -1,34 +1,25 @@
 .BtnContainer{
-    background-color: black;
+    background-color: darkslategray;
+    border: 1px solid white;
 }
 .Button{
-    width:32px;
-    height:32px;
+    transition: background-color 0.8s;
+    image-rendering: pixelated;
+    width:64px;
+    height:64px;
     background-color: gray;
-    margin: 10px
+    margin: 10px;
+    cursor: pointer;
 }
-.Body{
-    position: absolute;
-    width:64px;
-    height:64px;
-    transform: translate(0px,-32px)
-}
-.Color{
-    position: absolute;
-    width:64px;
-    height:64px;
-    transform: translate(0px,-32px)
-}
-.Face{
-    position: absolute;
-    width:32px;
-    height:32px;
-    transform: translate(16px,-16px)
+.Button:hover{
+    image-rendering: pixelated;
+    background-color: rgb(168, 164, 137);
 }
 .Preview{
     background-color: darkslategray;
     padding: 32px;
     margin: 32px;
+    cursor: none;
 }
 
 .CellListContainer{

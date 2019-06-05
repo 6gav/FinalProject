@@ -1,0 +1,22 @@
+
+.Body{
+    image-rendering: pixelated;
+    position: absolute;
+    width:64px;
+    height:64px;
+    transform: translate(-32px,-32px)
+}
+.Color{
+    image-rendering: pixelated;
+    position: absolute;
+    width:64px;
+    height:64px;
+    transform: translate(-32px,-32px)
+}
+.Face{
+    image-rendering: pixelated;
+    position: absolute;
+    width:64px;
+    height:64px;
+    transform: translate(-32px,-32px)
+}
