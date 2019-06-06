@@ -1,6 +1,9 @@
 .BtnContainer{
     background-color: darkslategray;
-    border: 1px solid white;
+    margin: 2px;
+    border: 4px ridge darkolivegreen;
+    color: darkolivegreen;
+
 }
 .Button{
     transition: background-color 0.8s;
@@ -21,13 +24,14 @@
 .Preview{
     background-color: darkslategray;
     padding: 32px;
-    margin: 32px;
-    cursor: none;
+    margin: 2px;
+    border: 4px ridge darkolivegreen;
 }
 
 .CellListContainer{
     background-color: darkslategray;
+    border: 4px ridge darkolivegreen;
     padding: 32px;
-    margin: 32px;
+    margin: 2px;
 }
 

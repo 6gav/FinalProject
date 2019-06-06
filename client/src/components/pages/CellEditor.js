@@ -18,8 +18,6 @@ class CellEditor extends Component {
     }
     constructor(props){
         super(props);
-        this.state.color = 0
-        this.state.face = 0
         this.state=this.initState
         //clears the local cells vvv
         //localStorage.setItem("cells",JSON.stringify({cells:[]}))
@@ -33,10 +31,10 @@ class CellEditor extends Component {
     }
     state=this.initState;
     ChangeFace = (e) =>{
-        this.setState({face:e.target.getAttribute("ind")-1})
+        this.setState({face:e.target.getAttribute("src")})
     }
     ChangeColor = (e) =>{
-        this.setState({color:e.target.getAttribute("ind")-1})
+        this.setState({color:e.target.getAttribute("src")})
     }
     SaveCell = (e) =>{
         e.preventDefault()
@@ -59,8 +57,13 @@ class CellEditor extends Component {
         
         console.log("Saving cell")
     }
-    HandleNameChange = (e) =>{
+    HandleNameChange = (e) =>
+    {
         this.setState({name:e.target.value})
+    }
+    CopyCell = (cell)=>
+    {
+        this.setState({color:cell.color,face:cell.face,name:cell.name})
     }
   render() {
       let props = this.props,
@@ -93,8 +96,8 @@ class CellEditor extends Component {
                 <div className='Preview'>
                     <div style={{position:'relative'}}>
                         <img className='Body' src={this.props.game_data.cell_body}></img>
-                        <img className='Color' src={this.props.game_data.colors[this.state.color]}></img>
-                        <img className='Face' src={this.props.game_data.faces[this.state.face]}></img>
+                        <img className='Color' src={this.state.color}></img>
+                        <img className='Face' src={this.state.face}></img>
                     </div>
                 </div>
                 <form onSubmit={this.SaveCell}>
@@ -103,7 +106,7 @@ class CellEditor extends Component {
                 </form>
             </div>
             <div className='CellListContainer'>
-                    <CellList state={this.state.cells} cell_body={this.props.cell_body}></CellList>
+                    <CellList state={this.state.cells} cell_body={this.props.cell_body} onClickCell={this.CopyCell}></CellList>
             </div>
         </div>
     )
