@@ -7,6 +7,9 @@ export default class CellList extends Component {
         if(this.props.onCellSelected){
             this.props.onCellSelected(choice);
         }
+        if(this.props.onClickCell){
+            this.props.onClickCell(this.props.state[choice])
+        }
 
     }
     constructor(props){
