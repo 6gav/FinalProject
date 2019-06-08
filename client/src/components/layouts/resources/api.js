@@ -1,6 +1,8 @@
 import OpenSocket from 'socket.io-client';
 
 const socket = OpenSocket();
+console.error("NEW SOCKET IS MADE HERE");
+
 
 class SocketApi{
     constructor(){
@@ -35,6 +37,7 @@ class SocketApi{
     }
     //get game map. data includes current user uid, and game ID 
     getMap(data,cb){
+        console.log(this.connected)
         console.log('fetching map data')
         socket.emit('getMap',data)
         
@@ -54,4 +57,3 @@ class SocketApi{
 }
 
 global.SocketApi = new SocketApi();
-
