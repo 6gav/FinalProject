@@ -4,6 +4,11 @@ import './Grid.css'
 import Cell from './resources/Cell'
 import cell_primary from './resources/cell/color_mask_00.png'
 
+
+require('../layouts/resources/api.js')
+const socket = global.SocketApi;
+
+
 const GRID_WIDTH = 40,GRID_HEIGHT = 40;//Default grid dimensions are 40x40
 const GRID_SPACING=20;
 
@@ -23,11 +28,10 @@ const RanRange = function(min,max,integer=true){
       //of the cells on their 
       //relative grid position
 
-      let cells = props.makeCells()
-
+      let cells = props.cells
+      console.log("CELLS")
+      console.log(cells)
       if(cells){
-          console.log("SPA")
-          console.log(props.gridSpacing)
           return (
               cells.map(cell =>
                 (
@@ -43,7 +47,11 @@ const RanRange = function(min,max,integer=true){
               )
               )
           )
+      }else{
+          console.log("Cells returned null")
+          return <div/>
       }
+
   }
 
   function OpenChoicePrompt(props){
@@ -95,22 +103,39 @@ const RanRange = function(min,max,integer=true){
 
         makeCells = () =>{
         //api call (top,left,width,height)
-        let gridSp = global.SocketApi.getMap({gameID:this.props.gameID,uid:this.props.uid,top:0,left:0,width:GRID_WIDTH,height:GRID_HEIGHT},(resp)=>{console.log("feff");console.log(resp)})
-        console.log(gridSp)
-        console.log("EFE")
-        //returns: list of occupied cells
-        let _cells = []
-        for(let i = 0; i < 0; i++){
-            if(gridSp[i]){
-                _cells.push(gridSp[i]);
+        let gridSp = [];
+        console.log(`Game ID: ${this.props.gameID}\nUser ID: ${this.props.uid}`)
+        let gridRef=this;
+    
+        let c = global.SocketApi.getMap({gameID:this.props.gameID,uid:this.props.uid,top:0,left:0,width:GRID_WIDTH,height:GRID_HEIGHT},(resp)=>{
+            console.log("feff");
+            //console.log(resp)
+            gridSp = resp;
+            console.log(gridSp);
+            //returns: list of occupied cells
+            let _cells = [],i,j=i=0,container = null;
+            for(; i < gridSp.length; i++){
+                console.log(`i: ${i}\nj: ${j}`)
+                for(j = 0; j < gridSp[i].length; j++){
+
+                    container = gridSp[i][j];
+                    console.log (container);
+                    if(container != null){
+                        if(container.objects != null){
+                            for(let k = 0; k < container.objects.length; k++){
+                                _cells.push(container.objects[k]);
+                            }
+                        }
+                    }
+                }
             }
-        }
+            console.log(_cells)
+            gridRef.state.cells = _cells
+        })
+
         let storage = GetStorage()
         
-        console.log("Hiiya")
-        console.log(_cells)
         
-        return _cells
         }
       constructor(props)
       {
@@ -120,7 +145,16 @@ const RanRange = function(min,max,integer=true){
         
         this.rows = props.gridSize;
         this.cols = props.gridSize;
-        this.state.cells = this.makeCells()
+        this.makeCells()
+        let user = props.user
+        console.log("Here")
+        console.log(user)
+        socket.connectToSocket(user,(j)=>{console.log("CONESCOT");console.log(j)})
+
+        setInterval(() => {
+            this.makeCells()
+            this.setState({})
+        }, 500);
       }
 
 
@@ -145,13 +179,9 @@ const RanRange = function(min,max,integer=true){
         const y = Math.floor(offsetY / this.props.gridSpacing);
         if(x >= 0 && x <= this.cols && y  >= 0 && y <= this.rows){
                 if(this.state.onPositionClick){
-                    console.log("Clicked on: ("+x+','+y+').')
                     this.state.onPositionClick({x:x,y:y,obj:this.board[y][x]})
-                
             }
-        }else{
-            console.log("Clicked on but outside bounds?")
-        }
+        }else{}
         this.setState();
     }
 
@@ -162,24 +192,22 @@ const RanRange = function(min,max,integer=true){
     }
 
     componentDidUpdate(){
-        this.state.cells = this.makeCells();
+        this.makeCells();
     }
 
       render(){
-          console.log("RENDR")
-          console.log(this.state)
-          console.log(this.props)
           let { cells } = this.state.cells;
+          console.log(cells)
           
           let sp = this.props.gridSpacing,
           w = this.props.gridSize*sp,
           h = this.props.gridSize*sp,
           state = this.state,
           handleChoice = this.handleChoice
-
-            console.log(`w: ${w} h: ${h}\nsp: ${sp}`)
-          return (<div>
-              <button className="LinkContainer" name="btn_back" id="SinglePlayer" onClick={()=>{window.location = '/'}} >🢠</button>
+          const stateset=()=>{this.setState({})}
+          const showcell=()=>{console.log(this.state.cells)}
+            return (<div>
+              <button name="btn_back" id="SinglePlayer" onClick={()=>{window.location = '/'}} >🢠</button>
                         
               <div className='GridContainer'>
                 <div className='Grid'
@@ -200,7 +228,10 @@ const RanRange = function(min,max,integer=true){
                     <OpenChoicePrompt onClosePrompt={this.props.onClosePrompt} isTrue={true} choice={this.props.choice} callback={this.props.callback} OnChoice={handleChoice}/>
                 }
               </div>
-          <button onClick={this.makeCells}>ForceUpdate</button>
+              <button onClick={this.makeCells}>ForceUpdate</button>
+              <button onClick={stateset}>set State</button>
+              <button onClick={showcell}>cells</button>
+          
           </div>)
       }
   }
