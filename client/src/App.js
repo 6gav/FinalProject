@@ -398,7 +398,7 @@ class App extends Component {
     }).catch(function(error) {
       console.log(error);
     });
-    window.location = '/simulation_s';
+    //window.location = '/simulation_s';
     return true;
     
   }
