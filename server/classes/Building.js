@@ -6,7 +6,9 @@ class Building {
     constructor(pos){
         this.position = pos;
         this.loot = {};
-        GenerateLoot();
+        this.looted = false;
+        this.GenerateLoot();
+        this.type == "building";
     
     }
 
@@ -35,9 +37,15 @@ class Building {
     }
 
     GetLoot(){
-        let tempLoot = Object.assign(JSON.stringify(this.loot));
-        this.loot = {};
-        return tempLoot;
+        if(this.looted){
+            return null;
+        }
+        this.looted = true;
+        return this.loot;
+    }
+
+    GetPosition(){
+        return this.position;
     }
 
 

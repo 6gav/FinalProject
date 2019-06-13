@@ -35,7 +35,7 @@ class GameManager{
         if(currentGame.hostID == userID){
             currentGame.AddAi(3);
 
-            currentGame.StartGame(1000);
+            currentGame.StartGame(5000);
         }
 
         return;
@@ -63,12 +63,12 @@ class GameManager{
 
     PlayerInput(gameID, userID, params){
         let currentGame = this.gameList[gameID];
-
-        currentGame.playerInput(userID, params);
+        if(currentGame){
+            currentGame.PlayerInput(userID, params);
+        }
     }
 
     SetupSocket(socket){
-        this.socket = socket;
 
         socket.on("connection", (client) => {
             console.log("Client joined");
@@ -82,7 +82,11 @@ class GameManager{
 
                 let currentGame = this.gameList[info.gameID];
 
-                let map = currentGame.GetMap();
+                let map = null;
+                if(currentGame){
+                    map = currentGame.GetMap();
+                    
+                }
                 socket.to(uid).emit("map", (map));
             });
 

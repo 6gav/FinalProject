@@ -17,7 +17,8 @@ class Player{
 
         this.userID = userID;
         this.displayName = displayName;
-
+        
+        this.TurnCount = 0; //<<<<<REMOVE THIS
         this.type = "player";
     }
 
@@ -30,7 +31,6 @@ class Player{
         this.health = 100;
         this.attack = 10;
 
-        this.TurnCount = 0; //<<<<<REMOVE THIS
 
         this.userID = number;
         this.displayName = "AI_" + number;
@@ -42,7 +42,10 @@ class Player{
 
         this.TurnCount %= 10;
 
-        this.char.target = {x: Math.floor(Math.random() * 3) - 1, y: Math.floor(Math.random() * 3) - 1};
+
+        if(this.type == "bot"){
+            this.char.target = {x: Math.floor(Math.random() * 3) - 1, y: Math.floor(Math.random() * 3) - 1};
+        }
 
         //Call AI and get result
 
@@ -53,7 +56,7 @@ class Player{
 
         this.char.Update();
 
-        console.log({x: this.GetPosition().x, y: this.GetPosition().y, health: this.health});
+        console.log({x: this.GetPosition().x, y: this.GetPosition().y, health: this.health, targetX: this.char.target.x, targetY: this.char.target.y});
     }
 
     Attack(enemy){
@@ -114,16 +117,19 @@ class Player{
     Input(params){
         switch(params.type){
             case 'direction':
-                this.char.target = params.direction;   
+                this.char.target = params.params;   
             break;
             case 'enemy':
-                if(this.mood.includes("fight")){
+                if(this.mood == "fight"){
                     this.combat = true;
-                    this.enemyTarget = params.enemy;
+                    this.enemyTarget = params.params;
                 }
                 else{
                     this.combat = false;
                 }
+            break;
+            case 'mood': 
+                this.mood = params.params;
             break;
         }
     }
@@ -132,26 +138,73 @@ class Player{
         this.char.max = size;
     }
 
-    FindBuilding(buildings){
-        this.closestBuilding = null;
-        let closestDistance = 10000;
-        buildings.foreach(building => {
+    FindClosest(objects){
+
+        let closestObject = null;
+        let closestDistance = 100000;
+        objects.forEach(obj => {
+            if(obj.looted || !obj.alive) {
+                return;
+            }
             let distance = {};
-            distance.x = this.GetPosition().x - building.position.x;
-            distance.y = this.GetPosition().y - building.position.y
+            distance.x = this.GetPosition().x - obj.GetPosition().x;
+            distance.y = this.GetPosition().y - obj.GetPosition().y
             distance.x = distance.x*distance.x;
             distance.y = distance.y*distance.y;
             if(distance.x + distance.y < closestDistance){
-                this.closestBuilding = building;
+                closestObject = obj;
+                closestDistance = distance.x + distance.y;
             }
         });
+        if(closestDistance <= 100 && closestObject.type == "bot"){
+            this.enemyTarget = closestObject;
+        }
     }
 
-    PathToBuilding(){
+    PathToBuilding(obj){
         let newTarget = {};
-        this.closestBuilding.x;
-        this.closestBuilding.y;
-        this.char.target = {}
+        newTarget.x = obj.GetPosition().x - this.GetPosition().x;
+        newTarget.y = obj.GetPosition().y - this.GetPosition().y;
+
+        if(newTarget.x > 0){
+            newTarget.x = 1;
+        }
+        else if(newTarget.x < 0){
+            newTarget.x = -1;
+        }
+        else {
+            newTarget.x = 0;
+        }
+
+        if(newTarget.y > 0){
+            newTarget.y = 1;
+        }
+        else if(newTarget.y < 0){
+            newTarget.y = -1;
+        }
+        else{
+            newTarget.y = 0;
+        }
+
+        let loot = {};
+        if(newTarget.x == 0 && newTarget.y == 0 && obj.type == "building"){
+            loot = obj.GetLoot();
+            obj.looted = true;
+        }
+
+        if(loot.Health){
+            this.health += loot.Health;
+        }
+        else if(loot.Attack){
+            this.health += loot.Attack;
+        }
+        else if(loot.Armor){
+            this.health += loot.Armor;
+        }
+
+
+        this.char.target = JSON.parse(JSON.stringify(newTarget));
+        
     }
 }
 

@@ -139,6 +139,7 @@ function registerGamePaths(app){
     app.post('/api/PlayerInput', (req, res) => {
         //GameID, UserID, InputType, Params
 
-        global.gameManager.PlayerInput(req.body.gameID, req.body.userID, {type: req.body.inputType, params: req.body.parms})
+        global.gameManager.PlayerInput(req.body.gameID, req.body.userID, {type: req.body.inputType, params: req.body.params});
+        res.send({});
     });
 }

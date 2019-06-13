@@ -22,7 +22,6 @@ class Map{
             tempArea[pos.x][pos.y].objects.push(obj);
         });
         
-        console.log(this.objects);
         return tempArea;
     }
 

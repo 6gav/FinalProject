@@ -379,6 +379,7 @@ class App extends Component {
     let viewer = this;
     let user = this.state.user,userID=user.uid,
     gameID = 2000
+    console.log("Game Start CALLED HEREREREHJREHQJRHQJRKHEWQJRKHEWJQRHEWQ");
     fetch('/api/StartGame', {
       method: 'POST',
       headers:{
