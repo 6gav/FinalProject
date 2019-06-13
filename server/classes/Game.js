@@ -2,6 +2,7 @@
 
 const Player = require('./Player');
 const Map = require('./Map');
+const Building = require('./Building');
 
 class Game{
 
@@ -9,8 +10,9 @@ class Game{
         this.gameID = gameID;
         this.hostID = hostID;
 
+        this.objects = {};
         this.playerList = [];
-        this.map = new Map(25);
+        this.map = new Map(50);
 
     }
 
@@ -32,15 +34,28 @@ class Game{
         }
     }
 
+    AddBuildings(amount){
+        
+        this.objects["building"] = [];
+        
+        for(let i = 0; i < amount; i++){
+            let x = Math.floor(Math.random()*this.map.size);
+            let y = Math.floor(Math.random()*this.map.size);
+            let building = new Building({x: x, y: y});
+            this.objects["building"].push(building);
+        }
+    }
+
     Setup(deltaTime){
         this.deltaTime = deltaTime;
         this.running = true;
 
+        AddBuildings(10);
         
 
         this.playerList.forEach(player => {
-            player.SetMapSize(25);
-            player.SetPosition({x: Math.floor(Math.random()*25), y: Math.floor(Math.random()*25)});
+            player.SetMapSize(this.map.size);
+            player.SetPosition({x: Math.floor(Math.random()*this.map.size), y: Math.floor(Math.random()*this.map.size)});
 
             this.map.objects.push(player);
 
@@ -74,7 +89,7 @@ class Game{
             var distX = pPos.x - ePos.x;
             var distY = pPos.y - ePos.y;
 
-            if(distX + distY <= 10 && otherPlayer.alive){
+            if(distX + distY <= 3 && otherPlayer.alive){
                 this.playerList[0].Input({type: "enemy", enemy: otherPlayer});
             }
         }
@@ -86,6 +101,10 @@ class Game{
         }
 
         this.playerList.forEach(player => {
+            if(player.mood == "loot"){
+                player.FindBuilding(this.objects["building"]);
+            }
+
             player.Update();
         });
 

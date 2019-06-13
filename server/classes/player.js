@@ -11,7 +11,7 @@ class Player{
         this.attack = 30;
         this.alive = true;
 
-        this.mood = ["fight"];
+        this.mood = "fight";
         this.enemyTarget = null;
         this.combat = false;
 
@@ -37,6 +37,7 @@ class Player{
     }
 
     Update(){
+
         this.TurnCount++;
 
         this.TurnCount %= 10;
@@ -129,6 +130,28 @@ class Player{
 
     SetMapSize(size){
         this.char.max = size;
+    }
+
+    FindBuilding(buildings){
+        this.closestBuilding = null;
+        let closestDistance = 10000;
+        buildings.foreach(building => {
+            let distance = {};
+            distance.x = this.GetPosition().x - building.position.x;
+            distance.y = this.GetPosition().y - building.position.y
+            distance.x = distance.x*distance.x;
+            distance.y = distance.y*distance.y;
+            if(distance.x + distance.y < closestDistance){
+                this.closestBuilding = building;
+            }
+        });
+    }
+
+    PathToBuilding(){
+        let newTarget = {};
+        this.closestBuilding.x;
+        this.closestBuilding.y;
+        this.char.target = {}
     }
 }
 
