@@ -74,30 +74,28 @@ class GameManager{
             console.log("Client joined");
             client.on("sendUid", (info) => {
                 console.log("Client connected with uid: " + info);
-                client.join(info);
 
-                client.on("getMap", (info) => {
-                    console.log("ASKED FOR MAP");
-                    let uid = info.uid;
-    
-                    let currentGame = this.gameList[info.gameID];
-    
-                    let map = null;
-                    if(currentGame){
-                        map = currentGame.GetMap();
-                        
-                    }
-                    setTimeout(() => {
-                        socket.to(uid).emit("map", (map));
-                    }, 0);
-                });
+            });
+            
+            client.on("getMap", (info) => {
+                console.log("ASKED FOR MAP");
+                let uid = info.uid;
 
-                //Uid, GameID, Params
-                client.on("pInput", (gameID, userID, params) => {
-                    this.PlayerInput(gameID, userID, params);
-                }); 
+                let currentGame = this.gameList[info.gameID];
+
+                let map = null;
+                if(currentGame){
+                    map = currentGame.GetMap();
+                }
+                setTimeout(() => {
+                    client.emit("map", (map));
+                }, 0);
             });
 
+            //Uid, GameID, Params
+            client.on("pInput", (gameID, userID, params) => {
+                this.PlayerInput(gameID, userID, params);
+            });
 
         });
     }
