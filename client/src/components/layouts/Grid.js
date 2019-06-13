@@ -4,7 +4,8 @@ import './Grid.css'
 import Cell from './resources/Cell'
 import cell_primary from './resources/cell/color_mask_00.png'
 
-
+import tempPrimary from './resources/cell/color_mask_17.png'
+import tempSecondary from './resources/cell/face_01.png'
 require('../layouts/resources/api.js')
 const socket = global.SocketApi;
 
@@ -35,20 +36,21 @@ const RanRange = function(min,max,integer=true){
           return (
               cells.map(cell =>
                 (
+
                   <Cell 
-                  x={cell.x}
-                  y={cell.y}
-                  key={`${cell.x},${cell.y}`}
+                  x={cell.char.position.x}
+                  y={cell.char.position.y}
+                  key={`${cell.char.position.x},${cell.char.position.y}`}
                   color={props.color}
-                  cell_primary={cell.primary}
-                    cell_secondary = {cell.secondary}
+                  cell_primary={tempPrimary}//{cell.primary}
+                    cell_secondary = {tempSecondary}//{cell.secondary}
                   dimensions={{Spacing:props.gridSpacing}}
                   />
               )
               )
           )
       }else{
-          console.log("Cells returned null")
+          //console.log("Cells returned null")
           return <div/>
       }
 
@@ -94,32 +96,46 @@ const RanRange = function(min,max,integer=true){
   class Grid extends Component{
       state = {
           cells:[],//list of data occupying cells
-          interval: 100,//interval between screen updates
-          isRunning: false,//if the grid should update automatically
+          interval: 1000,//interval between screen updates
+          isRunning: true,//if the grid should update automatically
           
           color:"#c00",
           onPositionClick:null,//function(s) to call when the grid is clicked.
         }
 
+        setCellInterval = ()=>{
+            let intervalID = setInterval(() => {
+                console.log("HI")
+                this.makeCells()
+                this.setState({})
+            }, 1000);
+            
+            this.setState({intervalID:intervalID})
+        }
+        clearInt = ()=>{
+            clearInterval(this.state.intervalID)
+            
+            this.setState({isRunning:false})//!this.state.isRunning})
+        }
         makeCells = () =>{
         //api call (top,left,width,height)
         let gridSp = [];
-        console.log(`Game ID: ${this.props.gameID}\nUser ID: ${this.props.uid}`)
+        //console.log(`Game ID: ${this.props.gameID}\nUser ID: ${this.props.uid}`)
         let gridRef=this;
     
         let c = global.SocketApi.getMap({gameID:this.props.gameID,uid:this.props.uid,top:0,left:0,width:GRID_WIDTH,height:GRID_HEIGHT},(resp)=>{
-            console.log("feff");
+            //console.log("feff");
             //console.log(resp)
             gridSp = resp;
-            console.log(gridSp);
+            //console.log(gridSp);
             //returns: list of occupied cells
             let _cells = [],i,j=i=0,container = null;
             for(; i < gridSp.length; i++){
-                console.log(`i: ${i}\nj: ${j}`)
+                //console.log(`i: ${i}\nj: ${j}`)
                 for(j = 0; j < gridSp[i].length; j++){
 
                     container = gridSp[i][j];
-                    console.log (container);
+                    //console.log (container);
                     if(container != null){
                         if(container.objects != null){
                             for(let k = 0; k < container.objects.length; k++){
@@ -129,14 +145,14 @@ const RanRange = function(min,max,integer=true){
                     }
                 }
             }
-            console.log(_cells)
+            //console.log(_cells)
             gridRef.state.cells = _cells
         })
-
         let storage = GetStorage()
         
         
         }
+        
       constructor(props)
       {
         super(props)
@@ -147,14 +163,16 @@ const RanRange = function(min,max,integer=true){
         this.cols = props.gridSize;
         this.makeCells()
         let user = props.user
-        console.log("Here")
-        console.log(user)
-        socket.connectToSocket(user,(j)=>{console.log("CONESCOT");console.log(j)})
+        //////console.log("Here")
+        ////console.log(user)
+        socket.connectToSocket(user,(j)=>{
+            //console.log("CONESCOT");//console.log(j)
+          })
 
-        setInterval(() => {
-            this.makeCells()
-            this.setState({})
-        }, 500);
+          this.setCellInterval();
+          //this.makeCells()
+        
+        
       }
 
 
@@ -194,18 +212,23 @@ const RanRange = function(min,max,integer=true){
     componentDidUpdate(){
         this.makeCells();
     }
-
+    componentWillUnmount(){
+    }
       render(){
           let { cells } = this.state.cells;
-          console.log(cells)
+          //console.log(cells)
           
           let sp = this.props.gridSpacing,
           w = this.props.gridSize*sp,
           h = this.props.gridSize*sp,
           state = this.state,
           handleChoice = this.handleChoice
-          const stateset=()=>{this.setState({})}
-          const showcell=()=>{console.log(this.state.cells)}
+          const stateset=()=>{
+              this.setState({})
+            }
+          const showcell=()=>{
+              console.log(this.state.cells)
+        }
             return (<div>
               <button name="btn_back" id="SinglePlayer" onClick={()=>{window.location = '/'}} >🢠</button>
                         
@@ -220,18 +243,17 @@ const RanRange = function(min,max,integer=true){
                 onClick={this.handleClick}
                 ref={(_ref)=>{this.gridRef = _ref;}}
                 >
-                {
-                    <RenderCells makeCells={this.makeCells}cells={state.cells} gridSpacing={this.props.gridSpacing} color={this.state.color}cell_body={this.props.cell_body}/>
-                }
+                
+                    <RenderCells makeCells={this.makeCells}cells={this.state.cells} gridSpacing={this.props.gridSpacing} color={this.state.color}cell_body={this.props.cell_body}/>
+                
                 </div>
                 {
                     <OpenChoicePrompt onClosePrompt={this.props.onClosePrompt} isTrue={true} choice={this.props.choice} callback={this.props.callback} OnChoice={handleChoice}/>
                 }
               </div>
               <button onClick={this.makeCells}>ForceUpdate</button>
-              <button onClick={stateset}>set State</button>
-              <button onClick={showcell}>cells</button>
-          
+              
+            
           </div>)
       }
   }

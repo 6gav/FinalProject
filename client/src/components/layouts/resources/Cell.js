@@ -30,7 +30,8 @@ export class Cell extends Component {
         let spacing = this.props.dimensions.Spacing*0.8,rad=-2,
         translation='translate('+rad+'px, '+rad+'px)',
         invlation = 'translate('+(-rad)+'px, '+(-rad)+'px)';
-        
+        console.log(cell_primary)
+        console.log(cell_secondary)
         return(
             <div className="Cell" style={{
                 transform:invlation,
@@ -43,15 +44,7 @@ export class Cell extends Component {
             <img src = {cell_body} style={{position:'absolute',width:spacing,height:spacing}}></img>
             <img src = {cell_primary}  style={{tintColor:`${color}`,position:'absolute',width:spacing,height:spacing}}></img>
             <img src = {cell_secondary} style={{position:'absolute',width:spacing,height:spacing}}></img>
-                {()=>{
-                    if(this.state.imgs.length>0){
-                        alert()
-                        return(this.state.imgs.map(img=>(
-                        {/*<img src = {posmark} alt = {''} className='CellContents'/>*/}
-                        )))
-                    }
-
-                }}
+             
             </div>
         )
     }

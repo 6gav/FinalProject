@@ -12,7 +12,6 @@ import ProfilePage from "./components/pages/ProfilePage";
 import Lobby from "./components/pages/Lobby";
 import CellEditor from "./components/pages/CellEditor";
 
-
 import openSocket from 'socket.io-client';
 import ReactTimeout from 'react-timeout';
 
@@ -114,9 +113,7 @@ const colors =
 //TODO: Cell Personalize objects
 //cowboy hat leather chaps
 const uuidv1 = require('uuid/v1');
-const version = "v0.4.1.";
-require('./api')
-const socket = global.SocketApi;
+const version = "v0.4.2.";
 
 const PromptOneChoice=(message,event=null)=>{
   let msg = {
@@ -220,8 +217,8 @@ class App extends Component {
   }
 
   state={
-    gridSize:30,
-    gridSpacing:24,
+    gridSize:20,
+    gridSpacing:50,
     showDebug:true,
     user:this.GetUser(),
     //array of message objects. objects have an id, along with data containing the string of the message.
@@ -367,8 +364,7 @@ class App extends Component {
     }).catch(function(error) {
       console.log(error);
     });
-
-    socket.connectToSocket(user,(j)=>{console.log(j)})
+    
     return true;
   }
   StartGame = () =>{
@@ -404,13 +400,9 @@ class App extends Component {
       faces:faces,
       colors:colors,
     }
-    
+    let user = this.state.user;
     const SinglePlayerGame= (props)=>{
       //post start game to server
-      console.log("SinglePlayer JSX")
-      console.log(props.gameID)
-      console.log(props.displayName)
-      console.log(props.userID)
 
 
         return (<div className="GameSpace">
@@ -423,8 +415,11 @@ class App extends Component {
           gridSize={this.state.gridSize} 
           gridSpacing={this.state.gridSpacing} 
           onPositionClick={this.onPositionClick}  
-          GetCellsFromStorage={this.GetCellsFromStorage}>
+          GetCellsFromStorage={this.GetCellsFromStorage}
+          user={user}>
+          
           </Grid>
+          <Interface onDebugValuesChange={this.onDebugValuesChange} messages={this.state.messages} AddMessage={this.AddMessage}></Interface>
           </div>);
           }
         const MultiPlayerGame = (<div className="GameSpace">
@@ -433,7 +428,9 @@ class App extends Component {
         OnChoice={this.OnChoice} 
         gridSize={this.state.gridSize} 
         gridSpacing={this.state.gridSpacing} 
-        onPositionClick={this.onPositionClick}>
+        onPositionClick={this.onPositionClick}
+        user={user}>
+        
         </Grid>
           <Interface onDebugValuesChange={this.onDebugValuesChange} messages={this.state.messages} AddMessage={this.AddMessage}></Interface></div>);
           const CustomizeCell = ()=>{
@@ -453,15 +450,15 @@ class App extends Component {
             <Header hasAuthuser={this.hasAuthuser}/>
             <Switch>
               <Route exact path='/'   render={() => <Home CreateGame={this.CreateGame}/>}/>
-              <Route exact path='/simulation_s'       render={() =><SinglePlayerGame gameID={this.state.gameID}socket={socket}/>} />
-              <Route exact path='/simulation_m'       render={() =><MultiPlayerGame socket={socket}/>}  />
+              <Route exact path='/simulation_s'       render={() =><SinglePlayerGame gameID={this.state.gameID}/>} />
+              <Route exact path='/simulation_m'       render={() =><MultiPlayerGame/>}  />
               <Route exact path='/simulation'         render={() =><Lobby  game_data={game_data} func={{StartGame:this.StartGame,GetCellsFromStorage:this.GetCellsFromStorage,GetPlayers:this.GetPlayers,SetCellSelection:this.SetCellSelection}}mode ={"singleplayer"}user={this.user}/>}/>
-              <Route exact path='/simulation_editor'  render={()=><CustomizeCell game_data={game_data} user={this.state.user}/>}/>
+              <Route exact path='/simulation_editor'  render={()=><CustomizeCell game_data={game_data} user={user}/>}/>
               <Route exact path='/about'              render={()=><About          version={version}/>} />
               <Route exact path='/signin'             render={()=><Registration   version={version}LoginUser={this.LoginUser} hasAuthuser = {this.hasAuthuser}/>}/>
-              <Route exact path='/profile'            render={()=><ProfilePage    version = {version} user={this.state.user} LogoutUser={this.LogoutUser}/>}/>
+              <Route exact path='/profile'            render={()=><ProfilePage    version = {version} user={user} LogoutUser={this.LogoutUser}/>}/>
             </Switch>
-          </div>
+          </div>  
         </div>
       </Router>
     );

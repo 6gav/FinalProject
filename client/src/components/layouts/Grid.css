@@ -10,7 +10,11 @@
 
 .Grid {
     position: relative;
-    background-color: #211;
+    background-color: rgb(180, 84, 84);
+    
+        
+}
+.Gridlines{
     background-image:
         linear-gradient(rgba(119, 255, 119, 0.2) 1px, transparent 1px),
         linear-gradient(90deg, rgba(119,255,119,0.15) 1px, transparent 1px);

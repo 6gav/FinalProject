@@ -4,15 +4,14 @@ const socket = OpenSocket();
 console.error("NEW SOCKET IS MADE HERE");
 
 
-class SocketApi{
+class SocketApi{    
     constructor(){
         this.map_cb = null;
         this.connected = false;
-        console.log("CONST")
 
         socket.on('map',(map)=>{
             map = map;
-        
+
             console.log("ME")
             if(this.map_cb != null){
                 console.log("ME")
@@ -37,8 +36,6 @@ class SocketApi{
     }
     //get game map. data includes current user uid, and game ID 
     getMap(data,cb){
-        console.log(this.connected)
-        console.log('fetching map data')
         socket.emit('getMap',data)
         
         this.map_cb = cb;

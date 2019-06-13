@@ -39,8 +39,8 @@ class CellEditor extends Component {
     SaveCell = (e) =>{
         e.preventDefault()
         let cell = {
-            color:this.props.game_data.colors[this.state.color],
-            face :this.props.game_data.faces[this.state.face],
+            color:this.state.color,
+            face :this.state.face,
             name :this.state.name,
             user :this.props.user.displayName,
         }
@@ -52,6 +52,8 @@ class CellEditor extends Component {
         )
         console.log(this.state.cells)
         this.state.cells.push(cell)
+        console.log(cell)
+        console.log("EEF")
         //TODO: the storage overwrites existing cells
         this.props.AddCellToStorage(cell)
         
