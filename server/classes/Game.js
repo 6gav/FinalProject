@@ -104,10 +104,10 @@ class Game{
         }
 
         this.playerList.forEach(player => {
-            if(player.mood == "loot"){
+            if(player.mood == "loot" && player.type == "player"){
                 player.FindClosest(this.objects["building"]);
             }
-            else if (player.mood == "fight"){
+            else if (player.mood == "fight" && player.type == "player"){
                 let players = this.playerList.slice(1, this.playerList.length);
                 player.FindClosest(players);
             }
