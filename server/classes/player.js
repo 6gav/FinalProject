@@ -147,7 +147,6 @@ class Player{
                 return;
             }
             let distance = {};
-        
             distance.x = this.GetPosition().x - obj.GetPosition().x;
             distance.y = this.GetPosition().y - obj.GetPosition().y
             distance.x = distance.x*distance.x;
@@ -160,10 +159,6 @@ class Player{
         if(closestDistance <= 100 && closestObject.type == "bot"){
             this.enemyTarget = closestObject;
         }
-        setTimeout(() => {
-            this.PathToBuilding(closestObject);
-            
-        }, 0);
     }
 
     PathToBuilding(obj){
@@ -208,10 +203,7 @@ class Player{
         }
 
 
-        setTimeout(() => {
-            
-            this.char.target = JSON.parse(JSON.stringify(newTarget));
-        }, 0);
+        this.char.target = JSON.parse(JSON.stringify(newTarget));
         
     }
 }

@@ -95,6 +95,7 @@ class Game{
             if(distX + distY <= 3 && otherPlayer.alive){
                 this.playerList[0].Input({type: "enemy", params: otherPlayer});
             }
+
         }
 
 
@@ -110,10 +111,7 @@ class Game{
                 let players = this.playerList.slice(1, this.playerList.length);
                 player.FindClosest(players);
             }
-            setTimeout(() => {
-                player.Update();
-                
-            }, 0);
+            player.Update();                
         });
 
         if(this.running){
