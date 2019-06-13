@@ -39,6 +39,9 @@ export class Cell extends Component {
         invlation = 'translate('+(-rad)+'px, '+(-rad)+'px)';
         //console.log(this.props)
         //console.log(cell_secondary)
+        if(this.props.char.type != "building"){
+
+        
         return(
             <div className="Cell" style={{
                 transform:invlation,
@@ -54,6 +57,14 @@ export class Cell extends Component {
             <img src = {cell_secondary} style={{position:'absolute',width:spacing,height:spacing}}></img>
             </div>
         )
+        }
+        else{return <div className="building" style={{
+            transform:invlation,
+            position: "absolute",
+            left:   `${spacing*this.props.x+1}px`,
+            top:    `${spacing*this.props.y+1}px`,
+            
+        }}></div>}
     }
 }
 
