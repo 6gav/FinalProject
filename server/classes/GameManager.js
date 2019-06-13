@@ -93,8 +93,8 @@ class GameManager{
                 });
 
                 //Uid, GameID, Params
-                client.on("pInput", (info) => {
-    
+                client.on("pInput", (gameID, userID, params) => {
+                    this.PlayerInput(gameID, userID, params);
                 }); 
             });
 
