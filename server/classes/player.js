@@ -4,7 +4,6 @@ const Char = require('./char');
 
 class Player{
     constructor(userID, displayName){
-        this.char = new Char();
 
         this.armor = 50;
         this.health = 100;
@@ -30,6 +29,8 @@ class Player{
         this.health = 100;
         this.attack = 10;
 
+        this.position = {x: null, y: null};
+        this.target = {x: null, y: null};
 
         this.userID = number;
         this.displayName = "AI_" + number;
@@ -44,13 +45,23 @@ class Player{
         if(this.type == "bot"){
 
 
-            this.char.target = {x: Math.floor(Math.random() * 3) - 1, y: Math.floor(Math.random() * 3) - 1};
+            this.target = {x: Math.floor(Math.random() * 3) - 1, y: Math.floor(Math.random() * 3) - 1};
         }
 
 
-        this.char.Update();
 
-        console.log({x: this.GetPosition().x, y: this.GetPosition().y, health: this.health, targetX: this.char.target.x, targetY: this.char.target.y});
+
+
+        var newPos = {x: this.position.x + this.target.x, y: this.position.y + this.target.y};
+        if(newPos.x >= 0 && newPos.x < this.max){
+            this.position.x = newPos.x;
+        }
+        if(newPos.y >= 0 && newPos.y < this.max){
+            this.position.y = newPos.y;
+        }
+
+
+        console.log({x: this.position.x, y: this.position.y, health: this.health, targetX: this.target.x, targetY: this.target.y});
     }
 
     Attack(enemy){
@@ -100,18 +111,14 @@ class Player{
 
     }
 
-    GetPosition(){
-        return this.char.position;
-    }
-
     SetPosition(position){
-        this.char.position = position;
+        this.position = position;
     }
 
     Input(params){
         switch(params.type){
             case 'direction':
-                this.char.target = params.params;   
+                this.target = params.params;   
             break;
             case 'enemy':
                 if(this.mood == "fight"){
@@ -128,7 +135,7 @@ class Player{
     }
 
     SetMapSize(size){
-        this.char.max = size;
+        this.max = size;
     }
 
     FindClosest(objects){
@@ -140,8 +147,8 @@ class Player{
                 return;
             }
             let distance = {};
-            distance.x = this.GetPosition().x - obj.GetPosition().x;
-            distance.y = this.GetPosition().y - obj.GetPosition().y
+            distance.x = this.position.x - obj.position.x;
+            distance.y = this.position.y - obj.position.y
             distance.x = distance.x*distance.x;
             distance.y = distance.y*distance.y;
             if(distance.x + distance.y < closestDistance){
@@ -154,8 +161,8 @@ class Player{
 
     PathToBuilding(obj){
         let newTarget = {};
-        newTarget.x = obj.GetPosition().x - this.GetPosition().x;
-        newTarget.y = obj.GetPosition().y - this.GetPosition().y;
+        newTarget.x = obj.position.x - this.position.x;
+        newTarget.y = obj.position.y - this.position.y;
 
         if(newTarget.x > 0){
             newTarget.x = 1;
@@ -193,7 +200,7 @@ class Player{
             this.health += loot.Armor;
         }
 
-        this.char.target = JSON.parse(JSON.stringify(newTarget));
+        this.target = JSON.parse(JSON.stringify(newTarget));
         
     }
 }
