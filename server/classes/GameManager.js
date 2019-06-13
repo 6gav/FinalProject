@@ -92,7 +92,6 @@ class GameManager{
     
 
     GetMap(gameID){
-        console.log("Asked for map")
         let currentGame = this.gameList[gameID];
 
         if(!currentGame){

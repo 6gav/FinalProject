@@ -6,8 +6,8 @@ class Player{
     constructor(userID, displayName){
 
         this.armor = 50;
-        this.health = 100;
-        this.attack = 30;
+        this.health = 200;
+        this.attack = 50;
         this.alive = true;
 
         this.mood = "fight";
@@ -25,7 +25,7 @@ class Player{
     MakeAi(number){
         this.type = "bot";
 
-        this.armor = 10;
+        this.armor = 0;
         this.health = 100;
         this.attack = 10;
 
@@ -143,7 +143,10 @@ class Player{
         let closestObject = null;
         let closestDistance = 100000;
         objects.forEach(obj => {
-            if(obj.looted || !obj.alive) {
+            if(obj.type == "building" && obj.looted){
+                return;
+            }
+            if(obj.type == "player" && !obj.alive){
                 return;
             }
             let distance = {};
@@ -182,6 +185,11 @@ class Player{
         }
         else{
             newTarget.y = 0;
+        }
+
+        if(this.mood == "flee"){
+            newTarget.x *= -1;
+            newTarget.y *= -1;
         }
 
         let loot = {};
