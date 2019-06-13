@@ -113,7 +113,7 @@ const RenderCells = (props)=>{
         }
 
         setCellInterval = ()=>{
-            /*
+           /* 
             let intervalID = setInterval(() => {
                 //console.log("HI")
                 this.makeCells()
@@ -139,24 +139,18 @@ const RenderCells = (props)=>{
             //console.log("feff");
             //console.log(resp)
             gridSp = resp;
-            //console.log(gridSp);
+            console.log(gridSp);
             //returns: list of occupied cells
-            let _cells = [],i,j=i=0,container = null;
+            let _cells = [],i=0,container = null;
             for(; i < gridSp.length; i++){
-                //console.log(`i: ${i}\nj: ${j}`)
-                for(j = 0; j < gridSp[i].length; j++){
-
-                    container = gridSp[i][j];
-                    //console.log (container);
+                    container = gridSp[i];
+                    console.log (container);
                     if(container != null){
                         if(container.objects != null){
-                            for(let k = 0; k < container.objects.length; k++){
-                                _cells.push(container.objects[k]);
-                            }
+                            _cells.push(container);
                         }
                     }
                 }
-            }
             //console.log(_cells)
             gridRef.state.cells = _cells
         })
