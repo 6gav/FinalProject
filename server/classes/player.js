@@ -17,7 +17,8 @@ class Player{
 
         this.userID = userID;
         this.displayName = displayName;
-
+        
+        this.TurnCount = 0; //<<<<<REMOVE THIS
         this.type = "player";
     }
 
@@ -30,7 +31,6 @@ class Player{
         this.health = 100;
         this.attack = 10;
 
-        this.TurnCount = 0; //<<<<<REMOVE THIS
 
         this.userID = number;
         this.displayName = "AI_" + number;
@@ -114,16 +114,19 @@ class Player{
     Input(params){
         switch(params.type){
             case 'direction':
-                this.char.target = params.direction;   
+                this.char.target = params.params;   
             break;
             case 'enemy':
-                if(this.mood.includes("fight")){
+                if(this.mood == "fight"){
                     this.combat = true;
-                    this.enemyTarget = params.enemy;
+                    this.enemyTarget = params.params;
                 }
                 else{
                     this.combat = false;
                 }
+            break;
+            case 'mood': 
+                this.mood = params.params;
             break;
         }
     }
@@ -133,25 +136,55 @@ class Player{
     }
 
     FindBuilding(buildings){
+        
+
         this.closestBuilding = null;
-        let closestDistance = 10000;
-        buildings.foreach(building => {
+        let closestDistance = 100000;
+        buildings.forEach(building => {
+            if(building.looted){
+                return;
+            }
             let distance = {};
+        
             distance.x = this.GetPosition().x - building.position.x;
             distance.y = this.GetPosition().y - building.position.y
             distance.x = distance.x*distance.x;
             distance.y = distance.y*distance.y;
             if(distance.x + distance.y < closestDistance){
                 this.closestBuilding = building;
+                closestDistance = distance.x + distance.y;
             }
         });
+        this.PathToBuilding();
     }
 
     PathToBuilding(){
         let newTarget = {};
-        this.closestBuilding.x;
-        this.closestBuilding.y;
-        this.char.target = {}
+        newTarget.x = this.closestBuilding.position.x - this.GetPosition().x;
+        newTarget.y = this.closestBuilding.position.y - this.GetPosition().y;
+
+        if(newTarget.x > 0){
+            newTarget.x = 1;
+        }
+        else if(newTarget.x < 0){
+            newTarget.x = -1;
+        }
+        else {
+            newTarget.x = 0;
+        }
+
+        if(newTarget.y > 0){
+            newTarget.y = 1;
+        }
+        else if(newTarget.y < 0){
+            newTarget.y = -1;
+        }
+        else{
+            newTarget.y = 0;
+        }
+
+        this.char.target = JSON.parse(JSON.stringify(newTarget));
+        
     }
 }
 

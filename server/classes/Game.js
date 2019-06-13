@@ -43,6 +43,7 @@ class Game{
             let y = Math.floor(Math.random()*this.map.size);
             let building = new Building({x: x, y: y});
             this.objects["building"].push(building);
+            this.map.objects.push(building);
         }
     }
 
@@ -50,7 +51,7 @@ class Game{
         this.deltaTime = deltaTime;
         this.running = true;
 
-        AddBuildings(10);
+        this.AddBuildings(10);
         
 
         this.playerList.forEach(player => {
@@ -64,7 +65,7 @@ class Game{
         this.playerList[1].SetPosition({x: 0, y: 0});
         this.map.ExportMap();
 
-        this.playerList[0].Input({type: 'direction', direction: {x: -1, y: -1}});
+        this.playerList[0].Input({type: 'direction', params: {x: -1, y: -1}});
     }
 
     PlayerInput(userID, params){
@@ -76,6 +77,8 @@ class Game{
     }
 
     Update(){
+
+        console.log("~~~~~~GAME TICK~~~~~~");
 
         let player = this.playerList[0];
 
@@ -90,11 +93,10 @@ class Game{
             var distY = pPos.y - ePos.y;
 
             if(distX + distY <= 3 && otherPlayer.alive){
-                this.playerList[0].Input({type: "enemy", enemy: otherPlayer});
+                this.playerList[0].Input({type: "enemy", params: otherPlayer});
             }
         }
 
-        console.log("Game tick");
 
         if(!this.playerList[0].alive){
             this.running = false;
