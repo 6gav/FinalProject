@@ -293,7 +293,23 @@ class App extends Component {
     this.setState(this.state)
   }
 
-  
+  GetMap = (jdata,cb) =>{
+    fetch('/api/GetMap', {
+      method: 'POST',
+      headers:{
+          'Content-Type':'Application/json',
+      },
+      body: JSON.stringify({
+        //pass in host's current game
+        gameID:jdata.gameID
+      })
+  }).then(function(response) {
+    return response.json();
+  }).then(function(json) {
+    cb(json);
+  }).catch(function(error) {
+  });
+  }
   GetPlayers = (gameID) =>
   {
     //grabs list of players in current game
@@ -317,6 +333,7 @@ class App extends Component {
       });
       return players;
   }
+
   SetCellSelection = (index) =>{
     //sends the server which cell current 
     //user will play as
@@ -415,7 +432,7 @@ class App extends Component {
 
 
         return (<div className="GameSpace">
-          <Grid 
+          <Grid  GetMap={this.GetMap}
           gameID={2000}
           uid={this.state.user.uid}
           onClosePrompt={this.onClosePrompt}

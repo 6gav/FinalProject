@@ -69,35 +69,30 @@ class GameManager{
     }
 
     /*async SetupSocket(socket){
-
         socket.on("connection", (client) => {
             console.log("Client joined");            
             client.on("getMap", (info) => {
                 console.log("ASKED FOR MAP");
                 setInterval(() => {
                 let uid = info.uid;
-
                 let currentGame = this.gameList[info.gameID];
-
                 let map = null;
                 if(currentGame){
                     map = currentGame.GetMap();
                 }
                     client.emit("map", (map));
-
                 }, 0);
             });
-
             //Uid, GameID, Params
             client.on("pInput", (gameID, userID, params) => {
                 this.PlayerInput(gameID, userID, params);
             });
-
         });
     }*/     
     
 
     GetMap(gameID){
+        console.log("Asked for map")
         let currentGame = this.gameList[gameID];
 
         if(!currentGame){

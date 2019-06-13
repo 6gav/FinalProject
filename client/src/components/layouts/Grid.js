@@ -5,10 +5,9 @@ import Cell from './resources/Cell'
 import cell_primary from './resources/cell/color_mask_00.png'
 import tempPrimary from './resources/cell/color_mask_17.png'
 import tempSecondary from './resources/cell/face_01.png'
-import {SocketApi} from './resources/api';
 
 
-let socket;
+import { Socket } from 'dgram';
 
 const GRID_WIDTH = 40,GRID_HEIGHT = 40;//Default grid dimensions are 40x40
 const GRID_SPACING=20;
@@ -29,10 +28,11 @@ const RenderCells = (props)=>{
     //of the cells on their 
     //relative grid position
     let visualRender = props.GetCellsFromStorage();
-    console.log(visualRender)
+    
     let cells = props.cells
     //console.log("CELLS")
-    //console.log(cells)
+    console.log(cells)
+    
     if(cells){
         //console.log(props)
         for(let i = 0; i < cells.length; i++){
@@ -47,9 +47,9 @@ const RenderCells = (props)=>{
                 (
                   <Cell 
                   char={cell}
-                  x={cell.char.position.x}
-                  y={cell.char.position.y}
-                  key={`${cell.char.position.x},${cell.char.position.y}`}
+                  x={cell.position.x}
+                  y={cell.position.y}
+                  key={`${cell.position.x},${cell.position.y}`}
                   color={props.color}
                   cell_primary={tempPrimary}//{cell.primary}
                     cell_secondary = {tempSecondary}//{cell.secondary}
@@ -130,18 +130,23 @@ const RenderCells = (props)=>{
             this.setState({isRunning:false})//!this.state.isRunning})
         }
         makeCells = () =>{
+            console.log("starttin")
         //api call (top,left,width,height)
         let gridSp = [];
         //console.log(`Game ID: ${this.props.gameID}\nUser ID: ${this.props.uid}`)
         let gridRef=this;
-    
-        let c = socket.getMap({gameID:this.props.gameID,uid:this.props.uid,top:0,left:0,width:GRID_WIDTH,height:GRID_HEIGHT},(resp)=>{
-            //console.log("feff");
-            //console.log(resp)
-            gridSp = resp;
-            console.log(gridSp);
+            //todo: fetch map
+            let jdata = 
+            {
+                gameID: this.props.gameID,
+                uid: this.props.uid,
+                rect:{top:0,left:0,width:GRID_WIDTH,height:GRID_HEIGHT}
+            }
+            const cb = (resp)=>{
+                this.setState({cells:resp})
+            }
             //returns: list of occupied cells
-            let _cells = [],i=0,container = null;
+            let _cells = this.props.GetMap(jdata,cb),i=0,container = null;
             for(; i < gridSp.length; i++){
                     container = gridSp[i];
                     console.log (container);
@@ -153,8 +158,7 @@ const RenderCells = (props)=>{
                 }
             //console.log(_cells)
             gridRef.state.cells = _cells
-        })
-        let storage = GetStorage()
+            let storage = GetStorage()
         
         
         }
@@ -162,7 +166,6 @@ const RenderCells = (props)=>{
       constructor(props)
       {
         super(props)
-        socket = new SocketApi();
         let size = props.gridSize,
         spacing = props.gridSpacing;
         
@@ -172,9 +175,6 @@ const RenderCells = (props)=>{
         let user = props.user
         //////console.log("Here")
         ////console.log(user)
-        socket.connectToSocket(user,(j)=>{
-            //console.log("CONESCOT");//console.log(j)
-          })
 
           this.setCellInterval();
           //this.makeCells()
@@ -222,7 +222,7 @@ const RenderCells = (props)=>{
     componentWillUnmount(){
     }
       render(){
-          let { cells } = this.state.cells;
+          let { cells } = this.state;
           //console.log(cells)
           
           let sp = this.props.gridSpacing,
