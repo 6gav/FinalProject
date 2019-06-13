@@ -86,8 +86,8 @@ class Game{
 
             const otherPlayer = this.playerList[j];
 
-            var pPos = player.GetPosition();
-            var ePos = otherPlayer.GetPosition();
+            var pPos = player.position;
+            var ePos = otherPlayer.position;
             
             var distX = pPos.x - ePos.x;
             var distY = pPos.y - ePos.y;

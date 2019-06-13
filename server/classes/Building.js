@@ -44,10 +44,6 @@ class Building {
         return this.loot;
     }
 
-    GetPosition(){
-        return this.position;
-    }
-
 
 }
 
