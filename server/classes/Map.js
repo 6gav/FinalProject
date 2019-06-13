@@ -14,15 +14,8 @@ class Map{
     }
 
     ExportMap(){
-        let tempArea = Array.from(this.area);
-
-        this.objects.forEach(obj => {
-            let pos = obj.GetPosition();
-            tempArea[pos.x][pos.y].objects = [];
-            tempArea[pos.x][pos.y].objects.push(obj);
-        });
         
-        return tempArea;
+        return this.objects;
     }
 
 }
