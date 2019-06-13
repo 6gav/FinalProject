@@ -76,7 +76,7 @@ class Game{
         });
     }
 
-    Update(){
+    async Update(){
 
         console.log("~~~~~~GAME TICK~~~~~~");
 
@@ -104,10 +104,16 @@ class Game{
 
         this.playerList.forEach(player => {
             if(player.mood == "loot"){
-                player.FindBuilding(this.objects["building"]);
+                player.FindClosest(this.objects["building"]);
             }
-
-            player.Update();
+            else if (player.mood == "fight"){
+                let players = this.playerList.slice(1, this.playerList.length);
+                player.FindClosest(players);
+            }
+            setTimeout(() => {
+                player.Update();
+                
+            }, 0);
         });
 
         if(this.running){

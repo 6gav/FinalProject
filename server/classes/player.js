@@ -42,7 +42,10 @@ class Player{
 
         this.TurnCount %= 10;
 
-        this.char.target = {x: Math.floor(Math.random() * 3) - 1, y: Math.floor(Math.random() * 3) - 1};
+
+        if(this.type == "bot"){
+            this.char.target = {x: Math.floor(Math.random() * 3) - 1, y: Math.floor(Math.random() * 3) - 1};
+        }
 
         //Call AI and get result
 
@@ -53,7 +56,7 @@ class Player{
 
         this.char.Update();
 
-        console.log({x: this.GetPosition().x, y: this.GetPosition().y, health: this.health});
+        console.log({x: this.GetPosition().x, y: this.GetPosition().y, health: this.health, targetX: this.char.target.x, targetY: this.char.target.y});
     }
 
     Attack(enemy){
@@ -135,33 +138,38 @@ class Player{
         this.char.max = size;
     }
 
-    FindBuilding(buildings){
-        
+    FindClosest(objects){
 
-        this.closestBuilding = null;
+        let closestObject = null;
         let closestDistance = 100000;
-        buildings.forEach(building => {
-            if(building.looted){
+        objects.forEach(obj => {
+            if(obj.looted || !obj.alive) {
                 return;
             }
             let distance = {};
         
-            distance.x = this.GetPosition().x - building.position.x;
-            distance.y = this.GetPosition().y - building.position.y
+            distance.x = this.GetPosition().x - obj.GetPosition().x;
+            distance.y = this.GetPosition().y - obj.GetPosition().y
             distance.x = distance.x*distance.x;
             distance.y = distance.y*distance.y;
             if(distance.x + distance.y < closestDistance){
-                this.closestBuilding = building;
+                closestObject = obj;
                 closestDistance = distance.x + distance.y;
             }
         });
-        this.PathToBuilding();
+        if(closestDistance <= 100 && closestObject.type == "bot"){
+            this.enemyTarget = closestObject;
+        }
+        setTimeout(() => {
+            this.PathToBuilding(closestObject);
+            
+        }, 0);
     }
 
-    PathToBuilding(){
+    PathToBuilding(obj){
         let newTarget = {};
-        newTarget.x = this.closestBuilding.position.x - this.GetPosition().x;
-        newTarget.y = this.closestBuilding.position.y - this.GetPosition().y;
+        newTarget.x = obj.GetPosition().x - this.GetPosition().x;
+        newTarget.y = obj.GetPosition().y - this.GetPosition().y;
 
         if(newTarget.x > 0){
             newTarget.x = 1;
@@ -183,7 +191,27 @@ class Player{
             newTarget.y = 0;
         }
 
-        this.char.target = JSON.parse(JSON.stringify(newTarget));
+        let loot = {};
+        if(newTarget.x == 0 && newTarget.y == 0 && obj.type == "building"){
+            loot = obj.GetLoot();
+            obj.looted = true;
+        }
+
+        if(loot.Health){
+            this.health += loot.Health;
+        }
+        else if(loot.Attack){
+            this.health += loot.Attack;
+        }
+        else if(loot.Armor){
+            this.health += loot.Armor;
+        }
+
+
+        setTimeout(() => {
+            
+            this.char.target = JSON.parse(JSON.stringify(newTarget));
+        }, 0);
         
     }
 }

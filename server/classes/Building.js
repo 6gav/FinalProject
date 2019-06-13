@@ -8,6 +8,7 @@ class Building {
         this.loot = {};
         this.looted = false;
         this.GenerateLoot();
+        this.type == "building";
     
     }
 
