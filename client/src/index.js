@@ -3,6 +3,8 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
+import OpenSocket from 'socket.io-client';
+const socket = OpenSocket();
 
 ReactDOM.render(
 <App/>, document.getElementById('root'));
@@ -11,3 +13,6 @@ ReactDOM.render(
 // unregister() to register() below. Note this comes with some pitfalls.
 // Learn more about service workers: http://bit.ly/CRA-PWA
 serviceWorker.unregister();
+
+
+export {socket};

@@ -9,16 +9,13 @@ const error = require('./error');
 global.gameManager = new GameManager();
 
 //Create routing info regarding api calls
-function registerPaths(app, socket){
+function registerPaths(app){
     
     //User paths
     registerUserPaths(app);
     
     //Game paths
     registerGamePaths(app);
-
-    global.gameManager.SetupSocket(socket);
-
 }
 
 //Call function when file is loaded externally
@@ -130,7 +127,7 @@ function registerGamePaths(app){
         res.send(result);
     });
 
-    app.get('/api/GetMap', (req, res) => {
+    app.post('/api/GetMap', (req, res) => {
         var mapObject = global.gameManager.GetMap(req.body.gameID);
         
         res.send(mapObject);

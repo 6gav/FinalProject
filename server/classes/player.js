@@ -12,7 +12,6 @@ class Player{
         this.alive = true;
 
         this.mood = "fight";
-        this.enemyTarget = null;
         this.combat = false;
 
         this.userID = userID;
@@ -42,17 +41,12 @@ class Player{
 
         this.TurnCount %= 10;
 
-
         if(this.type == "bot"){
+
+
             this.char.target = {x: Math.floor(Math.random() * 3) - 1, y: Math.floor(Math.random() * 3) - 1};
         }
 
-        //Call AI and get result
-
-        if(this.combat && this.enemyTarget){
-            this.Attack(this.enemyTarget);
-            
-        }
 
         this.char.Update();
 
@@ -121,8 +115,7 @@ class Player{
             break;
             case 'enemy':
                 if(this.mood == "fight"){
-                    this.combat = true;
-                    this.enemyTarget = params.params;
+                    this.Attack(params.params);
                 }
                 else{
                     this.combat = false;
@@ -156,9 +149,7 @@ class Player{
                 closestDistance = distance.x + distance.y;
             }
         });
-        if(closestDistance <= 100 && closestObject.type == "bot"){
-            this.enemyTarget = closestObject;
-        }
+        this.PathToBuilding(closestObject);
     }
 
     PathToBuilding(obj){
@@ -201,7 +192,6 @@ class Player{
         else if(loot.Armor){
             this.health += loot.Armor;
         }
-
 
         this.char.target = JSON.parse(JSON.stringify(newTarget));
         

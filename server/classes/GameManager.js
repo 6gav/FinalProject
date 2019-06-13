@@ -35,7 +35,7 @@ class GameManager{
         if(currentGame.hostID == userID){
             currentGame.AddAi(3);
 
-            currentGame.StartGame(100);
+            currentGame.StartGame(2000);
         }
 
         return;
@@ -68,17 +68,13 @@ class GameManager{
         }
     }
 
-    SetupSocket(socket){
+    /*async SetupSocket(socket){
 
-        socket.once("connection", (client) => {
-            console.log("Client joined");
-            client.on("sendUid", (info) => {
-                console.log("Client connected with uid: " + info);
-
-            });
-            
+        socket.on("connection", (client) => {
+            console.log("Client joined");            
             client.on("getMap", (info) => {
                 console.log("ASKED FOR MAP");
+                setInterval(() => {
                 let uid = info.uid;
 
                 let currentGame = this.gameList[info.gameID];
@@ -87,8 +83,8 @@ class GameManager{
                 if(currentGame){
                     map = currentGame.GetMap();
                 }
-                setTimeout(() => {
                     client.emit("map", (map));
+
                 }, 0);
             });
 
@@ -98,7 +94,7 @@ class GameManager{
             });
 
         });
-    }
+    }*/     
     
 
     GetMap(gameID){

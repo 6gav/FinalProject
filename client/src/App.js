@@ -395,10 +395,10 @@ class App extends Component {
       console.log("Start Hello")
       viewer.setState({running:true})
       console.log(json)
+      window.location = '/simulation_s';
     }).catch(function(error) {
       console.log(error);
     });
-    //window.location = '/simulation_s';
     return true;
     
   }

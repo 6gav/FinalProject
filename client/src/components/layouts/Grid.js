@@ -5,10 +5,10 @@ import Cell from './resources/Cell'
 import cell_primary from './resources/cell/color_mask_00.png'
 import tempPrimary from './resources/cell/color_mask_17.png'
 import tempSecondary from './resources/cell/face_01.png'
+import {SocketApi} from './resources/api';
 
-require('../layouts/resources/api.js')
-const socket = global.SocketApi;
 
+let socket;
 
 const GRID_WIDTH = 40,GRID_HEIGHT = 40;//Default grid dimensions are 40x40
 const GRID_SPACING=20;
@@ -21,22 +21,22 @@ const RanRange = function(min,max,integer=true){
         val = Math.floor(val)
     }
     return val;
-  }
-  //#endregion
+}
+//#endregion
 
-  const RenderCells = (props)=>{
-      //this function will draw all 
-      //of the cells on their 
-      //relative grid position
-      let visualRender = props.GetCellsFromStorage();
-      console.log(visualRender)
-      let cells = props.cells
-      //console.log("CELLS")
-      //console.log(cells)
-      if(cells){
-          //console.log(props)
-          for(let i = 0; i < cells.length; i++){
-              if(cells[i].displayName ==props.displayName){
+const RenderCells = (props)=>{
+    //this function will draw all 
+    //of the cells on their 
+    //relative grid position
+    let visualRender = props.GetCellsFromStorage();
+    console.log(visualRender)
+    let cells = props.cells
+    //console.log("CELLS")
+    //console.log(cells)
+    if(cells){
+        //console.log(props)
+        for(let i = 0; i < cells.length; i++){
+            if(cells[i].displayName ==props.displayName){
                 console.log(visualRender[0])
                 cells[i].image=visualRender[0]
                 console.log(cells[i])
@@ -135,7 +135,7 @@ const RanRange = function(min,max,integer=true){
         //console.log(`Game ID: ${this.props.gameID}\nUser ID: ${this.props.uid}`)
         let gridRef=this;
     
-        let c = global.SocketApi.getMap({gameID:this.props.gameID,uid:this.props.uid,top:0,left:0,width:GRID_WIDTH,height:GRID_HEIGHT},(resp)=>{
+        let c = socket.getMap({gameID:this.props.gameID,uid:this.props.uid,top:0,left:0,width:GRID_WIDTH,height:GRID_HEIGHT},(resp)=>{
             //console.log("feff");
             //console.log(resp)
             gridSp = resp;
@@ -168,6 +168,7 @@ const RanRange = function(min,max,integer=true){
       constructor(props)
       {
         super(props)
+        socket = new SocketApi();
         let size = props.gridSize,
         spacing = props.gridSpacing;
         

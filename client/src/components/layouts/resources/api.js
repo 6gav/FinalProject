@@ -1,6 +1,5 @@
-import OpenSocket from 'socket.io-client';
 
-const socket = OpenSocket();
+import {socket} from '../../../index'; 
 console.error("NEW SOCKET IS MADE HERE");
 
 
@@ -53,4 +52,4 @@ class SocketApi{
     }
 }
 
-global.SocketApi = new SocketApi();
+export {SocketApi};
