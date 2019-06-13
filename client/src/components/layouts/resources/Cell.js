@@ -16,22 +16,29 @@ export class Cell extends Component {
     }
     
     render(){
-        console.log("rendering cell")
-        console.log(this.state)
+        //console.log("rendering cell")
+        //console.log(this.state)
         let cell_primary = this.props.cell_primary,
         cell_secondary   = this.props.cell_secondary
         let char = this.props.char?this.props.char:null
         let color = (this.props.color?this.props.color:this.state.color)
         if(char){
-            let color = char.body.color
-            let face = char.body.face
+            //let color = char.body.color
+            //let face = char.body.face
             
         }
+        if(this.props.image){
+            let image = this.props.image
+            cell_primary = image.face
+            cell_secondary=image.color
+        }
+        console.log(this.props)
+        console.log(this.props.char.displayName)
         let spacing = this.props.dimensions.Spacing*0.8,rad=-2,
         translation='translate('+rad+'px, '+rad+'px)',
         invlation = 'translate('+(-rad)+'px, '+(-rad)+'px)';
-        console.log(cell_primary)
-        console.log(cell_secondary)
+        //console.log(this.props)
+        //console.log(cell_secondary)
         return(
             <div className="Cell" style={{
                 transform:invlation,
@@ -41,10 +48,10 @@ export class Cell extends Component {
                 height: `${spacing-1}px`,
                 
             }}>
+             <div>{this.props.char.displayName}</div>
             <img src = {cell_body} style={{position:'absolute',width:spacing,height:spacing}}></img>
             <img src = {cell_primary}  style={{tintColor:`${color}`,position:'absolute',width:spacing,height:spacing}}></img>
             <img src = {cell_secondary} style={{position:'absolute',width:spacing,height:spacing}}></img>
-             
             </div>
         )
     }

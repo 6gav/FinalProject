@@ -172,7 +172,6 @@ class App extends Component {
   //gets local user cells
   GetCellsFromStorage=()=>{
     let cells = JSON.parse(localStorage.getItem("cells"))
-    console.log(cells)
     if(cells == null){
       cells = []
     }
@@ -190,8 +189,17 @@ class App extends Component {
     return user_cells
   }
   AddCellToStorage=(cell)=>{
-    let cells = JSON.parse(localStorage.getItem("cells")).cells
-    for(let i = 0; i < cells.length; i++){
+    let l_storage = JSON.parse(localStorage.getItem("cells"));
+    
+    let cells = [];
+    if(l_storage != null){
+
+      cells = l_storage.cells
+    }
+    else{
+      return false;
+    }
+      for(let i = 0; i < cells.length; i++){
       //cell exists in storage
       if(cells[i].name == cell.name){
         return false;

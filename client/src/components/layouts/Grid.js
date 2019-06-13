@@ -3,9 +3,9 @@ import ChoicePrompt from './ChoicePrompt'
 import './Grid.css'
 import Cell from './resources/Cell'
 import cell_primary from './resources/cell/color_mask_00.png'
-
 import tempPrimary from './resources/cell/color_mask_17.png'
 import tempSecondary from './resources/cell/face_01.png'
+
 require('../layouts/resources/api.js')
 const socket = global.SocketApi;
 
@@ -28,16 +28,25 @@ const RanRange = function(min,max,integer=true){
       //this function will draw all 
       //of the cells on their 
       //relative grid position
-
+      let visualRender = props.GetCellsFromStorage();
+      console.log(visualRender)
       let cells = props.cells
-      console.log("CELLS")
-      console.log(cells)
+      //console.log("CELLS")
+      //console.log(cells)
       if(cells){
+          //console.log(props)
+          for(let i = 0; i < cells.length; i++){
+              if(cells[i].displayName ==props.displayName){
+                console.log(visualRender[0])
+                cells[i].image=visualRender[0]
+                console.log(cells[i])
+            }
+        }
           return (
               cells.map(cell =>
                 (
-
                   <Cell 
+                  char={cell}
                   x={cell.char.position.x}
                   y={cell.char.position.y}
                   key={`${cell.char.position.x},${cell.char.position.y}`}
@@ -104,11 +113,14 @@ const RanRange = function(min,max,integer=true){
         }
 
         setCellInterval = ()=>{
+            /*
             let intervalID = setInterval(() => {
-                console.log("HI")
+                //console.log("HI")
                 this.makeCells()
                 this.setState({})
             }, 1000);
+            */
+           let intervalID=null;
             
             this.setState({intervalID:intervalID})
         }
@@ -227,7 +239,7 @@ const RanRange = function(min,max,integer=true){
               this.setState({})
             }
           const showcell=()=>{
-              console.log(this.state.cells)
+              //console.log(this.state.cells)
         }
             return (<div>
               <button name="btn_back" id="SinglePlayer" onClick={()=>{window.location = '/'}} >🢠</button>
@@ -238,13 +250,13 @@ const RanRange = function(min,max,integer=true){
                     width:w,
                     height:h,
                     backgroundSize:`${sp}px ${sp}px`,
-                    backgroundColor:"#211"
+                    
                 }} 
                 onClick={this.handleClick}
                 ref={(_ref)=>{this.gridRef = _ref;}}
                 >
                 
-                    <RenderCells makeCells={this.makeCells}cells={this.state.cells} gridSpacing={this.props.gridSpacing} color={this.state.color}cell_body={this.props.cell_body}/>
+                    <RenderCells displayName={this.props.user.displayName}GetCellsFromStorage={this.props.GetCellsFromStorage}makeCells={this.makeCells}cells={this.state.cells} gridSpacing={this.props.gridSpacing} color={this.state.color}cell_body={this.props.cell_body}/>
                 
                 </div>
                 {
@@ -252,6 +264,10 @@ const RanRange = function(min,max,integer=true){
                 }
               </div>
               <button onClick={this.makeCells}>ForceUpdate</button>
+              <button onClick={stateset}>set State</button>
+              <button onClick={showcell}>cells</button>
+              <button onClick={this.clearInt}>{this.state.isRunning?"pause":"start"}</button>
+              
               
             
           </div>)

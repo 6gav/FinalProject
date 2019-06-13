@@ -34,7 +34,7 @@ export default class CellList extends Component {
                     cells.map((Cell)=>{
                         i++
                     return( 
-                        <li data-id={i} key={i} className="CustCell" onClick={this.handleClick}>
+                        <li draggable data-id={i} key={i} className="CustCell" onClick={this.handleClick}>
                             <div className="CellBox">
                                 <img className='Body'  src={cell_body}></img>
                                 <img className='Color' src={Cell.color}></img>
