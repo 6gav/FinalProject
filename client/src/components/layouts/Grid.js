@@ -9,7 +9,8 @@ import tempSecondary from './resources/cell/face_01.png'
 
 import { Socket } from 'dgram';
 
-const GRID_WIDTH = 40,GRID_HEIGHT = 40;//Default grid dimensions are 40x40
+const uuidv1 = require('uuid/v1');
+const GRID_WIDTH = 50,GRID_HEIGHT = 10;//Default grid dimensions are 40x40
 const GRID_SPACING=20;
 
 //#region Tools
@@ -31,31 +32,35 @@ const RenderCells = (props)=>{
     
     let cells = props.cells
     //console.log("CELLS")
-    console.log(cells)
+    // console.log(cells)
     
+
     if(cells){
         //console.log(props)
         for(let i = 0; i < cells.length; i++){
+            cells[i].ind = i;
             if(cells[i].displayName ==props.displayName){
-                console.log(visualRender[0])
-                cells[i].image=visualRender[0]
-                console.log(cells[i])
+                //console.log(visualRender[0])
             }
         }
           return (
               cells.map(cell =>
                 (
-                  <Cell 
-                  char={cell}
-                  x={cell.position.x}
-                  y={cell.position.y}
-                  key={`${cell.position.x},${cell.position.y}`}
-                  color={props.color}
-                  cell_primary={tempPrimary}//{cell.primary}
+                    <Cell 
+                    char={cell}
+                    x={cell.position.x}
+                    y={cell.position.y}
+                    key={uuidv1()}//{`${cell.position.x},${cell.position.y}`}
+                    color={props.color}
+                    image={cell.displayName==props.displayName?props.GetCellSelected():null}
+                    ind={cell.ind}
+                    cell_primary={tempPrimary}//{cell.primary}
                     cell_secondary = {tempSecondary}//{cell.secondary}
-                  dimensions={{Spacing:props.gridSpacing}}
-                  />
-              )
+                    dimensions={{Spacing:props.gridSpacing}}
+                    />
+                )
+              
+                
               )
           )
       }else{
@@ -75,7 +80,7 @@ const RenderCells = (props)=>{
     if(props.choice){
         render = (
             <div>
-                <ChoicePrompt onClosePrompt={props.onClosePrompt} choice={props.choice} OnChoice={props.OnChoice}/>
+                <ChoicePrompt user={props.user} gameID={props.gameID} onClosePrompt={props.onClosePrompt} choice={props.choice} OnChoice={props.OnChoice}/>
             </div>
             )
     }
@@ -105,7 +110,7 @@ const RenderCells = (props)=>{
   class Grid extends Component{
       state = {
           cells:[],//list of data occupying cells
-          interval: 1000,//interval between screen updates
+          interval: 100,//interval between screen updates
           isRunning: true,//if the grid should update automatically
           
           color:"#c00",
@@ -130,7 +135,6 @@ const RenderCells = (props)=>{
             this.setState({isRunning:false})//!this.state.isRunning})
         }
         makeCells = () =>{
-            console.log("starttin")
         //api call (top,left,width,height)
         let gridSp = [];
         //console.log(`Game ID: ${this.props.gameID}\nUser ID: ${this.props.uid}`)
@@ -209,7 +213,9 @@ const RenderCells = (props)=>{
         }else{}
         this.setState();
     }
-
+    CreateChoicePrompt = ()=>{
+        this.props.onChoiceMade("What will you do","loot,fight,flee".split(','),this.props.ClearScreen)
+    }
     handleChoice = (choice) =>{
         let color = choice.Action.text;
         
@@ -236,6 +242,7 @@ const RenderCells = (props)=>{
           const showcell=()=>{
               //console.log(this.state.cells)
         }
+        //console.log(this.props.GetCellSelected(0));
             return (<div>
               <button name="btn_back" id="SinglePlayer" onClick={()=>{window.location = '/'}} >🢠</button>
                         
@@ -251,18 +258,14 @@ const RenderCells = (props)=>{
                 ref={(_ref)=>{this.gridRef = _ref;}}
                 >
                 
-                    <RenderCells displayName={this.props.user.displayName}GetCellsFromStorage={this.props.GetCellsFromStorage}makeCells={this.makeCells}cells={this.state.cells} gridSpacing={this.props.gridSpacing} color={this.state.color}cell_body={this.props.cell_body}/>
+                    <RenderCells user={this.props.user}GetCellSelected={this.props.GetCellSelected}displayName={this.props.user.displayName}GetCellsFromStorage={this.props.GetCellsFromStorage}makeCells={this.makeCells}cells={this.state.cells} gridSpacing={this.props.gridSpacing} color={this.state.color}cell_body={this.props.cell_body}/>
                 
                 </div>
                 {
-                    <OpenChoicePrompt onClosePrompt={this.props.onClosePrompt} isTrue={true} choice={this.props.choice} callback={this.props.callback} OnChoice={handleChoice}/>
+                    <OpenChoicePrompt gameID={this.props.gameID} user={this.props.user} onClosePrompt={this.props.onClosePrompt} isTrue={true} choice={this.props.choice} callback={this.props.callback} OnChoice={handleChoice}/>
                 }
               </div>
-              <button onClick={this.makeCells}>ForceUpdate</button>
-              <button onClick={stateset}>set State</button>
-              <button onClick={showcell}>cells</button>
-              <button onClick={this.clearInt}>{this.state.isRunning?"pause":"start"}</button>
-              
+              <button onClick={this.CreateChoicePrompt}>Choice</button>
               
             
           </div>)

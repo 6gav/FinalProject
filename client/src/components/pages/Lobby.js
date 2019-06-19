@@ -39,7 +39,7 @@ export default class Lobby extends Component {
       //then selects that cell as the playable one.
       //TODO: send selected cell index to server
       this.setState({clientCell:this.state.cells[index]})
-      
+      //console.log(this.props.func)
       this.props.func.SetCellSelection(index)
       
     }

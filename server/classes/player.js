@@ -61,7 +61,7 @@ class Player{
         }
 
 
-        console.log({x: this.position.x, y: this.position.y, health: this.health, targetX: this.target.x, targetY: this.target.y});
+        console.log({x: this.position.x, y: this.position.y, health: this.health, targetX: this.target.x, targetY: this.target.y,mood:this.mood});
     }
 
     Attack(enemy){

@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 import './ChoicePrompt.css'
 export default class ChoicePrompt extends Component {
-
     handleClick = (choice)=>{
         if(this.props.choice.callback){
           this.props.choice.callback()
@@ -12,17 +11,16 @@ export default class ChoicePrompt extends Component {
         }
         if(choice.Action)
           {
-            //console.log(this.props)
-          let b = true;
-          if(b){
-            
-            fetch('/api/responsePrompt', {
+            fetch('/api/PlayerInput', {
               method: 'POST',
               headers:{
                 'Content-Type':'Application/json',
               },
               body: JSON.stringify({
-                choice:choice
+                userID:this.props.user.uid,
+                gameID:this.props.gameID,
+                inputType:'mood',
+                params:choice.Action.text,
               })
             }).then(function(response) {
               return response.json();
@@ -32,7 +30,7 @@ export default class ChoicePrompt extends Component {
             }).catch(function(error) {
               console.log(error);
             });
-          }
+          
             if(choice.event){
               
               console.log("ev found")
@@ -49,6 +47,7 @@ export default class ChoicePrompt extends Component {
     return (
       <div className="Prompt">
         <form >
+          <legend>{this.props.user.displayName}</legend>
             <div>
                 <p className="PromptMessage">{this.props.choice.question}</p>
                 </div>

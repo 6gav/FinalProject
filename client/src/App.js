@@ -139,6 +139,7 @@ const PromptMultipleChoice = (caption,messages,event)=>{
       choices[i].Action.event = event
     }
   }
+  
   return {
     callback:event,
     question:caption,
@@ -172,14 +173,15 @@ class App extends Component {
   //gets local user cells
   GetCellsFromStorage=()=>{
     let cells = JSON.parse(localStorage.getItem("cells"))
-    if(cells == null){
+    if(cells == null)
       cells = []
-    }
     else
       cells = cells.cells
-    
+      if(this.state == null)
+        return []
+      if(this.state.user == null)
+        return cells
     let user_cells = []
-    
     for(let i = 0; i < cells.length; i++){
       if(cells[i].user == this.state.user.displayName)
         user_cells.push(cells[i])
@@ -187,6 +189,38 @@ class App extends Component {
 
     
     return user_cells
+  }
+  SetCellSelection = (index) =>{
+    //sends the server which cell current 
+    //user will play as
+    let user = this.state.user
+    console.log(user.uid)
+    //api call to set the cell on the bbabckend
+    if(false){
+    fetch('/api/SetUserCell', {
+      method: 'POST',
+      headers:{
+          'Content-Type':'Application/json',
+      },
+      body: JSON.stringify({
+        //pass in host's current game
+        uid:user.uid,
+        index:index
+      })
+  }).then(function(response) {
+      console.log(response)
+  }).then(function(json) {
+  }).catch(function(error) {
+  });
+  }
+  localStorage.setItem("cell_index",index)
+  }
+  GetCellSelected=(ind=-1)=>{
+    let cells = this.GetCellsFromStorage();
+    if(ind = -1){
+      ind = localStorage.getItem("cell_index")
+    }
+    return cells[ind]
   }
   AddCellToStorage=(cell)=>{
     let l_storage = JSON.parse(localStorage.getItem("cells"));
@@ -225,15 +259,24 @@ class App extends Component {
   }
 
   state={
-    gridSize:20,
-    gridSpacing:50,
+    gridSize:50,
+    gridSpacing:20,
     showDebug:true,
     user:this.GetUser(),
+    cell:this.GetCellSelected(),
     //array of message objects. objects have an id, along with data containing the string of the message.
     messages:[],
-    choice:null//PromptMultipleChoice("What will you do","loot,heal,wander,fight,run".split(',')),
+    choice:null,//PromptMultipleChoice("What will you do","loot,heal,wander,fight,run".split(',')),
+    cell_index:0
   }
-  
+  onChoiceMade = (caption,messages,cb)=>{
+    let resp = PromptMultipleChoice(
+      caption,messages,(e)=>{
+        cb()
+        console.log(e)
+    });
+    this.setState({choice:resp})
+  }
   onIdle = () =>{
     //log the user out after 10 minutes of inactivity
 
@@ -326,7 +369,7 @@ class App extends Component {
           })
       }).then(function(response) {
           players = response.players
-          console.log(players)
+          //console.log(players)
           return players;
       }).then(function(json) {
       }).catch(function(error) {
@@ -334,28 +377,8 @@ class App extends Component {
       return players;
   }
 
-  SetCellSelection = (index) =>{
-    //sends the server which cell current 
-    //user will play as
-    let user = this.state.user
-    console.log(user.uid)
-    
-    fetch('/api/SetUserCell', {
-      method: 'POST',
-      headers:{
-          'Content-Type':'Application/json',
-      },
-      body: JSON.stringify({
-        //pass in host's current game
-        uid:user.uid,
-        index:index
-      })
-  }).then(function(response) {
-      console.log(response)
-  }).then(function(json) {
-  }).catch(function(error) {
-  });
-  }
+  
+  
   CreateGame = () => {
     let user = this.GetUser();
 
@@ -396,7 +419,7 @@ class App extends Component {
     let viewer = this;
     let user = this.state.user,userID=user.uid,
     gameID = 2000
-    console.log("Game Start CALLED HEREREREHJREHQJRHQJRKHEWQJRKHEWJQRHEWQ");
+    console.log("Game Start CALLED");
     fetch('/api/StartGame', {
       method: 'POST',
       headers:{
@@ -419,7 +442,23 @@ class App extends Component {
     return true;
     
   }
-
+  ClearScreen=()=>{
+    console.log("screen cleared")
+    this.setState({choice:null})
+  }
+  debugChoice = ()=>{
+    fetch('/api/PlayerInput', {
+      method: 'POST',
+      headers:{
+        'Content-Type':'Application/json',
+      },
+      body: JSON.stringify({
+        userID:null,
+        gameID:this.state.gameID,
+        inputType:"run"
+      })
+    })
+  }
   render() {
     let game_data={
       cell_body:cell_body,
@@ -427,9 +466,9 @@ class App extends Component {
       colors:colors,
     }
     let user = this.state.user;
+    user.cell_index=this.state.cell_index;  
     const SinglePlayerGame= (props)=>{
       //post start game to server
-
 
         return (<div className="GameSpace">
           <Grid  GetMap={this.GetMap}
@@ -442,13 +481,16 @@ class App extends Component {
           gridSpacing={this.state.gridSpacing} 
           onPositionClick={this.onPositionClick}  
           GetCellsFromStorage={this.GetCellsFromStorage}
-          user={user}>
-          
+          onChoiceMade={this.onChoiceMade}  
+          user={user}
+          GetCellSelected = {this.GetCellSelected}
+          ClearScreen={this.ClearScreen}
+          >
           </Grid>
           <Interface onDebugValuesChange={this.onDebugValuesChange} messages={this.state.messages} AddMessage={this.AddMessage}></Interface>
           </div>);
           }
-        const MultiPlayerGame = (<div className="GameSpace">
+        /*const MultiPlayerGame = (<div className="GameSpace">
         <Grid 
         choice={this.state.choice} 
         OnChoice={this.OnChoice} 
@@ -458,7 +500,9 @@ class App extends Component {
         user={user}>
         
         </Grid>
-          <Interface onDebugValuesChange={this.onDebugValuesChange} messages={this.state.messages} AddMessage={this.AddMessage}></Interface></div>);
+        <Interface onDebugValuesChange={this.onDebugValuesChange} messages={this.state.messages} AddMessage={this.AddMessage}></Interface></div>
+        );*/
+          
           const CustomizeCell = ()=>{
             return (
               <CellEditor user={this.state.user}AddCellToStorage={this.AddCellToStorage}RemoveCellFromStorage={this.RemoveCellFromStorage}GetCellsFromStorage={this.GetCellsFromStorage}game_data={game_data}/>
@@ -468,16 +512,18 @@ class App extends Component {
     
 
     let MakeChoice = this.MakeChoice
+
     return (
       
       <Router>
         <div className = "App">
           <div className="Container">
+            <button onClick={this.debugChoice}>Send Loot</button>
             <Header hasAuthuser={this.hasAuthuser}/>
             <Switch>
               <Route exact path='/'   render={() => <Home CreateGame={this.CreateGame}/>}/>
-              <Route exact path='/simulation_s'       render={() =><SinglePlayerGame gameID={this.state.gameID}/>} />
-              <Route exact path='/simulation_m'       render={() =><MultiPlayerGame/>}  />
+              <Route exact path='/simulation_s'       render={() =><SinglePlayerGame />} />
+              <Route exact path='/simulation_m'       render={() =><SinglePlayerGame/>}  />
               <Route exact path='/simulation'         render={() =><Lobby  game_data={game_data} func={{StartGame:this.StartGame,GetCellsFromStorage:this.GetCellsFromStorage,GetPlayers:this.GetPlayers,SetCellSelection:this.SetCellSelection}}mode ={"singleplayer"}user={this.user}/>}/>
               <Route exact path='/simulation_editor'  render={()=><CustomizeCell game_data={game_data} user={user}/>}/>
               <Route exact path='/about'              render={()=><About          version={version}/>} />

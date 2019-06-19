@@ -3,6 +3,7 @@ import '../Cell.css'
 import './CellList.css'
 export default class CellList extends Component {
     handleClick = (e)=>{
+        //the index of the cell that was chosen
         let choice = e.currentTarget.dataset.id
         if(this.props.onCellSelected){
             this.props.onCellSelected(choice);

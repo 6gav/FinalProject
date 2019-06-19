@@ -6,7 +6,20 @@ import cell_blue from './cell/color_mask_09.png'
 import cell_green from './cell/color_mask_05.png'
 import cell_purp from './cell/color_mask_11.png'
 
+import building_0 from './building/building_0.png'
+import building_1 from './building/building_1.png'
+import building_2 from './building/building_2.png'
+import building_3 from './building/building_3.png'
+import building_4 from './building/building_4.png'
+
 import { SSL_OP_SSLEAY_080_CLIENT_DH_BUG } from 'constants';
+const buildings = [
+    building_0,
+    building_1,
+    building_2,
+    building_3,
+    building_4
+]
 let cell_color=null;
 export class Cell extends Component {
     state={
@@ -29,11 +42,10 @@ export class Cell extends Component {
         }
         if(this.props.image){
             let image = this.props.image
-            cell_primary = image.face
-            cell_secondary=image.color
+            cell_primary = image.color
+            cell_secondary=image.face
         }
-        console.log(this.props)
-        console.log(this.props.char.displayName)
+        
         let spacing = this.props.dimensions.Spacing*0.8,rad=-2,
         translation='translate('+rad+'px, '+rad+'px)',
         invlation = 'translate('+(-rad)+'px, '+(-rad)+'px)';
@@ -58,13 +70,18 @@ export class Cell extends Component {
             </div>
         )
         }
-        else{return <div className="building" style={{
-            transform:invlation,
-            position: "absolute",
-            left:   `${spacing*this.props.x+1}px`,
-            top:    `${spacing*this.props.y+1}px`,
-            
-        }}></div>}
+        else{
+            return <img 
+            className="Building" 
+            src={buildings[this.props.ind%5]}
+            style={{
+                
+                position: "absolute",
+                left:   `${spacing*this.props.x+1}px`,
+                top:    `${spacing*this.props.y+1}px`,
+                }
+            }></img>
+        }
     }
 }
 

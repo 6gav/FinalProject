@@ -10,12 +10,13 @@
 
 .Grid {
     position: relative;
-    background-color: rgb(145, 199, 149);
+    background-image: url("../rescources/Grass.png");
+    background-repeat: repeat;
+      
 }
-.building{
-    background-color: black;
-    width: 32px;
-    height: 32px;
+.Building{
+    width: 30px;
+    height: 30px;
 }
 .Gridlines{
     background-image:
