@@ -31,8 +31,8 @@ const RenderCells = (props)=>{
     let visualRender = props.GetCellsFromStorage();
     
     let cells = props.cells
-    //console.log("CELLS")
-    // console.log(cells)
+    console.log("CELLS")
+    console.log(cells)
     
 
     if(cells){
@@ -43,6 +43,7 @@ const RenderCells = (props)=>{
                 //console.log(visualRender[0])
             }
         }
+        console.log(cells)
           return (
               cells.map(cell =>
                 (

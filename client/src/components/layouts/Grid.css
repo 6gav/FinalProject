@@ -15,8 +15,14 @@
       
 }
 .Building{
+    image-rendering: pixelated;
     width: 30px;
     height: 30px;
+}
+.Terrain{
+    image-rendering: pixelated;
+    width: 3px;
+    height: 3px;
 }
 .Gridlines{
     background-image:

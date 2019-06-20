@@ -518,7 +518,6 @@ class App extends Component {
       <Router>
         <div className = "App">
           <div className="Container">
-            <button onClick={this.debugChoice}>Send Loot</button>
             <Header hasAuthuser={this.hasAuthuser}/>
             <Switch>
               <Route exact path='/'   render={() => <Home CreateGame={this.CreateGame}/>}/>
